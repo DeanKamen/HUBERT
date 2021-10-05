@@ -8,88 +8,68 @@
 
 
 /*                TUNING AND OPTIONS                   */
-const unsigned MAX_ROWS = 64; // based on the max size of numpy arrays in default IBERT (3072)
-const unsigned MAX_COLS = 64;
+const unsigned MAX_ROWS_SMALL = 64; // based on the max size of numpy arrays in default IBERT (3072)
+const unsigned MAX_COLS_SMALL = 64;
+const unsigned MAX_ROWS = 3072;
+const unsigned MAX_COLS = 3072;
+const unsigned STD_ROWS = 768;
+const unsigned STD_COLS = 768;
+
 const unsigned UNITS_PER_MULTIPLY= 32; //must be a factor of the MAX_COLS
-typedef double fraction;
+// for example float t_tensor[MAX_ROWS*MAX_COLS];
+static int RETURN_NOTHING = 0;
 
-class Tensor{
-    //private:
-    public:
-    //temporarily public? should write get() and set() functions
-        unsigned int t_numRows;
-        unsigned int t_numCols;
-        bool transposed = false;
-		bool null = true;
-        float t_tensor[MAX_ROWS][MAX_COLS]; 
 
-    public:
-        //constructors
-		Tensor(); //default constructor
-        Tensor(unsigned, unsigned, float); //row, column, fill constructor
-        Tensor(const unsigned numRows, const unsigned numCols, float** init_pointer);
-		Tensor(Tensor *A);
+typedef float* Tensor;
+/* FUNCTION DEFINITIONS */
+void mul_cross(Tensor A, int rowsA, int colsA, Tensor B, int rowsB, int colsB, Tensor C);
+void mul_cross_secondary(Tensor A, int rowsA, int colsA, Tensor B, int rowsB, int colsB, Tensor C);
+//dot type (broadcasting)
+void add(Tensor A, int rowsA, int colsA, Tensor B, int rowsB, int colsB, Tensor C);
+void sub(Tensor A, int rowsA, int colsA, Tensor B, int rowsB, int colsB, Tensor C);
+void mul_dot(Tensor A, int rowsA, int colsA, Tensor B, int rowsB, int colsB, Tensor C);
+void div_dot(Tensor A, int rowsA, int colsA, Tensor B, int rowsB, int colsB, Tensor C);
+void pow_dot(Tensor A, int rowsA, int colsA, Tensor B, int rowsB, int colsB, Tensor C);
+//scalar type
+void add_scalar(Tensor A, int rowsA, int colsA, float B, Tensor C);
+void mul_scalar(Tensor A, int rowsA, int colsA, float B, Tensor C);
+void sub_scalar(Tensor A, int rowsA, int colsA, float B, Tensor C);
+void sub_scalar(float B, Tensor A, int rowsA, int colsA, Tensor C);
+void div_scalar(Tensor A, int rowsA, int colsA, float B, Tensor C);
+void pow_scalar(Tensor A, int rowsA, int colsA, float B, Tensor C);
+void max(Tensor A, int rowsA, int colsA, int dim, Tensor C, int& returnedRows = RETURN_NOTHING, int& returnedCols = RETURN_NOTHING);
+void min(Tensor A, int rowsA, int colsA, int dim, Tensor C, int& returnedRows = RETURN_NOTHING, int& returnedCols = RETURN_NOTHING);
+void max_scalar(Tensor A, int rowsA, int colsA, float compare, Tensor C);
+void min_scalar(Tensor A, int rowsA, int colsA, float compare, Tensor C);
+void min_dot(Tensor A, int rowsA, int colsA, Tensor B, Tensor C); //implied A.size == B.size
+void abs_tensor(Tensor A, int rowsA, int colsA, Tensor C);
+void floor_tensor(Tensor A, int rowsA, int colsA, Tensor C);
+void exp2_tensor(Tensor A, int rowsA, int colsA, Tensor C);
+void clamp(Tensor A, int rowsA, int colsA, float min, float max, Tensor C);
+void roundTensor(Tensor A, int rowsA, int colsA, Tensor C);
+void reciprocal(Tensor A, int rowsA, int colsA, Tensor C);
+void sum(Tensor A, int rowsA, int colsA, int dim, Tensor C, int& returnedRows = RETURN_NOTHING, int& returnedCols = RETURN_NOTHING);
+void sign(Tensor A, int rowsA, int colsA, Tensor C);
+void mean(Tensor A, int rowsA, int colsA, Tensor C, int& returnedRows = RETURN_NOTHING, int& returnedCols = RETURN_NOTHING);
+void sqrt_tensor(Tensor A, int rowsA, int colsA, Tensor C);
+//manipulation
+void fill(Tensor A, int rowsA, int colsA, float fill);
+//void view(Tensor A, int rowsA, int colsA, int rows, int cols, Tensor space);
+void tensor_frexp(Tensor In, int rowsIn, int colsIn, Tensor m, int rowsm, int colsm, Tensor e, int rowse, int colse);
+//adressing methods
+float get(Tensor A, int rowsA, int colsA, const int &row, const int &col);
+float transposed_get(Tensor A, int rowsA, int colsA, const int &row, const int &col);
+void set(Tensor A, int rowsA, int colsA, const int &row, const int &col, const float val);
+void transposed_set(Tensor A, int rowsA, int colsA, const int &row, const int &col, const float val);
 
-        //math
-		static void mul_cross(Tensor &A, Tensor &B, Tensor &C);
-		static void mul_cross_secondary(Tensor &A, Tensor &B, Tensor &C);
-		//dot type (broadcasting)
-        static void add(Tensor &A, Tensor &B, Tensor &C);
-        static void sub(Tensor &A, Tensor &B, Tensor &C);
-		static void mul_dot(Tensor &A, Tensor &B, Tensor &C);
-		static void div_dot(Tensor &A, Tensor &B, Tensor &C);
-		static void pow_dot(Tensor &A, Tensor &B, Tensor &C);
-		//scalar type
-        static void add_scalar(Tensor &A, float B, Tensor &C);
-        static void mul_scalar(Tensor &A, float B, Tensor &C);
-        static void sub_scalar(Tensor &A, float B, Tensor &C);
-		static void sub_scalar(float B, Tensor &A, Tensor &C);
-        static void div_scalar(Tensor &A, float B, Tensor &C);
-        static void pow_scalar(Tensor &A, float B, Tensor &C);
-        static void max(Tensor &A, int dim, Tensor &C);
-        static void min(Tensor &A, int dim, Tensor &C);
-		static void max_scalar(Tensor &A, float compare, Tensor &C);
-		static void min_scalar(Tensor &A, float compare, Tensor &C);
-		static void min_dot(Tensor &A, Tensor &B, Tensor &C);
-		static void abs_tensor(Tensor &A, Tensor &C);
-        static void floor_tensor(Tensor &A, Tensor &C);
-		static void exp2_tensor(Tensor &A, Tensor &C);
-        static void clamp(Tensor &A, float min, float max, Tensor &C);
-        static void roundTensor(Tensor &A, Tensor &C);
-        static void reciprocal(Tensor &A, Tensor &C);
-		static void sum(Tensor &A, int dim, Tensor &C);
-		static void sign(Tensor &A, Tensor &C);
-		static void mean(Tensor &A, Tensor &C);
-		static void sqrt_tensor(Tensor &A, Tensor &C);
-        //manipulation
-        static void fill(Tensor &A, float fill);
-        static void view(Tensor &A, int rows, int cols, Tensor &space);
-        static void tensor_frexp(Tensor &inputs, Tensor &m, Tensor &e);
-        //adressing methods
-        static float get(Tensor &tensor, const unsigned &row, const unsigned &col);
-        static void set(Tensor &tensor, const unsigned &row, const unsigned &col, float val);
-		static float one(Tensor &);
-        //helper functions
-        static void transpose(Tensor &a);
-        static void print(Tensor&);
-		static void print_brief(Tensor&);
-        static unsigned getRows(Tensor &a);
-        static unsigned getCols(Tensor &a);
-        static bool eq(Tensor &A, Tensor &B);
-		static bool eq_verbose(Tensor &A, Tensor &B);
+//helper functions
+//TODO: figure out how to deal with transposition later
+//void transpose(Tensor a);
+void print(Tensor A, int rowsA, int colsA);
+void print_brief(Tensor A, int rowsA, int colsA);
+bool eq(Tensor A, int rowsA, int colsA, Tensor B, int rowsB, int colsB);
+bool eq_verbose(Tensor A, int rowsA, int colsA, Tensor B, int rowsB, int colsB);
 
-		//functions that probably shouldnt be used out of this file
-		static void setRows(Tensor &a, int num);
-		static void setCols(Tensor &a, int num);
-		static void copy(Tensor &A, Tensor &C);
-        //private helper functions
-    private:
-		static bool sameSize(Tensor &A, Tensor &B);
-		static bool sameRows(Tensor &A, Tensor &B);
-		static bool sameCols(Tensor &A, Tensor &B);
-		static void flopSize(Tensor *lhs, Tensor *rhs);
-		
-};
-
+void flopSize(Tensor lhs, int rowsLHS, int colsLHS, Tensor rhs, int rowsRHS, int colsRHS);
 
 #endif

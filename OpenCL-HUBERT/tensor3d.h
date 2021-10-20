@@ -11,96 +11,67 @@
 
 /*                TUNING AND OPTIONS                   */
 const unsigned MAX_DEPTH = 22;
+typedef float* Tensor3d;
 
-class Tensor3d{
-    public:
-        unsigned int t_numRows;
-        unsigned int t_numCols;
-		unsigned int t_depth;
-		bool null = true;
-        Tensor matrix[MAX_DEPTH]; 
+//NOTE: this Tensor3d will store its elements exactly the same as Tensor (2d) but its longer. That is, it is stored layer by layer, row by row
 
-    public:
-        //constructors
-		Tensor3d(Tensor3d *A); //Takes a 2d matrix and copies it into the first layer.
-        Tensor3d(Tensor *A); //Takes a 2d matrix and copies it into the first layer.
-		Tensor3d(int dep, int row, int col, float init);
-		Tensor3d(void); //all depth layers are nullpointer
-		~Tensor3d();
 
-		//special cross multiply
-		static void linear_mul(Tensor3d &A, Tensor &B, Tensor3d &C);
-		static void bmm(Tensor3d &A, Tensor3d &B, Tensor3d &C);
-		static void bmm2(Tensor3d &A, Tensor3d &B, Tensor3d &C);//specialized
+/* FUNCTION DEFINITIONS */
+void linear_mul(Tensor3d A, int rowsA, int colsA, int depA, Tensor B, int rowsB, int colsB, Tensor3d C); //WARNING: matrix's size changes
+void bmm(Tensor3d A, int rowsA, int colsA, int depA, Tensor3d B, int rowsB, int colsB, int depB, Tensor3d C);//WARNING: matrix's size changes
+void bmm2(Tensor3d A, int rowsA, int colsA, int depA, Tensor3d B, int rowsB, int colsB, int depB, Tensor3d C); //WARNING: matrix's size changes, specialized
 
-		//2d broadcasting across 3d
-        static void add(Tensor3d &A, Tensor &B, Tensor3d &C);
-        static void sub(Tensor3d &A, Tensor &B, Tensor3d &C);
-		static void mul_dot(Tensor3d &A, Tensor &B, Tensor3d &C);
-		static void div_dot(Tensor3d &A, Tensor &B, Tensor3d &C);
-		static void pow_dot(Tensor3d &A, Tensor &B, Tensor3d &C);
-		//3d and 3d
-		static void add(Tensor3d &A, Tensor3d &B, Tensor3d &C);
-		static void sub(Tensor3d &A, Tensor3d &B, Tensor3d &C);
-		static void mul_dot(Tensor3d &A, Tensor3d &B, Tensor3d &C);
-		static void div_dot(Tensor3d &A, Tensor3d &B, Tensor3d &C);
-		static void pow_dot(Tensor3d &A, Tensor3d &B, Tensor3d &C);
+//element to element type (broadcasting)
+void add(Tensor3d A, int rowsA, int colsA, int depA, Tensor B, int rowsB, int colsB, Tensor3d C);
+void sub(Tensor3d A, int rowsA, int colsA, int depA, Tensor B, int rowsB, int colsB, Tensor3d C);
+void mul_dot(Tensor3d A, int rowsA, int colsA, int depA, Tensor B, int rowsB, int colsB, Tensor3d C);
+void div_dot(Tensor3d A, int rowsA, int colsA, int depA, Tensor B, int rowsB, int colsB, Tensor3d C);
+void pow_dot(Tensor3d A, int rowsA, int colsA, int depA, Tensor B, int rowsB, int colsB, Tensor3d C);
+//3d and 3d
+void add(Tensor3d A, int rowsA, int colsA, int depA, Tensor3d B, int rowsB, int colsB, int depB, Tensor3d C);
+void sub(Tensor3d A, int rowsA, int colsA, int depA, Tensor3d B, int rowsB, int colsB, int depB, Tensor3d C);
+void mul_dot(Tensor3d A, int rowsA, int colsA, int depA, Tensor3d B, int rowsB, int colsB, int depB, Tensor3d C);
+void div_dot(Tensor3d A, int rowsA, int colsA, int depA, Tensor3d B, int rowsB, int colsB, int depB, Tensor3d C);
+void pow_dot(Tensor3d A, int rowsA, int colsA, int depA, Tensor3d B, int rowsB, int colsB, int depB, Tensor3d C);
 
-		//scalar type
-        static void add_scalar(Tensor3d &A, float B, Tensor3d &C);
-        static void mul_scalar(Tensor3d &A, float B, Tensor3d &C);
-        static void sub_scalar(Tensor3d &A, float B, Tensor3d &C);
-		static void sub_scalar(float B, Tensor3d &A, Tensor3d &C);
-        static void div_scalar(Tensor3d &A, float B, Tensor3d &C);
-        static void pow_scalar(Tensor3d &A, float B, Tensor3d &C);
-        static void max(Tensor3d &A, int dim, Tensor3d &C);
-        static void min(Tensor3d &A, int dim, Tensor3d &C);
-		static void max(Tensor3d &A, Tensor3d &C); // full collapse
-		static void min(Tensor3d &A, Tensor3d &C); 
-		static void max_scalar(Tensor3d &A, float compare, Tensor3d &C);
-		static void min_scalar(Tensor3d &A, float compare, Tensor3d &C);
-		static void min_dot(Tensor3d &A, Tensor &B, Tensor3d &C);
-		static void abs_tensor(Tensor3d &A, Tensor3d &C);
-        static void floor_tensor(Tensor3d &A, Tensor3d &C);
-		static void exp2_tensor(Tensor3d &A, Tensor3d &C);
-        static void clamp(Tensor3d &A, float min, float max, Tensor3d &C);
-        static void roundTensor(Tensor3d &A, Tensor3d &C);
-        static void reciprocal(Tensor3d &A, Tensor3d &C);
-		static void sum(Tensor3d &A, int dim, Tensor3d &C);
-		static void sign(Tensor3d &A, Tensor3d &C);
-		static void mean(Tensor3d &A, Tensor3d &C);
-		static void sqrt_tensor(Tensor3d &A, Tensor3d &C);
-        //manipulation
-        //TODO: only if necessary
-		//static void tensor_frexp(Tensor<float>* inputs, Tensor<float>* m, Tensor<float>* e);
+//scalar type
+void add_scalar(Tensor3d A, int rowsA, int colsA, int depA, float B, Tensor3d C);
+void mul_scalar(Tensor3d A, int rowsA, int colsA, int depA, float B, Tensor3d C);
+void sub_scalar(Tensor3d A, int rowsA, int colsA, int depA, float B, Tensor3d C);
+void sub_scalar(float B, Tensor3d A, int rowsA, int colsA, int depA, Tensor3d C);
+void div_scalar(Tensor3d A, int rowsA, int colsA, int depA, float B, Tensor3d C);
+void pow_scalar(Tensor3d A, int rowsA, int colsA, int depA, float B, Tensor3d C);
+void max(Tensor3d A, int rowsA, int colsA, int depA, int dim, Tensor3d C); //WARNING: matrix's size changes, along one dimention
+void min(Tensor3d A, int rowsA, int colsA, int depA, int dim, Tensor3d C); //WARNING: matrix's size changes
+void max(Tensor3d A, int rowsA, int colsA, int depA); //WARNING: matrix's size changes to 1x1
+void min(Tensor3d A, int rowsA, int colsA, int depA);//WARNING: matrix's size changes to 1x1
+void max_scalar(Tensor3d A, int rowsA, int colsA, int depA, float compare, Tensor3d C);
+void min_scalar(Tensor3d A, int rowsA, int colsA, int depA, float compare, Tensor3d C);
+void min_dot(Tensor3d A, int rowsA, int colsA, int depA, Tensor B, int rowsB, int colsB, Tensor3d C);
+void abs_tensor(Tensor3d A, int rowsA, int colsA, int depA, Tensor3d C);
+void floor_tensor(Tensor3d A, int rowsA, int colsA, int depA, Tensor3d C);
+void exp2_tensor(Tensor3d A, int rowsA, int colsA, int depA, Tensor3d C);
+void clamp(Tensor3d A, int rowsA, int colsA, int depA, float min, float max, Tensor3d C);
+void roundTensor(Tensor3d A, int rowsA, int colsA, int depA, Tensor3d C);
+void reciprocal(Tensor3d A, int rowsA, int colsA, int depA, Tensor3d C);
+void sum(Tensor3d A, int rowsA, int colsA, int depA, int dim, Tensor3d C);
+void sign(Tensor3d A, int rowsA, int colsA, int depA, Tensor3d C);
+void mean(Tensor3d A, int rowsA, int colsA, int depA, Tensor3d C); //WARNING: matrix's size changes
+void sqrt_tensor(Tensor3d A, int rowsA, int colsA, int depA, Tensor3d C);
 
-        //adressing methods where dep is depth and select the 2d array you want.
-        static float get(Tensor3d &tensor, const unsigned &row, const unsigned &col, const unsigned &dep);
-        static void set(Tensor3d &tensor, const unsigned &row, const unsigned &col, const unsigned &dep, float val);
-		static Tensor& get(Tensor3d &tensor, const unsigned &dep);
-		static void set(Tensor3d &tensor, const unsigned &dep, Tensor &slice);
-		static Tensor* twoD(Tensor3d &); //analog to one for 2d Tensors, but checks for ONE layer 
-		static void toTwoD(Tensor3d &A, Tensor &C);//takes a tensor that is YxZx1, Yx1xZ, or 1xYxZ and returns the 2d matrix
-		static void append(Tensor3d &tensor, Tensor &slice); //set + setDepth call
-       
-		//helper functions
-        static void print(Tensor3d &);
-		static void print_brief(Tensor3d &);
-        static unsigned getRows(Tensor3d &a);
-        static unsigned getCols(Tensor3d &a);
-		static unsigned getDepth(Tensor3d &a);
-        static bool eq(Tensor3d &A, Tensor3d &B);
+//adressing methods where dep is depth and select the 2d array you want.
+float get(Tensor3d A, int rowsA, int colsA, int depA, const unsigned &row, const unsigned &col, const unsigned &dep);
+void set(Tensor3d A, int rowsA, int colsA, int depA, const unsigned &row, const unsigned &col, const unsigned &dep, float val);
+Tensor get(Tensor3d A, int rowsA, int colsA, int depA, const unsigned &dep); //returns a 2d pointer to a part of this matrix
+void set(Tensor3d A, int rowsA, int colsA, int depA, const unsigned &dep, Tensor slice); //copies the elements of a 2d pointer into a section of the matrix
+Tensor twoD(Tensor3d A, int rowsA, int colsA, int depA); //analog to the one() function for 2d Tensors, but checks for ONE layer
+void toTwoD(Tensor3d A, int rowsA, int colsA, int depA, Tensor C);//takes a tensor that is YxZx1, Yx1xZ, or 1xYxZ and returns the 2d matrix
+void append(Tensor3d A, int rowsA, int colsA, Tensor slice); //sets the first layer to be the elements of a 2d matrix 
 
-		static void setRows(Tensor3d &a, int num);
-		static void setCols(Tensor3d &a, int num);
-
-        //private helper functions
-    private:
-		static void setDepth(Tensor3d &a, int num);
-		static bool sameSize(Tensor3d &A, Tensor &B);
-		static bool sameSize(Tensor3d &A, Tensor3d &B);
-		static bool sameDep(Tensor3d &A, Tensor3d &B);
-};
+//helper functions
+void print(Tensor3d A, int rowsA, int colsA, int depA);
+void print_brief(Tensor3d A, int rowsA, int colsA, int depA);
+bool eq(Tensor3d A, int rowsA, int colsA, int depA, Tensor3d B, int rowsB, int colsB, int depB);
 
 
 #endif

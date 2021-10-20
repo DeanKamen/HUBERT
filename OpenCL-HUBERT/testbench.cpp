@@ -2,6 +2,7 @@
 #include "HLS/hls.h"
 #include "HLS/stdio.h"
 #include "tensors.h" 
+#include "CL/opencl.hpp"
 
 
 int main()

@@ -6,32 +6,28 @@
 #include "HLS/math.h"
 #include "HLS/stdio.h"
 #include "tensors.h"
+#include "matrix_mult.h"
+#include "matrix_mult_transpose.h"
 #include <iostream>
 
 /*                    DEFINITIONS                      */
 
 //TODO find the proper matrix multiply functions
 
-/*
-void mul_cross(Tensor A, Tensor B, Tensor C)
+void mul_cross(Tensor A, const int rowsA, const int colsA, Tensor B, const int rowsB, const int colsB, Tensor C)
 //this function needs to use MACROS or constants known at compile time for sizes.
 //when using multiplies in components, use the below prototype.
 {
-	tensor_mmm<float, 22, 64, 22>(A, B, C);
-	setRows(C, rowsA);
-	setCols(C, getCols(B));
+	matrix_multiply<float, rowsA, colsA, colsB>(A, B, C);
 }
 
 
-void mul_cross_secondary(Tensor A, Tensor B, Tensor C)
+void mul_cross_transposeB(Tensor A, const int rowsA, const int colsA, Tensor B, const int rowsB, const int colsB, Tensor C)
 //this function needs to use MACROS or constants known at compile time for sizes.
 //when using multiplies in components, use the below prototype.
 {
-	tensor_mmm<float, 22, 22, 64>(A, B, C);
-	setRows(C, rowsA);
-	setCols(C, getCols(B));
+	matrix_multiply_transpose<float, rowsA, colsA, colsB>(A, B, C);
 }
-*/
 
 void add(Tensor A, int rowsA, int colsA, Tensor B, int rowsB, int colsB, Tensor C) //with basic broadcasting
 {
@@ -896,6 +892,28 @@ void transposed_set(Tensor A, int rowsA, int colsA, const int &row, const int &c
 		//printf("get() index [%d][%d] out of range\n", row, col);
 		//assert(false);
 		return;
+	}
+}
+
+void transpose(Tensor A, int rowsA, int colsA, Tensor C)
+{
+	for (int i = 0; i < rowsA; i++)
+	{
+		for (int j = 0; j < colsA; i++)
+		{
+			set(C, colsA, rowsA, j, i, get(A, rowsA, colsA, i, j));
+		}
+	}
+}
+
+void copy(Tensor A, int rowsA, int colsA, Tensor C)
+{
+	for (int i = 0; i < rowsA; i++)
+	{
+		for (int j = 0; j < colsA; i++)
+		{
+			set(C, rowsA, colsA, i, j, get(A, rowsA, colsA, i, j));
+		}
 	}
 }
 

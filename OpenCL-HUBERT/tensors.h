@@ -22,8 +22,8 @@ static int RETURN_NOTHING = 0;
 
 typedef float* Tensor;
 /* FUNCTION DEFINITIONS */
-void mul_cross(Tensor A, int rowsA, int colsA, Tensor B, int rowsB, int colsB, Tensor C);
-void mul_cross_secondary(Tensor A, int rowsA, int colsA, Tensor B, int rowsB, int colsB, Tensor C);
+void mul_cross(Tensor A, const int rowsA, const int colsA, Tensor B, const int rowsB, const int colsB, Tensor C); //WARNING: matrix's size changes
+void mul_cross_transposeB(Tensor A, const int rowsA, const int colsA, Tensor B, const int rowsB, const int colsB, Tensor C); //WARNING: matrix's size changes
 //dot type (broadcasting)
 void add(Tensor A, int rowsA, int colsA, Tensor B, int rowsB, int colsB, Tensor C);
 void sub(Tensor A, int rowsA, int colsA, Tensor B, int rowsB, int colsB, Tensor C);
@@ -37,8 +37,8 @@ void sub_scalar(Tensor A, int rowsA, int colsA, float B, Tensor C);
 void sub_scalar(float B, Tensor A, int rowsA, int colsA, Tensor C);
 void div_scalar(Tensor A, int rowsA, int colsA, float B, Tensor C);
 void pow_scalar(Tensor A, int rowsA, int colsA, float B, Tensor C);
-void max(Tensor A, int rowsA, int colsA, int dim, Tensor C, int& returnedRows = RETURN_NOTHING, int& returnedCols = RETURN_NOTHING);
-void min(Tensor A, int rowsA, int colsA, int dim, Tensor C, int& returnedRows = RETURN_NOTHING, int& returnedCols = RETURN_NOTHING);
+void max(Tensor A, int rowsA, int colsA, int dim, Tensor C); //WARNING: matrix's size changes
+void min(Tensor A, int rowsA, int colsA, int dim, Tensor C); //WARNING: matrix's size changes
 void max_scalar(Tensor A, int rowsA, int colsA, float compare, Tensor C);
 void min_scalar(Tensor A, int rowsA, int colsA, float compare, Tensor C);
 void min_dot(Tensor A, int rowsA, int colsA, Tensor B, Tensor C); //implied A.size == B.size
@@ -48,9 +48,9 @@ void exp2_tensor(Tensor A, int rowsA, int colsA, Tensor C);
 void clamp(Tensor A, int rowsA, int colsA, float min, float max, Tensor C);
 void roundTensor(Tensor A, int rowsA, int colsA, Tensor C);
 void reciprocal(Tensor A, int rowsA, int colsA, Tensor C);
-void sum(Tensor A, int rowsA, int colsA, int dim, Tensor C, int& returnedRows = RETURN_NOTHING, int& returnedCols = RETURN_NOTHING);
+void sum(Tensor A, int rowsA, int colsA, int dim, Tensor C); //WARNING: matrix's size changes
 void sign(Tensor A, int rowsA, int colsA, Tensor C);
-void mean(Tensor A, int rowsA, int colsA, Tensor C, int& returnedRows = RETURN_NOTHING, int& returnedCols = RETURN_NOTHING);
+void mean(Tensor A, int rowsA, int colsA, Tensor C); //WARNING: matrix's size changes
 void sqrt_tensor(Tensor A, int rowsA, int colsA, Tensor C);
 //manipulation
 void fill(Tensor A, int rowsA, int colsA, float fill);
@@ -63,8 +63,8 @@ void set(Tensor A, int rowsA, int colsA, const int &row, const int &col, const f
 void transposed_set(Tensor A, int rowsA, int colsA, const int &row, const int &col, const float val);
 
 //helper functions
-//TODO: figure out how to deal with transposition later
-//void transpose(Tensor a);
+void transpose(Tensor A, int rowsA, int colsA, Tensor C);
+void copy(Tensor A, int rowsA, int colsA, Tensor C);
 void print(Tensor A, int rowsA, int colsA);
 void print_brief(Tensor A, int rowsA, int colsA);
 bool eq(Tensor A, int rowsA, int colsA, Tensor B, int rowsB, int colsB);

@@ -126,9 +126,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="matrix_mult.h" />
+    <ClInclude Include="matrix_mult_transpose.h" />
+    <ClInclude Include="tensor3d.h" />
     <ClInclude Include="tensors.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="tensor3d.cpp" />
     <ClCompile Include="tensors.cpp" />
     <ClCompile Include="testbench.cpp" />
   </ItemGroup>

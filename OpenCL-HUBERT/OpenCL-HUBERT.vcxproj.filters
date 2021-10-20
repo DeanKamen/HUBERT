@@ -18,12 +18,24 @@
     <ClInclude Include="tensors.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="tensor3d.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="matrix_mult.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="matrix_mult_transpose.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="tensors.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="testbench.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="tensor3d.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

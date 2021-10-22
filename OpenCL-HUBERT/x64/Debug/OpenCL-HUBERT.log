@@ -1,8 +1,14 @@
 ﻿  testbench.cpp
-  opencl.hpp: CL_HPP_TARGET_OPENCL_VERSION is not defined. It will default to 300 (OpenCL 3.0)
-c:\users\hunto_efxy22i\opencl-hubert\opencl-hubert\testbench.cpp(16): warning C4244: 'argument': conversion from 'unsigned int' to 'const float', possible loss of data
-c:\users\hunto_efxy22i\opencl-hubert\opencl-hubert\testbench.cpp(17): warning C4244: 'argument': conversion from 'unsigned int' to 'const float', possible loss of data
-testbench.obj : error LNK2019: unresolved external symbol clReleaseDevice referenced in function "public: static int __cdecl cl::detail::ReferenceHandler<struct _cl_device_id *>::release(struct _cl_device_id *)" (?release@?$ReferenceHandler@PEAU_cl_device_id@@@detail@cl@@SAHPEAU_cl_device_id@@@Z)
-testbench.obj : error LNK2019: unresolved external symbol clReleaseContext referenced in function "public: static int __cdecl cl::detail::ReferenceHandler<struct _cl_context *>::release(struct _cl_context *)" (?release@?$ReferenceHandler@PEAU_cl_context@@@detail@cl@@SAHPEAU_cl_context@@@Z)
-testbench.obj : error LNK2019: unresolved external symbol clReleaseCommandQueue referenced in function "public: static int __cdecl cl::detail::ReferenceHandler<struct _cl_command_queue *>::release(struct _cl_command_queue *)" (?release@?$ReferenceHandler@PEAU_cl_command_queue@@@detail@cl@@SAHPEAU_cl_command_queue@@@Z)
-C:\Users\hunto_efxy22i\OpenCL-HUBERT\x64\Debug\OpenCL-HUBERT.exe : fatal error LNK1120: 3 unresolved externals
+c:\users\hunto_efxy22i\opencl-hubert\opencl-hubert\matrix_mult.h(73): warning C4068: unknown pragma
+c:\users\hunto_efxy22i\opencl-hubert\opencl-hubert\matrix_mult.h(78): warning C4068: unknown pragma
+c:\users\hunto_efxy22i\opencl-hubert\opencl-hubert\matrix_mult.h(84): warning C4068: unknown pragma
+c:\users\hunto_efxy22i\opencl-hubert\opencl-hubert\matrix_mult.h(103): warning C4068: unknown pragma
+c:\users\hunto_efxy22i\opencl-hubert\opencl-hubert\matrix_mult.h(109): warning C4068: unknown pragma
+c:\users\hunto_efxy22i\opencl-hubert\opencl-hubert\matrix_mult.h(115): warning C4068: unknown pragma
+c:\users\hunto_efxy22i\opencl-hubert\opencl-hubert\matrix_mult_transpose.h(73): warning C4068: unknown pragma
+c:\users\hunto_efxy22i\opencl-hubert\opencl-hubert\matrix_mult_transpose.h(78): warning C4068: unknown pragma
+c:\users\hunto_efxy22i\opencl-hubert\opencl-hubert\matrix_mult_transpose.h(84): warning C4068: unknown pragma
+c:\users\hunto_efxy22i\opencl-hubert\opencl-hubert\matrix_mult_transpose.h(104): warning C4068: unknown pragma
+c:\users\hunto_efxy22i\opencl-hubert\opencl-hubert\matrix_mult_transpose.h(110): warning C4068: unknown pragma
+c:\users\hunto_efxy22i\opencl-hubert\opencl-hubert\matrix_mult_transpose.h(116): warning C4068: unknown pragma
+  OpenCL-HUBERT.vcxproj -> C:\Users\hunto_efxy22i\OpenCL-HUBERT\x64\Debug\OpenCL-HUBERT.exe

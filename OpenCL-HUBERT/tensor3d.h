@@ -7,7 +7,6 @@
 #define __HUBERT_TENSOR3D_H__
 
 #include "tensors.h"
-#include "tensor3dXL.h"
 
 /*                TUNING AND OPTIONS                   */
 const unsigned MAX_DEPTH = 22;
@@ -17,10 +16,6 @@ typedef float* Tensor3d;
 
 
 /* FUNCTION DEFINITIONS */
-void linear_mul(Tensor3d A, int rowsA, int colsA, int depA, Tensor B, int rowsB, int colsB, Tensor3d C); //WARNING: matrix's size changes
-void bmm(Tensor3d A, int rowsA, int colsA, int depA, Tensor3d B, int rowsB, int colsB, int depB, Tensor3d C);//WARNING: matrix's size changes
-void bmm2(Tensor3d A, int rowsA, int colsA, int depA, Tensor3d B, int rowsB, int colsB, int depB, Tensor3d C); //WARNING: matrix's size changes, specialized
-
 //element to element type (broadcasting)
 void add(Tensor3d A, int rowsA, int colsA, int depA, Tensor B, int rowsB, int colsB, Tensor3d C);
 void sub(Tensor3d A, int rowsA, int colsA, int depA, Tensor B, int rowsB, int colsB, Tensor3d C);
@@ -64,7 +59,6 @@ float get(Tensor3d A, int rowsA, int colsA, int depA, const unsigned &row, const
 void set(Tensor3d A, int rowsA, int colsA, int depA, const unsigned &row, const unsigned &col, const unsigned &dep, float val);
 Tensor get(Tensor3d A, int rowsA, int colsA, int depA, const unsigned &dep); //returns a 2d pointer to a part of this matrix
 void set(Tensor3d A, int rowsA, int colsA, int depA, const unsigned &dep, Tensor slice); //copies the elements of a 2d pointer into a section of the matrix
-Tensor twoD(Tensor3d A, int rowsA, int colsA, int depA); //analog to the one() function for 2d Tensors, but checks for ONE layer
 void toTwoD(Tensor3d A, int rowsA, int colsA, int depA, Tensor C);//takes a tensor that is YxZx1, Yx1xZ, or 1xYxZ and returns the 2d matrix
 void append(Tensor3d A, int rowsA, int colsA, Tensor slice); //sets the first layer to be the elements of a 2d matrix 
 

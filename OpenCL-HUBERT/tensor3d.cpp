@@ -7,42 +7,9 @@
 #include "HLS/stdio.h"
 #include "tensors.h"
 #include "tensor3d.h"
-#include "tensor3dXL.h"
 #include <iostream>
 
 /*                    DEFINITIONS                      */
-
-//special multiply
-void linear_mul(Tensor3d A, int rowsA, int colsA, int depA, Tensor B, int rowsB, int colsB, Tensor3d C)
-{
-	for (unsigned d = 0; d < depA; d++)
-	{
-		mul_cross_transposeB(get(A, rowsA, colsA, depA, d), rowsA, colsA, B, colsB, rowsB, get(C, rowsA, colsA, depA, d));
-	}
-	//the resulting matrix should have cols = colsB, rows = rowsA
-}
-
-void bmm(Tensor3d A, int rowsA, int colsA, int depA, Tensor3d B, int rowsB, int colsB, int depB, Tensor3d C)
-{ //for when they both have the same size. 
-	//We assume B is the same shape as A but compatible to multiply 
-	//assuming a 22x64 * 22x64 but we transpose the second input
-	//assert(colsA == colsB);
-	for (unsigned d = 0; d < depA; d++)
-	{
-		Tensor rhs = get(B, rowsB, colsB, depB, d);
-		mul_cross_transposeB(get(A, rowsA, colsA, depA, d), rowsA, colsA, rhs, colsB, rowsB, get(C, rowsA, colsA, depA, d));
-	}
-}
-
-void bmm2(Tensor3d A, int rowsA, int colsA, int depA, Tensor3d B, int rowsB, int colsB, int depB, Tensor3d C)
-{ //for when they both have the same size. 
-	//We assume B is already "transposed". Also assuming a 22x22 * 22x64
-	//assert(colsA == rowsB);
-	for (unsigned d = 0; d < depA; d++)
-	{
-		mul_cross(get(A, rowsA, colsA, depA, d), rowsA, colsA, get(B, rowsB, colsB, depB, d), rowsB, colsB, get(C, rowsA, colsA, depA, d));
-	}
-}
 
 //2d broadcasting across 3d
 void add(Tensor3d A, int rowsA, int colsA, int depA, Tensor B, int rowsB, int colsB, Tensor3d C)
@@ -418,7 +385,13 @@ void toTwoD(Tensor3d A, int rowsA, int colsA, int depA, Tensor C)
 {
 	if (depA == 1)
 	{
-		copy(twoD(A,rowsA,colsA,depA), rowsA, colsA, C);
+		for (unsigned r = 0; r < rowsA; r++)
+		{
+			for (unsigned c = 0; c < colsA; c++)
+			{
+				set(C, rowsA, colsA, r, c, get(A, rowsA, colsA, depA, 0, r, c));
+			}
+		}
 	}
 	else if (rowsA == 1)
 	{// Here we transform depth into rows. depth 0 being the first row

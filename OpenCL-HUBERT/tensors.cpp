@@ -6,28 +6,11 @@
 #include "HLS/math.h"
 #include "HLS/stdio.h"
 #include "tensors.h"
-#include "matrix_mult.h"
-#include "matrix_mult_transpose.h"
 #include <iostream>
 
 /*                    DEFINITIONS                      */
 
-//TODO find the proper matrix multiply functions
-
-void mul_cross(Tensor A, const int rowsA, const int colsA, Tensor B, const int rowsB, const int colsB, Tensor C)
-//this function needs to use MACROS or constants known at compile time for sizes.
-//when using multiplies in components, use the below prototype.
-{
-	matrix_multiply<float, rowsA, colsA, colsB>(A, B, C);
-}
-
-
-void mul_cross_transposeB(Tensor A, const int rowsA, const int colsA, Tensor B, const int rowsB, const int colsB, Tensor C)
-//this function needs to use MACROS or constants known at compile time for sizes.
-//when using multiplies in components, use the below prototype.
-{
-	matrix_multiply_transpose<float, rowsA, colsA, colsB>(A, B, C);
-}
+//TODO: translate everything to template?
 
 void add(Tensor A, int rowsA, int colsA, Tensor B, int rowsB, int colsB, Tensor C) //with basic broadcasting
 {
@@ -397,7 +380,7 @@ void pow_scalar(Tensor A, int rowsA, int colsA, float B, Tensor C)
 }
 
 
-void max(Tensor A, int rowsA, int colsA, int dim, Tensor C, int& returnedRows, int& returnedCols)
+void max(Tensor A, int rowsA, int colsA, int dim, Tensor C)
 //functions similar to https://pytorch.org/docs/stable/generated/torch.max.html#torch.max
 //but only works on 2d tensors and only returns a tensor with the maximums, no indexes. 
 //dim=0 means you find the biggest in each column,
@@ -427,9 +410,6 @@ void max(Tensor A, int rowsA, int colsA, int dim, Tensor C, int& returnedRows, i
 			set(C, rowsA, colsA, 0, i, largest);
 			first = true;
         }
-        //i know the dimentions of C, so i set them for safety
-        returnedRows = 1;
-        returnedCols = colsA;
     }
     else
     {
@@ -455,12 +435,10 @@ void max(Tensor A, int rowsA, int colsA, int dim, Tensor C, int& returnedRows, i
 			set(C, rowsA, colsA, i, 0, largest);
 			first = true;
         }
-		returnedRows = rowsA;
-		returnedCols = 1;
     }
 }
 
-void min(Tensor A, int rowsA, int colsA, int dim, Tensor C, int& returnedRows, int& returnedCols)
+void min(Tensor A, int rowsA, int colsA, int dim, Tensor C)
 //virtually same code as MAX
 //dim=0 means you find the smallest in each column,
 //dim=1 means you find the smallest in each row. 
@@ -489,9 +467,6 @@ void min(Tensor A, int rowsA, int colsA, int dim, Tensor C, int& returnedRows, i
 			set(C, rowsA, colsA, 0, i, smallest);
 			first = true;
         }
-        //I can guarantee the dimentions of the resulting tensor.
-		returnedRows = 1;
-		returnedCols = colsA;
     }
     else
     { //dim ==1
@@ -517,8 +492,6 @@ void min(Tensor A, int rowsA, int colsA, int dim, Tensor C, int& returnedRows, i
 			set(C, rowsA, colsA, i, 0, smallest);
 			first = true;
         }
-        returnedRows =  rowsA;
-		returnedCols = 1;
     }
 }
 
@@ -662,7 +635,7 @@ void reciprocal(Tensor A, int rowsA, int colsA, Tensor C)
 }
 
 
-void sum(Tensor A, int rowsA, int colsA, int dim, Tensor C, int& returnedRows, int& returnedCols)
+void sum(Tensor A, int rowsA, int colsA, int dim, Tensor C)
 {
 //dim=0 means you find the sum of each column,
 //dim=1 means you find the sum of each row. 
@@ -680,9 +653,6 @@ void sum(Tensor A, int rowsA, int colsA, int dim, Tensor C, int& returnedRows, i
 			set(C, rowsA, colsA, 0, i, running);
 			running = 0;
 		}
-		//I can guarantee the dimentions of the resulting tensor.
-		returnedRows = 1;
-		returnedCols = colsA;
 	}
 	else
 	{ //dim ==1
@@ -695,8 +665,6 @@ void sum(Tensor A, int rowsA, int colsA, int dim, Tensor C, int& returnedRows, i
 			set(C, rowsA, colsA, i, 0, running);
 			running = 0;
 		}
-		returnedRows = rowsA;
-		returnedCols = 1;
 	}
 }
 
@@ -725,7 +693,7 @@ void sign(Tensor A, int rowsA, int colsA, Tensor C)
 }
 
  
-void mean(Tensor A, int rowsA, int colsA, Tensor C, int& returnedRows, int& returnedCols)
+void mean(Tensor A, int rowsA, int colsA, Tensor C)
 {// assume a row vector. can be expanded upon like max and min to work along multiple dimentions
 	//assert(rowsA == 1);
 	float running = 0.f;
@@ -734,8 +702,6 @@ void mean(Tensor A, int rowsA, int colsA, Tensor C, int& returnedRows, int& retu
 		running += get(A, rowsA, colsA, 0, j);
 	}
 	set(C, rowsA, colsA, 0, 0, running / (float)colsA);
-	returnedCols = 1;
-	returnedRows = rowsA;
 }
 
 
@@ -812,7 +778,7 @@ void view(Tensor A, int rowsA, int colsA, const int rows, const int cols, Tensor
 void tensor_frexp(Tensor In, int rowsIn, int colsIn, Tensor m, int rowsm, int colsm, Tensor e, int rowse, int colse)
 {
     //I am writing this one myself as I dont have access to numpy
-    //C has a function called frexp, so I am just applying it to ever element in a matrix.
+    //C has a function called frexp, so I am just applying it to every element in a matrix.
     //used for the fixed point multiply function in quant_act 
     //reutrns the mantissas and then put the exponents in a seperate tensor.
 	const int MAX_BIT = 31;
@@ -838,61 +804,25 @@ void tensor_frexp(Tensor In, int rowsIn, int colsIn, Tensor m, int rowsm, int co
 
 /****************************************************adressing methods****************************************************/
 
-float get(Tensor A, int rowsA, int colsA, const int &row, const int &col)
+float get(Tensor A, int rowsA, int colsA, int row, int col)
 {
-    if(row < rowsA && col < colsA)
-    {
-        return A[row * colsA + col];
-    }
-    else
-    {
-        //printf("get() index [%d][%d] out of range\n", col, row);
-		//assert(false);
-        return 0;
-    }
+	return A[row * colsA + col];
 }
 
-float transposed_get(Tensor A, int rowsA, int colsA, const int &row, const int &col)
+float transposed_get(Tensor A, int rowsA, int colsA, int row, int col)
 {
-	if (row < colsA && col < rowsA)
-	{
-		return A[col*rowsA + row];
-	}
-	else
-	{
-		//printf("get() index [%d][%d] out of range\n", row, col);
-		//assert(false);
-		return 0;
-	}
+	return A[col*rowsA + row];
 }
 
 
-void set(Tensor A, int rowsA, int colsA, const int &row, const int &col, const float val)
+void set(Tensor A, int rowsA, int colsA, int row, int col, float val)
 {
-	if (row < rowsA && col < colsA)
-	{
-		A[row * colsA + col] = val;
-	}
-	else
-	{
-		//printf("get() index [%d][%d] out of range\n", col, row);
-		//assert(false);
-		return;
-	}
+	A[row * colsA + col] = val;
 }
 
-void transposed_set(Tensor A, int rowsA, int colsA, const int &row, const int &col, const float val)
+void transposed_set(Tensor A, int rowsA, int colsA, int row, int col, float val)
 {
-	if (row < colsA && col < rowsA)
-	{
-		A[col*rowsA + row] = val;
-	}
-	else
-	{
-		//printf("get() index [%d][%d] out of range\n", row, col);
-		//assert(false);
-		return;
-	}
+	A[col*rowsA + row] = val;
 }
 
 void transpose(Tensor A, int rowsA, int colsA, Tensor C)

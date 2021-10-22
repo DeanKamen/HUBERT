@@ -6,7 +6,6 @@
 #ifndef __HUBERT_TENSORS_H__
 #define __HUBERT_TENSORS_H__
 
-
 /*                TUNING AND OPTIONS                   */
 const unsigned MAX_ROWS_SMALL = 64; // based on the max size of numpy arrays in default IBERT (3072)
 const unsigned MAX_COLS_SMALL = 64;
@@ -22,8 +21,6 @@ static int RETURN_NOTHING = 0;
 
 typedef float* Tensor;
 /* FUNCTION DEFINITIONS */
-void mul_cross(Tensor A, const int rowsA, const int colsA, Tensor B, const int rowsB, const int colsB, Tensor C); //WARNING: matrix's size changes
-void mul_cross_transposeB(Tensor A, const int rowsA, const int colsA, Tensor B, const int rowsB, const int colsB, Tensor C); //WARNING: matrix's size changes
 //dot type (broadcasting)
 void add(Tensor A, int rowsA, int colsA, Tensor B, int rowsB, int colsB, Tensor C);
 void sub(Tensor A, int rowsA, int colsA, Tensor B, int rowsB, int colsB, Tensor C);
@@ -57,10 +54,10 @@ void fill(Tensor A, int rowsA, int colsA, float fill);
 //void view(Tensor A, int rowsA, int colsA, int rows, int cols, Tensor space);
 void tensor_frexp(Tensor In, int rowsIn, int colsIn, Tensor m, int rowsm, int colsm, Tensor e, int rowse, int colse);
 //adressing methods
-float get(Tensor A, int rowsA, int colsA, const int &row, const int &col);
-float transposed_get(Tensor A, int rowsA, int colsA, const int &row, const int &col);
-void set(Tensor A, int rowsA, int colsA, const int &row, const int &col, const float val);
-void transposed_set(Tensor A, int rowsA, int colsA, const int &row, const int &col, const float val);
+float get(Tensor A, int rowsA, int colsA, int row, int col);
+float transposed_get(Tensor A, int rowsA, int colsA, int row, int col);
+void set(Tensor A, int rowsA, int colsA, int row, int col, float val);
+void transposed_set(Tensor A, int rowsA, int colsA, int row, int col, float val);
 
 //helper functions
 void transpose(Tensor A, int rowsA, int colsA, Tensor C);

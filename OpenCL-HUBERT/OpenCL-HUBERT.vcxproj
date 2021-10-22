@@ -130,6 +130,7 @@
     <ClInclude Include="matrix_mult_transpose.h" />
     <ClInclude Include="tensor3d.h" />
     <ClInclude Include="tensors.h" />
+    <ClInclude Include="tensor_matMul.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="tensor3d.cpp" />

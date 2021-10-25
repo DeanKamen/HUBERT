@@ -11,4 +11,11 @@ c:\users\hunto_efxy22i\opencl-hubert\opencl-hubert\matrix_mult_transpose.h(84): 
 c:\users\hunto_efxy22i\opencl-hubert\opencl-hubert\matrix_mult_transpose.h(104): warning C4068: unknown pragma
 c:\users\hunto_efxy22i\opencl-hubert\opencl-hubert\matrix_mult_transpose.h(110): warning C4068: unknown pragma
 c:\users\hunto_efxy22i\opencl-hubert\opencl-hubert\matrix_mult_transpose.h(116): warning C4068: unknown pragma
+c:\users\hunto_efxy22i\opencl-hubert\opencl-hubert\testbench.cpp(121): warning C4305: 'argument': truncation from 'double' to 'float'
+c:\users\hunto_efxy22i\opencl-hubert\opencl-hubert\testbench.cpp(122): warning C4305: 'initializing': truncation from 'double' to 'float'
+c:\users\hunto_efxy22i\opencl-hubert\opencl-hubert\testbench.cpp(125): warning C4305: 'argument': truncation from 'double' to 'float'
+c:\users\hunto_efxy22i\opencl-hubert\opencl-hubert\testbench.cpp(126): warning C4305: 'initializing': truncation from 'double' to 'float'
+c:\users\hunto_efxy22i\opencl-hubert\opencl-hubert\testbench.cpp(140): warning C4305: 'argument': truncation from 'double' to 'float'
+c:\users\hunto_efxy22i\opencl-hubert\opencl-hubert\testbench.cpp(153): warning C4305: 'argument': truncation from 'double' to 'float'
+c:\users\hunto_efxy22i\opencl-hubert\opencl-hubert\testbench.cpp(158): warning C4305: 'initializing': truncation from 'double' to 'float'
   OpenCL-HUBERT.vcxproj -> C:\Users\hunto_efxy22i\OpenCL-HUBERT\x64\Debug\OpenCL-HUBERT.exe

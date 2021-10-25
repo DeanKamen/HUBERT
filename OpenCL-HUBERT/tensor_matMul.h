@@ -26,7 +26,8 @@ void matMul_transposeB(Tensor A, Tensor B, Tensor C)
 //this function needs to use MACROS or constants known at compile time for sizes.
 //when using multiplies in components, use the below prototype.
 {
-	matrix_multiply_transpose<float, rowsA, colsA, colsB>(A, B, C);
+	matrix_multiply_transpose<float, rowsA, colsA, rowsB>(A, B, C);
+	print(C, rowsA, rowsB);
 }
 
 //special multiply
@@ -35,7 +36,10 @@ void linear_mul(Tensor3d A, Tensor B, Tensor3d C)
 {
 	for (unsigned d = 0; d < depA; d++)
 	{
-		matMul_transposeB<rowsA, colsA, colsB, rowsB>(get(A, rowsA, colsA, depA, d), B, get(C, rowsA, colsA, depA, d));
+		matMul_transposeB<rowsA, colsA, rowsB, colsB>(get_layer(A, rowsA, colsA, depA, d), B, get_layer(C, rowsA, rowsB, depA, d));
+		print(get_layer(A, rowsA, colsA, depA, d), rowsA, colsA);
+		print(B, rowsB, colsB);
+		//print(get_layer(C, rowsA, rowsB, depA, d), rowsA, rowsB);
 	}
 	//the resulting matrix should have cols = colsB, rows = rowsA
 }
@@ -48,8 +52,8 @@ void bmm(Tensor3d A, Tensor3d B, Tensor3d C)
 	//assert(colsA == colsB);
 	for (unsigned d = 0; d < depA; d++)
 	{
-		Tensor rhs = get(B, rowsB, colsB, depB, d);
-		matMul_transposeB<rowsA, colsA, colsB, rowsB>(get(A, rowsA, colsA, depA, d), rhs, get(C, rowsA, colsA, depA, d));
+		Tensor rhs = get_layer(B, rowsB, colsB, depB, d);
+		matMul_transposeB<rowsA, colsA, colsB, rowsB>(get_layer(A, rowsA, colsA, depA, d), rhs, get_layer(C, rowsA, colsA, depA, d));
 	}
 }
 
@@ -60,7 +64,7 @@ void bmm2(Tensor3d A, Tensor3d B, Tensor3d C)
 	//assert(colsA == rowsB);
 	for (unsigned d = 0; d < depA; d++)
 	{
-		matMul<rowsA, colsA, colsB, rowsB>(get(A, rowsA, colsA, depA, d), get(B, rowsB, colsB, depB, d), get(C, rowsA, colsA, depA, d));
+		matMul<rowsA, colsA, colsB, rowsB>(get_layer(A, rowsA, colsA, depA, d), get_layer(B, rowsB, colsB, depB, d), get_layer(C, rowsA, colsA, depA, d));
 	}
 }
 #endif

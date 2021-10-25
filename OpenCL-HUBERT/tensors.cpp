@@ -12,7 +12,8 @@
 
 //TODO: translate everything to template?
 
-void add(Tensor A, int rowsA, int colsA, Tensor B, int rowsB, int colsB, Tensor C) //with basic broadcasting
+void add(Tensor A, int rowsA, int colsA, Tensor B, int rowsB, int colsB, Tensor C) 
+//with basic broadcasting
 {
 	int rowMod;
 	int colMod;
@@ -27,13 +28,13 @@ void add(Tensor A, int rowsA, int colsA, Tensor B, int rowsB, int colsB, Tensor 
 	{
 		rowMod = rowsA + 1;
 		colMod = 1; //the column is always the 0th index.
-		flopSize(larger, rowsA, rowsB, smaller, rowsB, colsB);
+		flopSize(larger, rowsA, colsA, smaller, rowsB, colsB);
 	}
 	else if (colsA == colsB)
 	{
 		rowMod = 1; //the row is always the 0th index.
-		colMod = colsA + 1;; 
-		flopSize(larger, rowsA, rowsB, smaller, rowsB, colsB);
+		colMod = colsA + 1;
+		flopSize(larger, rowsA, colsA, smaller, rowsB, colsB);
 	}
 	else if(rowsB == 1 && colsB == 1)
 	{
@@ -54,8 +55,8 @@ void add(Tensor A, int rowsA, int colsA, Tensor B, int rowsB, int colsB, Tensor 
 		int temp2 = colsA;
 		rowsA = rowsB;
 		colsA = colsB;
-		rowsA = temp1;
-		rowsB = temp2;
+		rowsB = temp1;
+		colsB = temp2;
 	}
 
 	//now for the actual math
@@ -85,13 +86,13 @@ void sub(Tensor A, int rowsA, int colsA, Tensor B, int rowsB, int colsB, Tensor 
 	{
 		rowMod = rowsA + 1;
 		colMod = 1; //the column is always the 0th index.
-		flopSize(larger, rowsA, rowsB, smaller, rowsB, colsB);
+		flopSize(larger, rowsA, colsA, smaller, rowsB, colsB);
 	}
 	else if (colsA == colsB)
 	{
 		rowMod = 1; //the row is always the 0th index.
 		colMod = colsA + 1;;
-		flopSize(larger, rowsA, rowsB, smaller, rowsB, colsB);
+		flopSize(larger, rowsA, colsA, smaller, rowsB, colsB);
 	}
 	else if (rowsB == 1 && colsB == 1)
 	{
@@ -103,8 +104,6 @@ void sub(Tensor A, int rowsA, int colsA, Tensor B, int rowsB, int colsB, Tensor 
 		printf("incompatible dimenions\n");
 		//assert(false);
 	}
-
-
 	//deal with potentially flopped dimentions
 	if (larger != A)
 	{ //rowsA always belongs to the larger of the two
@@ -112,8 +111,8 @@ void sub(Tensor A, int rowsA, int colsA, Tensor B, int rowsB, int colsB, Tensor 
 		int temp2 = colsA;
 		rowsA = rowsB;
 		colsA = colsB;
-		rowsA = temp1;
-		rowsB = temp2;
+		rowsB = temp1;
+		colsB = temp2;
 	}
 
 	//now for the actual math
@@ -143,13 +142,13 @@ void mul_dot(Tensor A, int rowsA, int colsA, Tensor B, int rowsB, int colsB, Ten
 	{
 		rowMod = rowsA + 1;
 		colMod = 1; //the column is always the 0th index.
-		flopSize(larger, rowsA, rowsB, smaller, rowsB, colsB);
+		flopSize(larger, rowsA, colsA, smaller, rowsB, colsB);
 	}
 	else if (colsA == colsB)
 	{
 		rowMod = 1; //the row is always the 0th index.
 		colMod = colsA + 1;;
-		flopSize(larger, rowsA, rowsB, smaller, rowsB, colsB);
+		flopSize(larger, rowsA, colsA, smaller, rowsB, colsB);
 	}
 	else if (rowsB == 1 && colsB == 1)
 	{
@@ -161,8 +160,6 @@ void mul_dot(Tensor A, int rowsA, int colsA, Tensor B, int rowsB, int colsB, Ten
 		printf("incompatible dimenions\n");
 		//assert(false);
 	}
-
-
 	//deal with potentially flopped dimentions
 	if (larger != A)
 	{ //rowsA always belongs to the larger of the two
@@ -170,8 +167,8 @@ void mul_dot(Tensor A, int rowsA, int colsA, Tensor B, int rowsB, int colsB, Ten
 		int temp2 = colsA;
 		rowsA = rowsB;
 		colsA = colsB;
-		rowsA = temp1;
-		rowsB = temp2;
+		rowsB = temp1;
+		colsB = temp2;
 	}
 
 	//now for the actual math
@@ -201,13 +198,13 @@ void div_dot(Tensor A, int rowsA, int colsA, Tensor B, int rowsB, int colsB, Ten
 	{
 		rowMod = rowsA + 1;
 		colMod = 1; //the column is always the 0th index.
-		flopSize(larger, rowsA, rowsB, smaller, rowsB, colsB);
+		flopSize(larger, rowsA, colsA, smaller, rowsB, colsB);
 	}
 	else if (colsA == colsB)
 	{
 		rowMod = 1; //the row is always the 0th index.
 		colMod = colsA + 1;;
-		flopSize(larger, rowsA, rowsB, smaller, rowsB, colsB);
+		flopSize(larger, rowsA, colsA, smaller, rowsB, colsB);
 	}
 	else if (rowsB == 1 && colsB == 1)
 	{
@@ -219,8 +216,6 @@ void div_dot(Tensor A, int rowsA, int colsA, Tensor B, int rowsB, int colsB, Ten
 		printf("incompatible dimenions\n");
 		//assert(false);
 	}
-
-
 	//deal with potentially flopped dimentions
 	if (larger != A)
 	{ //rowsA always belongs to the larger of the two
@@ -228,8 +223,8 @@ void div_dot(Tensor A, int rowsA, int colsA, Tensor B, int rowsB, int colsB, Ten
 		int temp2 = colsA;
 		rowsA = rowsB;
 		colsA = colsB;
-		rowsA = temp1;
-		rowsB = temp2;
+		rowsB = temp1;
+		colsB = temp2;
 	}
 
 	//now for the actual math
@@ -259,13 +254,13 @@ void pow_dot(Tensor A, int rowsA, int colsA, Tensor B, int rowsB, int colsB, Ten
 	{
 		rowMod = rowsA + 1;
 		colMod = 1; //the column is always the 0th index.
-		flopSize(larger, rowsA, rowsB, smaller, rowsB, colsB);
+		flopSize(larger, rowsA, colsA, smaller, rowsB, colsB);
 	}
 	else if (colsA == colsB)
 	{
 		rowMod = 1; //the row is always the 0th index.
 		colMod = colsA + 1;;
-		flopSize(larger, rowsA, rowsB, smaller, rowsB, colsB);
+		flopSize(larger, rowsA, colsA, smaller, rowsB, colsB);
 	}
 	else if (rowsB == 1 && colsB == 1)
 	{
@@ -278,7 +273,6 @@ void pow_dot(Tensor A, int rowsA, int colsA, Tensor B, int rowsB, int colsB, Ten
 		//assert(false);
 	}
 
-
 	//deal with potentially flopped dimentions
 	if (larger != A)
 	{ //rowsA always belongs to the larger of the two
@@ -286,8 +280,8 @@ void pow_dot(Tensor A, int rowsA, int colsA, Tensor B, int rowsB, int colsB, Ten
 		int temp2 = colsA;
 		rowsA = rowsB;
 		colsA = colsB;
-		rowsA = temp1;
-		rowsB = temp2;
+		rowsB = temp1;
+		colsB = temp2;
 	}
 
 	//now for the actual math
@@ -385,6 +379,7 @@ void max(Tensor A, int rowsA, int colsA, int dim, Tensor C)
 //but only works on 2d tensors and only returns a tensor with the maximums, no indexes. 
 //dim=0 means you find the biggest in each column,
 //dim=1 means you find the biggest in each row. 
+//Note that the result of this operation is always stored in the first few elements of C.
 {
     if(dim == 0)
     {
@@ -407,7 +402,7 @@ void max(Tensor A, int rowsA, int colsA, int dim, Tensor C)
                     }
                 }
             }
-			set(C, rowsA, colsA, 0, i, largest);
+			C[i] = largest; //This doesnt use set() due to the way we want to address the space
 			first = true;
         }
     }
@@ -432,7 +427,7 @@ void max(Tensor A, int rowsA, int colsA, int dim, Tensor C)
                     }
                 }
             }
-			set(C, rowsA, colsA, i, 0, largest);
+			C[i] = largest; //This doesnt use set() due to the way we want to address the space
 			first = true;
         }
     }
@@ -464,7 +459,7 @@ void min(Tensor A, int rowsA, int colsA, int dim, Tensor C)
                     }
                 }
             }
-			set(C, rowsA, colsA, 0, i, smallest);
+			C[i] = smallest; //This doesnt use set() due to the way we want to address the space
 			first = true;
         }
     }
@@ -489,10 +484,42 @@ void min(Tensor A, int rowsA, int colsA, int dim, Tensor C)
                     }
                 }
             }
-			set(C, rowsA, colsA, i, 0, smallest);
+			C[i] = smallest; //This doesnt use set() due to the way we want to address the space
 			first = true;
         }
     }
+}
+
+void sum(Tensor A, int rowsA, int colsA, int dim, Tensor C)
+{
+	//dim=0 means you find the sum of each column,
+	//dim=1 means you find the sum of each row. 
+	unsigned i, j;
+	float running = 0.0f;
+	if (dim == 0)
+	{
+		for (i = 0; i < colsA; i++)
+		{
+			for (j = 0; j < rowsA; j++)
+			{
+				running += get(A, rowsA, colsA, j, i);
+			}
+			C[i] = running;
+			running = 0;
+		}
+	}
+	else
+	{ //dim ==1
+		for (i = 0; i < rowsA; i++)
+		{
+			for (j = 0; j < colsA; j++)
+			{
+				running += get(A, rowsA, colsA, i, j);
+			}
+			C[i] = running;
+			running = 0;
+		}
+	}
 }
 
 
@@ -596,6 +623,7 @@ void clamp(Tensor A, int rowsA, int colsA, float min, float max, Tensor C)
             float viq = get(A, rowsA, colsA, i,j);
             if(viq > max) {set(C, rowsA, colsA, i,j,max);}
             else if (viq < min) {set(C, rowsA, colsA, i,j,min);}
+			else { set(C, rowsA, colsA, i, j, viq); }
         }
     }     
 }
@@ -632,40 +660,6 @@ void reciprocal(Tensor A, int rowsA, int colsA, Tensor C)
             set(C, rowsA, colsA, i,j,recip);
         }
     }     
-}
-
-
-void sum(Tensor A, int rowsA, int colsA, int dim, Tensor C)
-{
-//dim=0 means you find the sum of each column,
-//dim=1 means you find the sum of each row. 
-	unsigned i, j;
-	float running;
-	running = float(0);
-	if (dim == 0)
-	{
-		for (i = 0; i < colsA; i++)
-		{
-			for (j = 0; j < rowsA; j++)
-			{
-				running += get(A, rowsA, colsA, i, j);
-			}
-			set(C, rowsA, colsA, 0, i, running);
-			running = 0;
-		}
-	}
-	else
-	{ //dim ==1
-		for (i = 0; i < rowsA; i++)
-		{
-			for (j = 0; j < colsA; j++)
-			{
-				running += get(A, rowsA, colsA, i, j);
-			}
-			set(C, rowsA, colsA, i, 0, running);
-			running = 0;
-		}
-	}
 }
 
 
@@ -936,7 +930,7 @@ bool eq_verbose(Tensor A, int rowsA, int colsA, Tensor B, int rowsB, int colsB)
 	}
 }
 
-void flopSize(Tensor lhs, int rowsLHS, int colsLHS, Tensor rhs, int rowsRHS, int colsRHS)
+void flopSize(Tensor &lhs, int rowsLHS, int colsLHS, Tensor &rhs, int rowsRHS, int colsRHS)
 {//At the end of this function lhs will always point to the larger of the two tensors
 	//assert(sameRows(lhs,rhs) || sameCols(lhs,rhs)); //we assume that the tensors share one dimention
 	if (colsLHS < colsRHS || rowsLHS < rowsRHS) // if the left hand side has the smaller dimention, flop them

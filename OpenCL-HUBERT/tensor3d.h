@@ -55,10 +55,10 @@ void mean(Tensor3d A, int rowsA, int colsA, int depA, Tensor3d C); //WARNING: ma
 void sqrt_tensor(Tensor3d A, int rowsA, int colsA, int depA, Tensor3d C);
 
 //adressing methods where dep is depth and select the 2d array you want.
-float get(Tensor3d A, int rowsA, int colsA, int depA, const unsigned &row, const unsigned &col, const unsigned &dep);
-void set(Tensor3d A, int rowsA, int colsA, int depA, const unsigned &row, const unsigned &col, const unsigned &dep, float val);
-Tensor get(Tensor3d A, int rowsA, int colsA, int depA, const unsigned &dep); //returns a 2d pointer to a part of this matrix
-void set(Tensor3d A, int rowsA, int colsA, int depA, const unsigned &dep, Tensor slice); //copies the elements of a 2d pointer into a section of the matrix
+float get(Tensor3d A, int rowsA, int colsA, int depA, int row, int col, int dep);
+void set(Tensor3d A, int rowsA, int colsA, int depA, int row, int col, int dep, float val);
+Tensor get_layer(Tensor3d A, int rowsA, int colsA, int depA, int dep); //returns a 2d pointer to a part of this matrix
+void set(Tensor3d A, int rowsA, int colsA, int depA, int dep, Tensor slice); //copies the elements of a 2d pointer into a section of the matrix
 void toTwoD(Tensor3d A, int rowsA, int colsA, int depA, Tensor C);//takes a tensor that is YxZx1, Yx1xZ, or 1xYxZ and returns the 2d matrix
 void append(Tensor3d A, int rowsA, int colsA, Tensor slice); //sets the first layer to be the elements of a 2d matrix 
 

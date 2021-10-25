@@ -17,7 +17,7 @@ void add(Tensor3d A, int rowsA, int colsA, int depA, Tensor B, int rowsB, int co
 	//defer error checking to a layer by layer basis. 
 	for (unsigned d = 0; d < depA; d++)
 	{
-		add(get(A, rowsA, colsA, depA, d), rowsA, colsA, B, rowsB, colsB, get(C, rowsA, colsA, depA, d));
+		add(get_layer(A, rowsA, colsA, depA, d), rowsA, colsA, B, rowsB, colsB, get_layer(C, rowsA, colsA, depA, d));
 	}
 }
 
@@ -25,7 +25,7 @@ void sub(Tensor3d A, int rowsA, int colsA, int depA, Tensor B, int rowsB, int co
 {
 	for (unsigned d = 0; d < depA; d++)
 	{
-		sub(get(A, rowsA, colsA, depA, d), rowsA, colsA, B, rowsB, colsB, get(C, rowsA, colsA, depA, d));
+		sub(get_layer(A, rowsA, colsA, depA, d), rowsA, colsA, B, rowsB, colsB, get_layer(C, rowsA, colsA, depA, d));
 	}
 }
 
@@ -33,7 +33,7 @@ void mul_dot(Tensor3d A, int rowsA, int colsA, int depA, Tensor B, int rowsB, in
 {
 	for (unsigned d = 0; d < depA; d++)
 	{
-		mul_dot(get(A, rowsA, colsA, depA, d), rowsA, colsA, B, rowsB, colsB, get(C, rowsA, colsA, depA, d));
+		mul_dot(get_layer(A, rowsA, colsA, depA, d), rowsA, colsA, B, rowsB, colsB, get_layer(C, rowsA, colsA, depA, d));
 	}
 }
 
@@ -41,7 +41,7 @@ void div_dot(Tensor3d A, int rowsA, int colsA, int depA, Tensor B, int rowsB, in
 {
 	for (unsigned d = 0; d < depA; d++)
 	{
-		div_dot(get(A, rowsA, colsA, depA, d), rowsA, colsA, B, rowsB, colsB, get(C, rowsA, colsA, depA, d));
+		div_dot(get_layer(A, rowsA, colsA, depA, d), rowsA, colsA, B, rowsB, colsB, get_layer(C, rowsA, colsA, depA, d));
 	}
 }
 
@@ -49,7 +49,7 @@ void pow_dot(Tensor3d A, int rowsA, int colsA, int depA, Tensor B, int rowsB, in
 {
 	for (unsigned d = 0; d < depA; d++)
 	{
-		pow_dot(get(A, rowsA, colsA, depA, d), rowsA, colsA, B, rowsB, colsB, get(C, rowsA, colsA, depA, d));
+		pow_dot(get_layer(A, rowsA, colsA, depA, d), rowsA, colsA, B, rowsB, colsB, get_layer(C, rowsA, colsA, depA, d));
 	}
 }
 
@@ -57,14 +57,14 @@ void add(Tensor3d A, int rowsA, int colsA, int depA, Tensor3d B, int rowsB, int 
 {
 	for (unsigned d = 0; d < depA; d++)
 	{
-		add(get(A, rowsA, colsA, depA, d), rowsA, colsA, get(B, rowsB, colsB, depB, d), rowsB, colsB, get(C, rowsA, colsA, depA, d));
+		add(get_layer(A, rowsA, colsA, depA, d), rowsA, colsA, get_layer(B, rowsB, colsB, depB, d), rowsB, colsB, get_layer(C, rowsA, colsA, depA, d));
 	}
 }
 void sub(Tensor3d A, int rowsA, int colsA, int depA, Tensor3d B, int rowsB, int colsB, int depB, Tensor3d C)
 {
 	for (unsigned d = 0; d < depA; d++)
 	{
-		sub(get(A, rowsA, colsA, depA, d), rowsA, colsA, get(B, rowsB, colsB, depB, d), rowsB, colsB, get(C, rowsA, colsA, depA, d));
+		sub(get_layer(A, rowsA, colsA, depA, d), rowsA, colsA, get_layer(B, rowsB, colsB, depB, d), rowsB, colsB, get_layer(C, rowsA, colsA, depA, d));
 	}
 }
 
@@ -72,14 +72,14 @@ void mul_dot(Tensor3d A, int rowsA, int colsA, int depA, Tensor3d B, int rowsB, 
 {
 	for (unsigned d = 0; d < depA; d++)
 	{
-		mul_dot(get(A, rowsA, colsA, depA, d), rowsA, colsA, get(B, rowsB, colsB, depB, d), rowsB, colsB, get(C, rowsA, colsA, depA, d));
+		mul_dot(get_layer(A, rowsA, colsA, depA, d), rowsA, colsA, get_layer(B, rowsB, colsB, depB, d), rowsB, colsB, get_layer(C, rowsA, colsA, depA, d));
 	}
 }
 void div_dot(Tensor3d A, int rowsA, int colsA, int depA, Tensor3d B, int rowsB, int colsB, int depB, Tensor3d C)
 {
 	for (unsigned d = 0; d < depA; d++)
 	{
-		div_dot(get(A, rowsA, colsA, depA, d), rowsA, colsA, get(B, rowsB, colsB, depB, d), rowsB, colsB, get(C, rowsA, colsA, depA, d));
+		div_dot(get_layer(A, rowsA, colsA, depA, d), rowsA, colsA, get_layer(B, rowsB, colsB, depB, d), rowsB, colsB, get_layer(C, rowsA, colsA, depA, d));
 	}
 }
 
@@ -87,7 +87,7 @@ void pow_dot(Tensor3d A, int rowsA, int colsA, int depA, Tensor3d B, int rowsB, 
 {
 	for (unsigned d = 0; d < depA; d++)
 	{
-		pow_dot(get(A, rowsA, colsA, depA, d), rowsA, colsA, get(B, rowsB, colsB, depB, d), rowsB, colsB, get(C, rowsA, colsA, depA, d));
+		pow_dot(get_layer(A, rowsA, colsA, depA, d), rowsA, colsA, get_layer(B, rowsB, colsB, depB, d), rowsB, colsB, get_layer(C, rowsA, colsA, depA, d));
 	}
 }
 
@@ -96,7 +96,7 @@ void add_scalar(Tensor3d A, int rowsA, int colsA, int depA, float B, Tensor3d C)
 {
 	for (unsigned d = 0; d < depA; d++)
 	{
-		add_scalar(get(A, rowsA, colsA, depA, d), rowsA, colsA, B, get(C, rowsA, colsA, depA, d));
+		add_scalar(get_layer(A, rowsA, colsA, depA, d), rowsA, colsA, B, get_layer(C, rowsA, colsA, depA, d));
 	}
 }
 
@@ -104,7 +104,7 @@ void mul_scalar(Tensor3d A, int rowsA, int colsA, int depA, float B, Tensor3d C)
 {
 	for (unsigned d = 0; d < depA; d++)
 	{
-		mul_scalar(get(A, rowsA, colsA, depA, d), rowsA, colsA, B, get(C, rowsA, colsA, depA, d));
+		mul_scalar(get_layer(A, rowsA, colsA, depA, d), rowsA, colsA, B, get_layer(C, rowsA, colsA, depA, d));
 	}
 }
 
@@ -112,21 +112,21 @@ void sub_scalar(Tensor3d A, int rowsA, int colsA, int depA, float B, Tensor3d C)
 {
 	for (unsigned d = 0; d < depA; d++)
 	{
-		sub_scalar(get(A, rowsA, colsA, depA, d), rowsA, colsA, B, get(C, rowsA, colsA, depA, d));
+		sub_scalar(get_layer(A, rowsA, colsA, depA, d), rowsA, colsA, B, get_layer(C, rowsA, colsA, depA, d));
 	}
 }
 void sub_scalar(float B, Tensor3d A, int rowsA, int colsA, int depA, Tensor3d C)
 {
 	for (unsigned d = 0; d < depA; d++)
 	{
-		sub_scalar(B, get(A, rowsA, colsA, depA, d), rowsA, colsA, get(C, rowsA, colsA, depA, d));
+		sub_scalar(B, get_layer(A, rowsA, colsA, depA, d), rowsA, colsA, get_layer(C, rowsA, colsA, depA, d));
 	}
 }
 void div_scalar(Tensor3d A, int rowsA, int colsA, int depA, float B, Tensor3d C)
 {
 	for (unsigned d = 0; d < depA; d++)
 	{
-		div_scalar(get(A, rowsA, colsA, depA, d), rowsA, colsA, B, get(C, rowsA, colsA, depA, d));
+		div_scalar(get_layer(A, rowsA, colsA, depA, d), rowsA, colsA, B, get_layer(C, rowsA, colsA, depA, d));
 	}
 }
 
@@ -134,7 +134,7 @@ void pow_scalar(Tensor3d A, int rowsA, int colsA, int depA, float B, Tensor3d C)
 {
 	for (unsigned d = 0; d < depA; d++)
 	{
-		pow_scalar(get(A, rowsA, colsA, depA, d), rowsA, colsA, B, get(C, rowsA, colsA, depA, d));
+		pow_scalar(get_layer(A, rowsA, colsA, depA, d), rowsA, colsA, B, get_layer(C, rowsA, colsA, depA, d));
 	}
 }
 
@@ -144,7 +144,7 @@ void max(Tensor3d A, int rowsA, int colsA, int depA, int dim, Tensor3d C)
 	{
 		for (unsigned d = 0; d < depA; d++)
 		{
-			max(get(A, rowsA, colsA, depA, d), rowsA, colsA, dim, get(C, rowsA, colsA, depA, d));
+			max(get_layer(A, rowsA, colsA, depA, d), rowsA, colsA, dim, get_layer(C, rowsA, colsA, depA, d));
 		}
 	}
 	else //dim ==2
@@ -183,7 +183,7 @@ void min(Tensor3d A, int rowsA, int colsA, int depA, int dim, Tensor3d C)
 	{
 		for (unsigned d = 0; d < depA; d++)
 		{
-			min(get(A, rowsA, colsA, depA, d), rowsA, colsA, dim, get(C, rowsA, colsA, depA, d));
+			min(get_layer(A, rowsA, colsA, depA, d), rowsA, colsA, dim, get_layer(C, rowsA, colsA, depA, d));
 		}
 	}
 	else //dim ==2
@@ -234,7 +234,7 @@ void max_scalar(Tensor3d A, int rowsA, int colsA, int depA, float compare, Tenso
 {
 	for (unsigned d = 0; d < depA; d++)
 	{
-		max_scalar(get(A, rowsA, colsA, depA, d), rowsA, colsA, compare, get(C, rowsA, colsA, depA, d));
+		max_scalar(get_layer(A, rowsA, colsA, depA, d), rowsA, colsA, compare, get_layer(C, rowsA, colsA, depA, d));
 	}
 }
 
@@ -242,7 +242,7 @@ void min_scalar(Tensor3d A, int rowsA, int colsA, int depA, float compare, Tenso
 {
 	for (unsigned d = 0; d < depA; d++)
 	{
-		min_scalar(get(A, rowsA, colsA, depA, d), rowsA, colsA, compare, get(C, rowsA, colsA, depA, d));
+		min_scalar(get_layer(A, rowsA, colsA, depA, d), rowsA, colsA, compare, get_layer(C, rowsA, colsA, depA, d));
 	}
 }
 
@@ -250,7 +250,7 @@ void min_dot(Tensor3d A, int rowsA, int colsA, int depA, Tensor B, int rowsB, in
 {
 	for (unsigned d = 0; d < depA; d++)
 	{
-		min_dot(get(A, rowsA, colsA, depA, d), rowsA, colsA, B, get(C, rowsA, colsA, depA, d));
+		min_dot(get_layer(A, rowsA, colsA, depA, d), rowsA, colsA, B, get_layer(C, rowsA, colsA, depA, d));
 	}
 }
 
@@ -258,7 +258,7 @@ void abs_tensor(Tensor3d A, int rowsA, int colsA, int depA, Tensor3d C)
 {
 	for (unsigned d = 0; d < depA; d++)
 	{
-		abs_tensor(get(A, rowsA, colsA, depA, d), rowsA, colsA, get(C, rowsA, colsA, depA, d));
+		abs_tensor(get_layer(A, rowsA, colsA, depA, d), rowsA, colsA, get_layer(C, rowsA, colsA, depA, d));
 	}
 }
 
@@ -266,7 +266,7 @@ void floor_tensor(Tensor3d A, int rowsA, int colsA, int depA, Tensor3d C)
 {
 	for (unsigned d = 0; d < depA; d++)
 	{
-		floor_tensor(get(A, rowsA, colsA, depA, d), rowsA, colsA, get(C, rowsA, colsA, depA, d));
+		floor_tensor(get_layer(A, rowsA, colsA, depA, d), rowsA, colsA, get_layer(C, rowsA, colsA, depA, d));
 	}
 }
 
@@ -274,7 +274,7 @@ void exp2_tensor(Tensor3d A, int rowsA, int colsA, int depA, Tensor3d C)
 {
 	for (unsigned d = 0; d < depA; d++)
 	{
-		exp2_tensor(get(A, rowsA, colsA, depA, d), rowsA, colsA, get(C, rowsA, colsA, depA, d));
+		exp2_tensor(get_layer(A, rowsA, colsA, depA, d), rowsA, colsA, get_layer(C, rowsA, colsA, depA, d));
 	}
 }
 
@@ -282,7 +282,7 @@ void clamp(Tensor3d A, int rowsA, int colsA, int depA, float min, float max, Ten
 {
 	for (unsigned d = 0; d < depA; d++)
 	{
-		clamp(get(A, rowsA, colsA, depA, d), rowsA, colsA, min, max, get(C, rowsA, colsA, depA, d));
+		clamp(get_layer(A, rowsA, colsA, depA, d), rowsA, colsA, min, max, get_layer(C, rowsA, colsA, depA, d));
 	}
 }
 
@@ -290,7 +290,7 @@ void roundTensor(Tensor3d A, int rowsA, int colsA, int depA, Tensor3d C)
 {
 	for (unsigned d = 0; d < depA; d++)
 	{
-		roundTensor(get(A, rowsA, colsA, depA, d), rowsA, colsA, get(C, rowsA, colsA, depA, d));
+		roundTensor(get_layer(A, rowsA, colsA, depA, d), rowsA, colsA, get_layer(C, rowsA, colsA, depA, d));
 	}
 }
 
@@ -298,7 +298,7 @@ void reciprocal(Tensor3d A, int rowsA, int colsA, int depA, Tensor3d C)
 {
 	for (unsigned d = 0; d < depA; d++)
 	{
-		reciprocal(get(A, rowsA, colsA, depA, d), rowsA, colsA, get(C, rowsA, colsA, depA, d));
+		reciprocal(get_layer(A, rowsA, colsA, depA, d), rowsA, colsA, get_layer(C, rowsA, colsA, depA, d));
 	}
 }
 
@@ -308,7 +308,7 @@ void sum(Tensor3d A, int rowsA, int colsA, int depA, int dim, Tensor3d C)
 	{
 		for (unsigned d = 0; d < depA; d++)
 		{
-			sum(get(A, rowsA, colsA, depA, d), rowsA, colsA, dim, get(C, rowsA, colsA, depA, d));
+			sum(get_layer(A, rowsA, colsA, depA, d), rowsA, colsA, dim, get_layer(C, rowsA, colsA, depA, d));
 		}
 	}
 
@@ -335,7 +335,7 @@ void sign(Tensor3d A, int rowsA, int colsA, int depA, Tensor3d C)
 {
 	for (unsigned d = 0; d < depA; d++)
 	{
-		sign(get(A, rowsA, colsA, depA, d), rowsA, colsA, get(C, rowsA, colsA, depA, d));
+		sign(get_layer(A, rowsA, colsA, depA, d), rowsA, colsA, get_layer(C, rowsA, colsA, depA, d));
 	}
 }
 
@@ -343,7 +343,7 @@ void mean(Tensor3d A, int rowsA, int colsA, int depA, Tensor3d C)
 {
 	for (unsigned d = 0; d < depA; d++)
 	{
-		mean(get(A, rowsA, colsA, depA, d), rowsA, colsA, get(C, rowsA, colsA, depA, d));
+		mean(get_layer(A, rowsA, colsA, depA, d), rowsA, colsA, get_layer(C, rowsA, colsA, depA, d));
 	}
 }
 
@@ -351,33 +351,34 @@ void sqrt_tensor(Tensor3d A, int rowsA, int colsA, int depA, Tensor3d C)
 {
 	for (unsigned d = 0; d < depA; d++)
 	{
-		sqrt_tensor(get(A, rowsA, colsA, depA, d), rowsA, colsA, get(C, rowsA, colsA, depA, d));
+		sqrt_tensor(get_layer(A, rowsA, colsA, depA, d), rowsA, colsA, get_layer(C, rowsA, colsA, depA, d));
 	}
 }
 
 //adressing methods where dep is depth and select the 2d array you want.
-float get(Tensor3d A, int rowsA, int colsA, int depA, const unsigned &row, const unsigned &col, const unsigned &dep)
+float get(Tensor3d A, int rowsA, int colsA, int depA, int row, int col, int dep)
 {
-	int first_el_of_layer = depA * sizeof(float)*rowsA*colsA;
+	int first_el_of_layer = dep*rowsA*colsA;
 	return A[first_el_of_layer + row * colsA + col];
 }
 
-void set(Tensor3d A, int rowsA, int colsA, int depA, const unsigned &row, const unsigned &col, const unsigned &dep, float val)
+void set(Tensor3d A, int rowsA, int colsA, int depA, int row, int col, int dep, float val)
 {
-	int first_el_of_layer = depA * sizeof(float)*rowsA*colsA;
+	int first_el_of_layer = dep*rowsA*colsA;
 	A[first_el_of_layer + row * colsA + col] = val;
 }
 
-Tensor get(Tensor3d A, int rowsA, int colsA, int depA, const unsigned &dep)
+Tensor get_layer(Tensor3d A, int rowsA, int colsA, int depA, int dep)
 {
-	return A + depA*sizeof(float)*rowsA*colsA; //index the pointer through layers, depA at a time. 
+	int first_el_of_layer = dep * rowsA*colsA;
+	return &A[first_el_of_layer]; //C++ pointers are so easY! 
 }
 
-void set(Tensor3d A, int rowsA, int colsA, int depA, const unsigned &dep, Tensor slice)
+void set(Tensor3d A, int rowsA, int colsA, int depA, int dep, Tensor slice)
 {//does a copy operation from slice to tensor
 	for (int i = 0; i < rowsA*colsA; i++)
 	{
-		A[depA*rowsA*colsA + i] = slice[i];
+		A[dep*rowsA*colsA + i] = slice[i];
 	}
 }
 
@@ -431,7 +432,7 @@ void print(Tensor3d A, int rowsA, int colsA, int depA)
 	printf("Tensor3d\n[");
 	for (unsigned d = 0; d < depA; d++)
 	{
-		print(get(A, rowsA, colsA, depA,d), rowsA, colsA);
+		print(get_layer(A, rowsA, colsA, depA,d), rowsA, colsA);
 		printf(",\n");
 	}
 	printf("] End Tensor3d\n");
@@ -442,7 +443,7 @@ void print_brief(Tensor3d A, int rowsA, int colsA, int depA)
 	printf("Tensor3d\n[");
 	for (unsigned d = 0; d < depA; d++)
 	{
-		print_brief(get(A, rowsA, colsA, depA, d), rowsA, colsA);
+		print_brief(get_layer(A, rowsA, colsA, depA, d), rowsA, colsA);
 		printf(",\n");
 	}
 	printf("] End Tensor3d\n");
@@ -452,7 +453,7 @@ bool eq(Tensor3d A, int rowsA, int colsA, int depA, Tensor3d B, int rowsB, int c
 {
 	for (unsigned d = 0; d < depA; d++)
 	{
-		if (!eq_verbose(get(A, rowsA, colsA, depA,d), rowsA, colsA, get(B, rowsB, colsB, depB,d), rowsB, colsB))
+		if (!eq_verbose(get_layer(A, rowsA, colsA, depA,d), rowsA, colsA, get_layer(B, rowsB, colsB, depB,d), rowsB, colsB))
 		{
 			return false;
 		}

@@ -36,6 +36,7 @@ void div_scalar(Tensor A, int rowsA, int colsA, float B, Tensor C);
 void pow_scalar(Tensor A, int rowsA, int colsA, float B, Tensor C);
 void max(Tensor A, int rowsA, int colsA, int dim, Tensor C); //WARNING: matrix's size changes
 void min(Tensor A, int rowsA, int colsA, int dim, Tensor C); //WARNING: matrix's size changes
+void sum(Tensor A, int rowsA, int colsA, int dim, Tensor C); //WARNING: matrix's size changes
 void max_scalar(Tensor A, int rowsA, int colsA, float compare, Tensor C);
 void min_scalar(Tensor A, int rowsA, int colsA, float compare, Tensor C);
 void min_dot(Tensor A, int rowsA, int colsA, Tensor B, Tensor C); //implied A.size == B.size
@@ -45,7 +46,6 @@ void exp2_tensor(Tensor A, int rowsA, int colsA, Tensor C);
 void clamp(Tensor A, int rowsA, int colsA, float min, float max, Tensor C);
 void roundTensor(Tensor A, int rowsA, int colsA, Tensor C);
 void reciprocal(Tensor A, int rowsA, int colsA, Tensor C);
-void sum(Tensor A, int rowsA, int colsA, int dim, Tensor C); //WARNING: matrix's size changes
 void sign(Tensor A, int rowsA, int colsA, Tensor C);
 void mean(Tensor A, int rowsA, int colsA, Tensor C); //WARNING: matrix's size changes
 void sqrt_tensor(Tensor A, int rowsA, int colsA, Tensor C);
@@ -67,6 +67,6 @@ void print_brief(Tensor A, int rowsA, int colsA);
 bool eq(Tensor A, int rowsA, int colsA, Tensor B, int rowsB, int colsB);
 bool eq_verbose(Tensor A, int rowsA, int colsA, Tensor B, int rowsB, int colsB);
 
-void flopSize(Tensor lhs, int rowsLHS, int colsLHS, Tensor rhs, int rowsRHS, int colsRHS);
+void flopSize(Tensor& lhs, int rowsLHS, int colsLHS, Tensor& rhs, int rowsRHS, int colsRHS);
 
 #endif

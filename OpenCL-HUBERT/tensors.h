@@ -62,6 +62,7 @@ void transposed_set(Tensor A, int rowsA, int colsA, int row, int col, float val)
 //helper functions
 void transpose(Tensor A, int rowsA, int colsA, Tensor C);
 void copy(Tensor A, int rowsA, int colsA, Tensor C);
+void shrinkTensor(Tensor A, int rowsA, int colsA, Tensor C, int rowsC, int colsC); //use this after a dimention has been collapsed
 void print(Tensor A, int rowsA, int colsA);
 void print_brief(Tensor A, int rowsA, int colsA);
 bool eq(Tensor A, int rowsA, int colsA, Tensor B, int rowsB, int colsB);

@@ -140,12 +140,22 @@ void pow_scalar(Tensor3d A, int rowsA, int colsA, int depA, float B, Tensor3d C)
 
 void max(Tensor3d A, int rowsA, int colsA, int depA, int dim, Tensor3d C)
 {
-	if (dim == 0 || dim == 1)
+	if (dim == 0 )
 	{
 		for (unsigned d = 0; d < depA; d++)
 		{
 			max(get_layer(A, rowsA, colsA, depA, d), rowsA, colsA, dim, get_layer(C, rowsA, colsA, depA, d));
 		}
+		//we already shrink one dim in the loop, so we shrink it here too.
+		shrinkTensor(C, rowsA, colsA, depA, C, 1, colsA, depA);
+	}
+	else if (dim == 1)
+	{
+		for (unsigned d = 0; d < depA; d++)
+		{
+			max(get_layer(A, rowsA, colsA, depA, d), rowsA, colsA, dim, get_layer(C, rowsA, colsA, depA, d));
+		}
+		shrinkTensor(C, rowsA, colsA, depA, C, rowsA, 1, depA);
 	}
 	else //dim ==2
 	{
@@ -160,7 +170,7 @@ void max(Tensor3d A, int rowsA, int colsA, int depA, int dim, Tensor3d C)
 				{
 					if (first)
 					{
-						largest = get(A, rowsA, colsA, depA, i, j, d);
+						largest = get(A, rowsA, colsA, depA, j, i, d);
 						first = false;
 					}
 					else {
@@ -170,21 +180,33 @@ void max(Tensor3d A, int rowsA, int colsA, int depA, int dim, Tensor3d C)
 						}
 					}
 				}
-				set(C, rowsA, colsA, 1, i, j, 0, largest);
+				set(C, rowsA, colsA, depA, j, i, 0, largest);
 				first = true;
 			}
 		}
+		print(C, rowsA, colsA, 1);
+		shrinkTensor(C, rowsA, colsA, depA, C, rowsA, colsA, 1);
 	}
 }
 
 void min(Tensor3d A, int rowsA, int colsA, int depA, int dim, Tensor3d C)
 {
-	if (dim == 0 || dim == 1)
+	if (dim == 0)
 	{
 		for (unsigned d = 0; d < depA; d++)
 		{
 			min(get_layer(A, rowsA, colsA, depA, d), rowsA, colsA, dim, get_layer(C, rowsA, colsA, depA, d));
 		}
+		//we already shrink one dim in the loop, so we shrink it here too.
+		shrinkTensor(C, rowsA, colsA, depA, C, 1, colsA, depA);
+	}
+	else if (dim == 1)
+	{
+		for (unsigned d = 0; d < depA; d++)
+		{
+			min(get_layer(A, rowsA, colsA, depA, d), rowsA, colsA, dim, get_layer(C, rowsA, colsA, depA, d));
+		}
+		shrinkTensor(C, rowsA, colsA, depA, C, rowsA, 1, depA);
 	}
 	else //dim ==2
 	{
@@ -199,7 +221,7 @@ void min(Tensor3d A, int rowsA, int colsA, int depA, int dim, Tensor3d C)
 				{
 					if (first)
 					{
-						smallest = get(A, rowsA, colsA, depA, i, j, d);
+						smallest = get(A, rowsA, colsA, depA, j, i, d);
 						first = false;
 					}
 					else {
@@ -209,10 +231,11 @@ void min(Tensor3d A, int rowsA, int colsA, int depA, int dim, Tensor3d C)
 						}
 					}
 				}
-				set(C, rowsA, colsA, 1, i, j, 0, smallest);
+				set(C, rowsA, colsA, 1, j, i, 0, smallest);
 				first = true;
 			}
 		}
+		shrinkTensor(C, rowsA, colsA, depA, C, rowsA, colsA, 1);
 	}
 }
 
@@ -246,8 +269,8 @@ void min_scalar(Tensor3d A, int rowsA, int colsA, int depA, float compare, Tenso
 	}
 }
 
-void min_dot(Tensor3d A, int rowsA, int colsA, int depA, Tensor B, int rowsB, int colsB, Tensor3d C)
-{
+void min_dot(Tensor3d A, int rowsA, int colsA, int depA, Tensor B, Tensor3d C)
+{ //assuming a and B are the same size.
 	for (unsigned d = 0; d < depA; d++)
 	{
 		min_dot(get_layer(A, rowsA, colsA, depA, d), rowsA, colsA, B, get_layer(C, rowsA, colsA, depA, d));
@@ -447,6 +470,52 @@ void print_brief(Tensor3d A, int rowsA, int colsA, int depA)
 		printf(",\n");
 	}
 	printf("] End Tensor3d\n");
+}
+
+void copy(Tensor3d A, int rowsA, int colsA, int depA, Tensor3d C)
+{
+	for (unsigned d = 0; d < depA; d++)
+	{
+		copy(get_layer(A, rowsA, colsA, depA, d), rowsA, colsA, get_layer(C, rowsA, colsA, depA, d));
+	}
+}
+
+void shrinkTensor(Tensor3d A, int rowsA, int colsA, int depA, Tensor3d C, int rowsC, int colsC, int depC)
+{
+	//we will assume that one of [rows, cols, or dep] have been collapsed to 1.
+	if (rowsA != rowsC && rowsC == 1)
+	{//we have a 3d matrix who has one row but the values are positioned assuming no dim was collapsed. Iterate over the remaining dims using different assumptions to collapse to C.
+		for (int i = 0; i < depA; i++)
+		{
+			for (int j = 0; j < colsA; j++)
+			{
+				float take = get(A, rowsA, colsA, depA, 0, j, i);
+				set(C, rowsC, colsC, depC, 0, j, i, take);
+			}
+		}
+	}
+	else if (colsA != colsC && colsC == 1)
+	{
+		for (int i = 0; i < depA; i++)
+		{
+			for (int j = 0; j < rowsA; j++)
+			{
+				float take = get(A, rowsA, colsA, depA, j, 0, i);
+				set(C, rowsC, colsC, depC, j, 0, i, take);
+			}
+		}
+	}
+	else if (depA != depC && depC == 1)
+	{
+		for (int i = 0; i < rowsA; i++)
+		{
+			for (int j = 0; j < colsA; j++)
+			{
+				float take = get(A, rowsA, colsA, depA, i, j, 0);
+				set(C, rowsC, colsC, depC, i, j, 0, take);
+			}
+		}
+	}
 }
 
 bool eq(Tensor3d A, int rowsA, int colsA, int depA, Tensor3d B, int rowsB, int colsB, int depB)

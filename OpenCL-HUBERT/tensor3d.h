@@ -42,7 +42,7 @@ void max(Tensor3d A, int rowsA, int colsA, int depA); //WARNING: matrix's size c
 void min(Tensor3d A, int rowsA, int colsA, int depA);//WARNING: matrix's size changes to 1x1
 void max_scalar(Tensor3d A, int rowsA, int colsA, int depA, float compare, Tensor3d C);
 void min_scalar(Tensor3d A, int rowsA, int colsA, int depA, float compare, Tensor3d C);
-void min_dot(Tensor3d A, int rowsA, int colsA, int depA, Tensor B, int rowsB, int colsB, Tensor3d C);
+void min_dot(Tensor3d A, int rowsA, int colsA, int depA, Tensor B, Tensor3d C);
 void abs_tensor(Tensor3d A, int rowsA, int colsA, int depA, Tensor3d C);
 void floor_tensor(Tensor3d A, int rowsA, int colsA, int depA, Tensor3d C);
 void exp2_tensor(Tensor3d A, int rowsA, int colsA, int depA, Tensor3d C);
@@ -65,6 +65,8 @@ void append(Tensor3d A, int rowsA, int colsA, Tensor slice); //sets the first la
 //helper functions
 void print(Tensor3d A, int rowsA, int colsA, int depA);
 void print_brief(Tensor3d A, int rowsA, int colsA, int depA);
+void copy(Tensor3d A, int rowsA, int colsA, int depA, Tensor3d C);
+void shrinkTensor(Tensor3d A, int rowsA, int colsA, int depA, Tensor3d C, int rowsC, int colsC, int depC);
 bool eq(Tensor3d A, int rowsA, int colsA, int depA, Tensor3d B, int rowsB, int colsB, int depB);
 
 

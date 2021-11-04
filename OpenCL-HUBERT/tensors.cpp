@@ -402,9 +402,11 @@ void max(Tensor A, int rowsA, int colsA, int dim, Tensor C)
                     }
                 }
             }
-			C[i] = largest; //This doesnt use set() due to the way we want to address the space
+			//C[i] = largest; //This doesnt use set() due to the way we want to address the space
+			set(C, rowsA, colsA, 0, i, largest);
 			first = true;
         }
+		shrinkTensor(C, rowsA, colsA, C, 1, colsA);
     }
     else
     {
@@ -427,9 +429,11 @@ void max(Tensor A, int rowsA, int colsA, int dim, Tensor C)
                     }
                 }
             }
-			C[i] = largest; //This doesnt use set() due to the way we want to address the space
+			//C[i] = largest; //This doesnt use set() due to the way we want to address the space
+			set(C, rowsA, colsA, i, 0, largest);
 			first = true;
         }
+		shrinkTensor(C, rowsA, colsA, C, rowsA, 1);
     }
 }
 
@@ -459,9 +463,11 @@ void min(Tensor A, int rowsA, int colsA, int dim, Tensor C)
                     }
                 }
             }
-			C[i] = smallest; //This doesnt use set() due to the way we want to address the space
+			//C[i] = smallest; //This doesnt use set() due to the way we want to address the space
+			set(C, rowsA, colsA, 0, i, smallest);
 			first = true;
         }
+		shrinkTensor(C, rowsA, colsA, C, 1, colsA);
     }
     else
     { //dim ==1
@@ -484,9 +490,11 @@ void min(Tensor A, int rowsA, int colsA, int dim, Tensor C)
                     }
                 }
             }
-			C[i] = smallest; //This doesnt use set() due to the way we want to address the space
+			//C[i] = smallest; //This doesnt use set() due to the way we want to address the space
+			set(C, rowsA, colsA, i, 0, smallest);
 			first = true;
         }
+		shrinkTensor(C, rowsA, colsA, C, rowsA, 1);
     }
 }
 
@@ -504,9 +512,11 @@ void sum(Tensor A, int rowsA, int colsA, int dim, Tensor C)
 			{
 				running += get(A, rowsA, colsA, j, i);
 			}
-			C[i] = running;
+			//C[i] = running;
+			set(C, rowsA, colsA, 0, i, running);
 			running = 0;
 		}
+		shrinkTensor(C, rowsA, colsA, C, 1, colsA);
 	}
 	else
 	{ //dim ==1
@@ -516,9 +526,11 @@ void sum(Tensor A, int rowsA, int colsA, int dim, Tensor C)
 			{
 				running += get(A, rowsA, colsA, i, j);
 			}
-			C[i] = running;
+			//C[i] = running;
+			set(C, rowsA, colsA, i, 0, running);
 			running = 0;
 		}
+		shrinkTensor(C, rowsA, colsA, C, rowsA, 1);
 	}
 }
 
@@ -834,9 +846,30 @@ void copy(Tensor A, int rowsA, int colsA, Tensor C)
 {
 	for (int i = 0; i < rowsA; i++)
 	{
-		for (int j = 0; j < colsA; i++)
+		for (int j = 0; j < colsA; j++)
 		{
 			set(C, rowsA, colsA, i, j, get(A, rowsA, colsA, i, j));
+		}
+	}
+}
+
+void shrinkTensor(Tensor A, int rowsA, int colsA, Tensor C, int rowsC, int colsC) //use this after a dimention has been collapsed
+{
+	//we will assume that rows have been collapsed to 1 or cols have been collapsed to 1.
+	if (rowsA != rowsC && rowsC ==1)
+	{//we have a 2d matrix who has one row but the values are positioned assuming multiple columns. Iterate over that row using different assumptions to collapse to C.
+		for (int i = 0; i < colsA; i++)
+		{
+			float take = get(A, rowsA, colsA, 0, i);
+			set(C, rowsC, colsC, 0, i, take);
+		}
+	}
+	else if (colsA != colsC && colsC == 1)
+	{
+		for (int i = 0; i < rowsA; i++)
+		{
+			float take = get(A, rowsA, colsA, i, 0);
+			set(C, rowsC, colsC, i, 0, take);
 		}
 	}
 }
@@ -938,16 +971,5 @@ void flopSize(Tensor &lhs, int rowsLHS, int colsLHS, Tensor &rhs, int rowsRHS, i
 		Tensor temp = lhs;
 		lhs = rhs;
 		rhs = temp;
-	}
-}
-
- void copy(Tensor A, int rowsA, int colsA, Tensor C, int rowsC, int colsC)
-{
-	for (unsigned i = 0; i < rowsA; i++)
-	{
-		for (unsigned j = 0; j < colsA; j++)
-		{
-			set(C, rowsC, colsC, i,j, get(A, rowsA, colsA, i,j));
-		}
 	}
 }

@@ -126,7 +126,7 @@ void matrix_multiply(T A_local[t_rowsA*t_colsA], T B_local[t_colsA*t_colsB], T C
 		}
 
 		if (last_s_itr && i >= 0) {
-			set(C_local, COLSA, COLSB, i, j, final_sum);
+			set(C_local, ROWSC, COLSC, i, j, final_sum);
 		}
 		if (j == COLSC - 1) {
 			j = 0;

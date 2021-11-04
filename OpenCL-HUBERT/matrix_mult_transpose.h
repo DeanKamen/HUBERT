@@ -43,15 +43,15 @@
 //
 //Tip - You can safely ignore compiler warnings like default template arguments for a function template are a C++11 extension [-Wc++11-extensions]. 
 #include "tensors.h"
-template<class T, int t_rowsA, int t_colsA, int t_rowsB, int DOT_VEC_SIZE = t_colsA, int BLOCK_SIZE = DOT_VEC_SIZE, int RUNNING_SUM_MULT_L = 1>
-void matrix_multiply_transpose(T A_local[t_rowsA*t_colsA], T B_local[t_colsA*t_rowsB], T C_local[t_rowsA*t_rowsB]) {
+template<class T, int t_rowsA, int t_colsA, int t_colsB, int DOT_VEC_SIZE = t_colsA, int BLOCK_SIZE = DOT_VEC_SIZE, int RUNNING_SUM_MULT_L = 1>
+void matrix_multiply_transpose(T A_local[t_rowsA*t_colsA], T B_local[t_colsA*t_colsB], T C_local[t_rowsA*t_colsB]) {
 //void matrix_multiply_transpose(Tensor A_local, Tensor B_local, Tensor C_local) {
 	const int COLSA = t_colsA;
 	const int ROWSA = t_rowsA;
-	const int COLSB = COLSA;
-	const int ROWSB = t_rowsB;
+	const int COLSB = t_colsB;
+	const int ROWSB = COLSA;
 	const int ROWSC = ROWSA;
-	const int COLSC = ROWSB;
+	const int COLSC = COLSB;
 
 	const int num_iter_per_elem_L = (COLSA / DOT_VEC_SIZE);
 
@@ -103,8 +103,9 @@ void matrix_multiply_transpose(T A_local[t_rowsA*t_colsA], T B_local[t_colsA*t_r
 		T running_sum = 0.0;
 #pragma unroll
 		for (int d = 0; d < DOT_VEC_SIZE; ++d) {
-			running_sum += A_local_regs_stable[d] * transposed_get(B_local, ROWSB, COLSB, s * DOT_VEC_SIZE + d, j);
+			running_sum += A_local_regs_stable[d] * get(B_local, COLSB, ROWSB, j, s * DOT_VEC_SIZE + d); //the only line that differs from non transpose
 		}
+
 		T sum = running_sums_for_col[RUNNING_SUM_MULT_L * COLSC - 1] = (s < RUNNING_SUM_MULT_L ? (T) 0.0 : running_sums_for_col[RUNNING_SUM_MULT_L * COLSC - 1]) + running_sum;
 		T final_sum = sum;
 #pragma unroll

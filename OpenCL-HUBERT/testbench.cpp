@@ -31,7 +31,7 @@ int main()
 	assert(eq(A, tensor1r, tensor1c, tensor1, tensor1r, tensor1c));
 
 	//test matMul
-	float tensorMul1a[] = { 1,1,1,2,1,2,1,1,1 };//first matrix, 4x3
+	float tensorMul1a[] = { 1,1,1,2,1,2,1,1,1 };
 	Tensor tensorMul1 = tensorMul1a;
 	const int tensorMul1r = 3;
 	const int tensorMul1c = 3;
@@ -190,10 +190,17 @@ int main()
 	const int rowsB = 3;
 	const int colsB = 2;
 
+	float B3d_ol_t[] = { 1,1,1, 1,2,1};
+
 	float B3d[] = { 1,1,1,1,2,1,1,2,1,1,1,1 };
 	const int Brows = 2;
 	const int Bcols = 3;
 	const int Bdep = 2;
+
+	float B3d_t[] = { 1,1,1,2,1,1,1,1,2,1,1,1 };
+	const int Brows_t = 3;
+	const int Bcols_t = 2;
+	const int Bdep_t = 2;
 
 	float Cspace[] = { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 };
 	const int Crows = 3;
@@ -220,15 +227,140 @@ int main()
 	set(A3d, Arows, Acols, Adep, 1, answerLayer2);
 	assert(eq(get_layer(A3d, Arows, Acols, Adep, 1), Arows, Acols, (Tensor)answerLayer2, Arows, Acols));
 
-
-	matMul_transposeB<Arows, Acols, rowsB, colsB>(get_layer(A3d, Arows, Acols, Adep, 0), B3d_ol, Cspace);
-
-
 	//linear mul, bmm, bmm2 test
-	//linear mul assumes the multiplicant is NOT transposed. 
+	//linear mul assumes the multiplicand is NOT transposed. 
 	linear_mul<Arows, Acols, Adep, rowsB, colsB>(A3d, B3d_ol, Cspace); //only take the first layer of B for this one.
 	float answerLinear[] = {3,5,3,7,11,7,11,17,11,11,16,11,7,10,7,3,4,3};
 	assert(eq(Cspace, Crows, Ccols, Cdep, (Tensor)answerLinear, Crows, Ccols, Cdep));
+
+	//bmm
+	bmm<Arows, Acols, Adep, Brows_t, Bcols_t, Bdep_t>(A3d, B3d_t, Cspace);
+	float answerBmm[] = { 3,5,3,7,11,7,11,17,11,11,17,11,7,11,7,3,5,3 };
+	assert(eq(Cspace, Crows, Ccols, Cdep, (Tensor)answerBmm, Crows, Ccols, Cdep));
+
+	//bmm2
+	bmm2<Arows, Acols, Adep, Brows, Bcols, Bdep>(A3d, B3d, Cspace);
+	float answerBmm2[] = { 3,5,3,7,11,7,11,17,11,11,17,11,7,11,7,3,5,3 };
+	assert(eq(Cspace, Crows, Ccols, Cdep, (Tensor)answerBmm2, Crows, Ccols, Cdep));
+
+	//test add, subtract, multiply, divide, pow
+	float onesTwos3d[] = { 1,2,1,2,1,2,1,2,1,2,1,2 };
+	const int oneTwos3dr = 3;
+	const int oneTwos3dc = 2;
+	const int oneTwos3dd = 2;
+
+
+	float spaceOut[] = { 0,0,0,0,0,0,0,0,0,0,0,0 };
+	const int spaceOutr = 3;
+	const int spaceOutc = 2;
+	const int spaceOutd = 2;
+
+	add(A3d, Arows, Acols, Adep, onesTwos3d, oneTwos3dr, oneTwos3dc, oneTwos3dd, spaceOut);
+	float answerAdd3[] = { 2, 4, 4, 6, 6, 8, 7, 7, 5, 5, 3, 3 };
+	assert(eq(spaceOut, spaceOutr, spaceOutc, spaceOutd, (Tensor)answerAdd3, spaceOutr, spaceOutc, spaceOutd));
+
+	add(A3d, Arows, Acols, Adep, onesTwos3d, oneTwos3dr, oneTwos3dc, spaceOut);
+	float answerAdd32[] = { 2, 4, 4, 6, 6, 8, 7, 7, 5, 5, 3, 3 };
+	assert(eq(spaceOut, spaceOutr, spaceOutc, spaceOutd, (Tensor)answerAdd32, spaceOutr, spaceOutc, spaceOutd));
+
+	add_scalar(A3d, Arows, Acols, Adep, 1, spaceOut);
+	float answerAddS[] = { 2,3,4,5,6,7,7,6,5,4,3,2 };
+	assert(eq(spaceOut, spaceOutr, spaceOutc, spaceOutd, (Tensor)answerAddS, spaceOutr, spaceOutc, spaceOutd));
+
+	sub(A3d, Arows, Acols, Adep, onesTwos3d, oneTwos3dr, oneTwos3dc, oneTwos3dd, spaceOut);
+	float answerSub3[] = { 0, 0, 2, 2, 4, 4, 5, 3, 3, 1, 1, -1 };
+	assert(eq(spaceOut, spaceOutr, spaceOutc, spaceOutd, (Tensor)answerSub3, spaceOutr, spaceOutc, spaceOutd));
+
+	sub(A3d, Arows, Acols, Adep, onesTwos3d, oneTwos3dr, oneTwos3dc, spaceOut);
+	float answerSub32[] = { 0, 0, 2, 2, 4, 4, 5, 3, 3, 1, 1, -1 };
+	assert(eq(spaceOut, spaceOutr, spaceOutc, spaceOutd, (Tensor)answerSub32, spaceOutr, spaceOutc, spaceOutd));
+
+	sub_scalar(A3d, Arows, Acols, Adep, 1, spaceOut);
+	float answerSubS[] = { 0,1,2,3,4,5,5,4,3,2,1,0 };
+	assert(eq(spaceOut, spaceOutr, spaceOutc, spaceOutd, (Tensor)answerSubS, spaceOutr, spaceOutc, spaceOutd));
+
+	mul_dot(A3d, Arows, Acols, Adep, onesTwos3d, oneTwos3dr, oneTwos3dc, oneTwos3dd, spaceOut);
+	float answerMul3[] = { 1, 4, 3, 8, 5, 12, 6, 10, 4, 6, 2, 2 };
+	assert(eq(spaceOut, spaceOutr, spaceOutc, spaceOutd, (Tensor)answerMul3, spaceOutr, spaceOutc, spaceOutd));
+
+	mul_dot(A3d, Arows, Acols, Adep, onesTwos3d, oneTwos3dr, oneTwos3dc, spaceOut);
+	float answerMul32[] = { 1, 4, 3, 8, 5, 12, 6, 10, 4, 6, 2, 2 };
+	assert(eq(spaceOut, spaceOutr, spaceOutc, spaceOutd, (Tensor)answerMul32, spaceOutr, spaceOutc, spaceOutd));
+
+	mul_scalar(A3d, Arows, Acols, Adep, 0, spaceOut);
+	float answerMulS[] = { 0,0,0,0,0,0,0,0,0,0,0,0 };
+	assert(eq(spaceOut, spaceOutr, spaceOutc, spaceOutd, (Tensor)answerMulS, spaceOutr, spaceOutc, spaceOutd));
+
+	div_dot(A3d, Arows, Acols, Adep, onesTwos3d, oneTwos3dr, oneTwos3dc, oneTwos3dd, spaceOut);
+	float answerDiv3[] = { 1, 1, 3, 2, 5, 3, 6, 2.5, 4, 1.5, 2, 0.5 };
+	assert(eq(spaceOut, spaceOutr, spaceOutc, spaceOutd, (Tensor)answerDiv3, spaceOutr, spaceOutc, spaceOutd));
+
+	div_dot(A3d, Arows, Acols, Adep, onesTwos3d, oneTwos3dr, oneTwos3dc, spaceOut);
+	float answerDiv32[] = { 1, 1, 3, 2, 5, 3, 6, 2.5, 4, 1.5, 2, 0.5 };
+	assert(eq(spaceOut, spaceOutr, spaceOutc, spaceOutd, (Tensor)answerDiv32, spaceOutr, spaceOutc, spaceOutd));
+
+	div_scalar(A3d, Arows, Acols, Adep, 1, spaceOut);
+	float answerDivS[] = { 1,2,3,4,5,6,6,5,4,3,2,1 };
+	assert(eq(spaceOut, spaceOutr, spaceOutc, spaceOutd, (Tensor)answerDivS, spaceOutr, spaceOutc, spaceOutd));
+
+	pow_dot(A3d, Arows, Acols, Adep, onesTwos3d, oneTwos3dr, oneTwos3dc, oneTwos3dd, spaceOut);
+	float answerPow3[] = { 1, 4, 3, 16, 5, 36, 6, 25, 4, 9, 2, 1 };
+	assert(eq(spaceOut, spaceOutr, spaceOutc, spaceOutd, (Tensor)answerPow3, spaceOutr, spaceOutc, spaceOutd));
+
+	pow_dot(A3d, Arows, Acols, Adep, onesTwos3d, oneTwos3dr, oneTwos3dc, spaceOut);
+	float answerPow32[] = { 1, 4, 3, 16, 5, 36, 6, 25, 4, 9, 2, 1 };
+	assert(eq(spaceOut, spaceOutr, spaceOutc, spaceOutd, (Tensor)answerPow32, spaceOutr, spaceOutc, spaceOutd));
+
+	pow_scalar(A3d, Arows, Acols, Adep, 0, spaceOut);
+	float answerPowS[] = { 1,1,1,1,1,1,1,1,1,1,1,1 };
+	assert(eq(spaceOut, spaceOutr, spaceOutc, spaceOutd, (Tensor)answerPowS, spaceOutr, spaceOutc, spaceOutd));
+	
+	//copy test
+	copy(A3d, Arows, Acols, Adep, spaceOut);
+	assert(eq(A3d, Arows, Acols, Adep, (Tensor)spaceOut, Arows, Acols, Adep));
+
+	//Min, max 3d tests
+
+	float customSpace1[] = {0,0,0,0};
+	max(A3d, Arows, Acols, Adep, 0, customSpace1); //We collapse dimention 0, rows, to 1
+	float answerMaxd0[] = {5,6,6,5};
+	assert(eq(customSpace1, 1, spaceOutc, spaceOutd, (Tensor)answerMaxd0, 1, spaceOutc, spaceOutd));
+
+	float customSpace2[] = { 0,0,0,0,0,0 };
+	max(A3d, Arows, Acols, Adep, 2, customSpace2); //We collapse dimention 2, depth, to 1
+	float answerMaxd2[] = { 6,5,4,4,5,6 };
+	assert(eq(customSpace2, spaceOutr, spaceOutc, 1, (Tensor)answerMaxd2, spaceOutr, spaceOutc, 1));
+
+	copy(A3d, Arows, Acols, Adep, spaceOut);
+	max(spaceOut, Arows, Acols, Adep); //matrix fully collapses to a single value
+	float answerFullMax[] = { 6 };
+	assert(eq(spaceOut, 1, 1, 1, (Tensor)answerFullMax, 1, 1, 1));
+
+	min(A3d, Arows, Acols, Adep, 0, spaceOut); //We collapse dimention 0, rows, to 1
+	float answerMind0[] = { 1,2,2,1 };
+	assert(eq(spaceOut, 1, spaceOutc, spaceOutd, (Tensor)answerMind0, 1, spaceOutc, spaceOutd));
+
+	min(A3d, Arows, Acols, Adep, 2, spaceOut); //We collapse dimention 2, depth, to 1
+	float answerMind2[] = { 1,2,3,3,2,1 };
+	assert(eq(spaceOut, spaceOutr, spaceOutc, 1, (Tensor)answerMind2, spaceOutr, spaceOutc, 1));
+
+	copy(A3d, Arows, Acols, Adep, spaceOut);
+	min(spaceOut, Arows, Acols, Adep); //matrix fully collapses to a single value
+	float answerFullMin[] = { 1 };
+	assert(eq(spaceOut, 1, 1, 1, (Tensor)answerFullMin, 1, 1, 1));
+	
+	max_scalar(A3d, Arows, Acols, Adep, 3, spaceOut);
+	float ansMaxScalar[] = {3,3,3,4,5,6,6,5,4,3,3,3};
+	assert(eq(spaceOut, spaceOutr, spaceOutc, spaceOutd, (Tensor)ansMaxScalar, spaceOutr, spaceOutc, spaceOutd));
+
+	min_scalar(A3d, Arows, Acols, Adep, 3, spaceOut);
+	float ansMinScalar[] = { 1,2,3,3,3,3,3,3,3,3,2,1 };
+	assert(eq(spaceOut, spaceOutr, spaceOutc, spaceOutd, (Tensor)ansMinScalar, spaceOutr, spaceOutc, spaceOutd));
+
+	float broadcastB[] = { 6,5,4,3,2,1,1,2,3,4,5,6 }; 
+	min_dot(A3d, Arows, Acols, Adep, broadcastB,spaceOut);
+	float ansMinDot[] = { 1,2,3,3,2,1,1,2,3,3,2,1 };
+	assert(eq(spaceOut, spaceOutr, spaceOutc, spaceOutd, (Tensor)ansMinDot, spaceOutr, spaceOutc, spaceOutd));
 
 	//overflow test
 	/*

@@ -30,6 +30,12 @@
     <ClInclude Include="tensor_matMul.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="hubertEnums.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="quantact.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="tensors.cpp">

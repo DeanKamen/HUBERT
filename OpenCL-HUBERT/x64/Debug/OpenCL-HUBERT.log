@@ -20,37 +20,38 @@ c:\users\hunto_efxy22i\opencl-hubert\opencl-hubert\tensor3d.cpp(154): warning C4
 c:\users\hunto_efxy22i\opencl-hubert\opencl-hubert\tensor3d.cpp(165): warning C4018: '<': signed/unsigned mismatch
 c:\users\hunto_efxy22i\opencl-hubert\opencl-hubert\tensor3d.cpp(167): warning C4018: '<': signed/unsigned mismatch
 c:\users\hunto_efxy22i\opencl-hubert\opencl-hubert\tensor3d.cpp(169): warning C4018: '<': signed/unsigned mismatch
-c:\users\hunto_efxy22i\opencl-hubert\opencl-hubert\tensor3d.cpp(196): warning C4018: '<': signed/unsigned mismatch
-c:\users\hunto_efxy22i\opencl-hubert\opencl-hubert\tensor3d.cpp(205): warning C4018: '<': signed/unsigned mismatch
-c:\users\hunto_efxy22i\opencl-hubert\opencl-hubert\tensor3d.cpp(216): warning C4018: '<': signed/unsigned mismatch
-c:\users\hunto_efxy22i\opencl-hubert\opencl-hubert\tensor3d.cpp(218): warning C4018: '<': signed/unsigned mismatch
-c:\users\hunto_efxy22i\opencl-hubert\opencl-hubert\tensor3d.cpp(220): warning C4018: '<': signed/unsigned mismatch
-c:\users\hunto_efxy22i\opencl-hubert\opencl-hubert\tensor3d.cpp(258): warning C4018: '<': signed/unsigned mismatch
-c:\users\hunto_efxy22i\opencl-hubert\opencl-hubert\tensor3d.cpp(266): warning C4018: '<': signed/unsigned mismatch
-c:\users\hunto_efxy22i\opencl-hubert\opencl-hubert\tensor3d.cpp(274): warning C4018: '<': signed/unsigned mismatch
-c:\users\hunto_efxy22i\opencl-hubert\opencl-hubert\tensor3d.cpp(282): warning C4018: '<': signed/unsigned mismatch
-c:\users\hunto_efxy22i\opencl-hubert\opencl-hubert\tensor3d.cpp(290): warning C4018: '<': signed/unsigned mismatch
-c:\users\hunto_efxy22i\opencl-hubert\opencl-hubert\tensor3d.cpp(298): warning C4018: '<': signed/unsigned mismatch
-c:\users\hunto_efxy22i\opencl-hubert\opencl-hubert\tensor3d.cpp(306): warning C4018: '<': signed/unsigned mismatch
-c:\users\hunto_efxy22i\opencl-hubert\opencl-hubert\tensor3d.cpp(314): warning C4018: '<': signed/unsigned mismatch
-c:\users\hunto_efxy22i\opencl-hubert\opencl-hubert\tensor3d.cpp(322): warning C4018: '<': signed/unsigned mismatch
-c:\users\hunto_efxy22i\opencl-hubert\opencl-hubert\tensor3d.cpp(332): warning C4018: '<': signed/unsigned mismatch
-c:\users\hunto_efxy22i\opencl-hubert\opencl-hubert\tensor3d.cpp(342): warning C4018: '<': signed/unsigned mismatch
-c:\users\hunto_efxy22i\opencl-hubert\opencl-hubert\tensor3d.cpp(344): warning C4018: '<': signed/unsigned mismatch
-c:\users\hunto_efxy22i\opencl-hubert\opencl-hubert\tensor3d.cpp(346): warning C4018: '<': signed/unsigned mismatch
-c:\users\hunto_efxy22i\opencl-hubert\opencl-hubert\tensor3d.cpp(359): warning C4018: '<': signed/unsigned mismatch
-c:\users\hunto_efxy22i\opencl-hubert\opencl-hubert\tensor3d.cpp(367): warning C4018: '<': signed/unsigned mismatch
-c:\users\hunto_efxy22i\opencl-hubert\opencl-hubert\tensor3d.cpp(375): warning C4018: '<': signed/unsigned mismatch
-c:\users\hunto_efxy22i\opencl-hubert\opencl-hubert\tensor3d.cpp(412): warning C4018: '<': signed/unsigned mismatch
-c:\users\hunto_efxy22i\opencl-hubert\opencl-hubert\tensor3d.cpp(414): warning C4018: '<': signed/unsigned mismatch
-c:\users\hunto_efxy22i\opencl-hubert\opencl-hubert\tensor3d.cpp(422): warning C4018: '<': signed/unsigned mismatch
-c:\users\hunto_efxy22i\opencl-hubert\opencl-hubert\tensor3d.cpp(424): warning C4018: '<': signed/unsigned mismatch
-c:\users\hunto_efxy22i\opencl-hubert\opencl-hubert\tensor3d.cpp(432): warning C4018: '<': signed/unsigned mismatch
-c:\users\hunto_efxy22i\opencl-hubert\opencl-hubert\tensor3d.cpp(434): warning C4018: '<': signed/unsigned mismatch
-c:\users\hunto_efxy22i\opencl-hubert\opencl-hubert\tensor3d.cpp(456): warning C4018: '<': signed/unsigned mismatch
-c:\users\hunto_efxy22i\opencl-hubert\opencl-hubert\tensor3d.cpp(467): warning C4018: '<': signed/unsigned mismatch
-c:\users\hunto_efxy22i\opencl-hubert\opencl-hubert\tensor3d.cpp(477): warning C4018: '<': signed/unsigned mismatch
-c:\users\hunto_efxy22i\opencl-hubert\opencl-hubert\tensor3d.cpp(523): warning C4018: '<': signed/unsigned mismatch
+c:\users\hunto_efxy22i\opencl-hubert\opencl-hubert\tensor3d.cpp(195): warning C4018: '<': signed/unsigned mismatch
+c:\users\hunto_efxy22i\opencl-hubert\opencl-hubert\tensor3d.cpp(204): warning C4018: '<': signed/unsigned mismatch
+c:\users\hunto_efxy22i\opencl-hubert\opencl-hubert\tensor3d.cpp(215): warning C4018: '<': signed/unsigned mismatch
+c:\users\hunto_efxy22i\opencl-hubert\opencl-hubert\tensor3d.cpp(217): warning C4018: '<': signed/unsigned mismatch
+c:\users\hunto_efxy22i\opencl-hubert\opencl-hubert\tensor3d.cpp(219): warning C4018: '<': signed/unsigned mismatch
+c:\users\hunto_efxy22i\opencl-hubert\opencl-hubert\tensor3d.cpp(257): warning C4018: '<': signed/unsigned mismatch
+c:\users\hunto_efxy22i\opencl-hubert\opencl-hubert\tensor3d.cpp(265): warning C4018: '<': signed/unsigned mismatch
+c:\users\hunto_efxy22i\opencl-hubert\opencl-hubert\tensor3d.cpp(273): warning C4018: '<': signed/unsigned mismatch
+c:\users\hunto_efxy22i\opencl-hubert\opencl-hubert\tensor3d.cpp(281): warning C4018: '<': signed/unsigned mismatch
+c:\users\hunto_efxy22i\opencl-hubert\opencl-hubert\tensor3d.cpp(289): warning C4018: '<': signed/unsigned mismatch
+c:\users\hunto_efxy22i\opencl-hubert\opencl-hubert\tensor3d.cpp(297): warning C4018: '<': signed/unsigned mismatch
+c:\users\hunto_efxy22i\opencl-hubert\opencl-hubert\tensor3d.cpp(305): warning C4018: '<': signed/unsigned mismatch
+c:\users\hunto_efxy22i\opencl-hubert\opencl-hubert\tensor3d.cpp(313): warning C4018: '<': signed/unsigned mismatch
+c:\users\hunto_efxy22i\opencl-hubert\opencl-hubert\tensor3d.cpp(321): warning C4018: '<': signed/unsigned mismatch
+c:\users\hunto_efxy22i\opencl-hubert\opencl-hubert\tensor3d.cpp(331): warning C4018: '<': signed/unsigned mismatch
+c:\users\hunto_efxy22i\opencl-hubert\opencl-hubert\tensor3d.cpp(340): warning C4018: '<': signed/unsigned mismatch
+c:\users\hunto_efxy22i\opencl-hubert\opencl-hubert\tensor3d.cpp(350): warning C4018: '<': signed/unsigned mismatch
+c:\users\hunto_efxy22i\opencl-hubert\opencl-hubert\tensor3d.cpp(352): warning C4018: '<': signed/unsigned mismatch
+c:\users\hunto_efxy22i\opencl-hubert\opencl-hubert\tensor3d.cpp(354): warning C4018: '<': signed/unsigned mismatch
+c:\users\hunto_efxy22i\opencl-hubert\opencl-hubert\tensor3d.cpp(368): warning C4018: '<': signed/unsigned mismatch
+c:\users\hunto_efxy22i\opencl-hubert\opencl-hubert\tensor3d.cpp(376): warning C4018: '<': signed/unsigned mismatch
+c:\users\hunto_efxy22i\opencl-hubert\opencl-hubert\tensor3d.cpp(384): warning C4018: '<': signed/unsigned mismatch
+c:\users\hunto_efxy22i\opencl-hubert\opencl-hubert\tensor3d.cpp(421): warning C4018: '<': signed/unsigned mismatch
+c:\users\hunto_efxy22i\opencl-hubert\opencl-hubert\tensor3d.cpp(423): warning C4018: '<': signed/unsigned mismatch
+c:\users\hunto_efxy22i\opencl-hubert\opencl-hubert\tensor3d.cpp(431): warning C4018: '<': signed/unsigned mismatch
+c:\users\hunto_efxy22i\opencl-hubert\opencl-hubert\tensor3d.cpp(433): warning C4018: '<': signed/unsigned mismatch
+c:\users\hunto_efxy22i\opencl-hubert\opencl-hubert\tensor3d.cpp(441): warning C4018: '<': signed/unsigned mismatch
+c:\users\hunto_efxy22i\opencl-hubert\opencl-hubert\tensor3d.cpp(443): warning C4018: '<': signed/unsigned mismatch
+c:\users\hunto_efxy22i\opencl-hubert\opencl-hubert\tensor3d.cpp(465): warning C4018: '<': signed/unsigned mismatch
+c:\users\hunto_efxy22i\opencl-hubert\opencl-hubert\tensor3d.cpp(476): warning C4018: '<': signed/unsigned mismatch
+c:\users\hunto_efxy22i\opencl-hubert\opencl-hubert\tensor3d.cpp(486): warning C4018: '<': signed/unsigned mismatch
+c:\users\hunto_efxy22i\opencl-hubert\opencl-hubert\tensor3d.cpp(535): warning C4018: '<': signed/unsigned mismatch
   testbench.cpp
 c:\users\hunto_efxy22i\opencl-hubert\opencl-hubert\matrix_mult.h(73): warning C4068: unknown pragma
 c:\users\hunto_efxy22i\opencl-hubert\opencl-hubert\matrix_mult.h(78): warning C4068: unknown pragma
@@ -71,5 +72,7 @@ c:\users\hunto_efxy22i\opencl-hubert\opencl-hubert\testbench.cpp(126): warning C
 c:\users\hunto_efxy22i\opencl-hubert\opencl-hubert\testbench.cpp(140): warning C4305: 'argument': truncation from 'double' to 'float'
 c:\users\hunto_efxy22i\opencl-hubert\opencl-hubert\testbench.cpp(153): warning C4305: 'argument': truncation from 'double' to 'float'
 c:\users\hunto_efxy22i\opencl-hubert\opencl-hubert\testbench.cpp(158): warning C4305: 'initializing': truncation from 'double' to 'float'
+c:\users\hunto_efxy22i\opencl-hubert\opencl-hubert\testbench.cpp(381): warning C4305: 'argument': truncation from 'double' to 'float'
+c:\users\hunto_efxy22i\opencl-hubert\opencl-hubert\testbench.cpp(395): warning C4305: 'argument': truncation from 'double' to 'float'
   Generating Code...
   OpenCL-HUBERT.vcxproj -> C:\Users\hunto_efxy22i\OpenCL-HUBERT\x64\Debug\OpenCL-HUBERT.exe

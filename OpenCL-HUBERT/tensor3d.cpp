@@ -147,7 +147,7 @@ void max(Tensor3d A, int rowsA, int colsA, int depA, int dim, Tensor3d C)
 			max(get_layer(A, rowsA, colsA, depA, d), rowsA, colsA, dim, get_layer(C, rowsA, colsA, depA, d));
 		}
 		//we already shrink one dim in the loop, so we shrink it here too.
-		shrinkTensor(C, rowsA, colsA, depA, C, 1, colsA, depA);
+		shrinkTensor(C, rowsA, colsA, depA, C, 1, colsA, depA);//make the depth continuous
 	}
 	else if (dim == 1)
 	{
@@ -155,7 +155,7 @@ void max(Tensor3d A, int rowsA, int colsA, int depA, int dim, Tensor3d C)
 		{
 			max(get_layer(A, rowsA, colsA, depA, d), rowsA, colsA, dim, get_layer(C, rowsA, colsA, depA, d));
 		}
-		shrinkTensor(C, rowsA, colsA, depA, C, rowsA, 1, depA);
+		shrinkTensor(C, rowsA, colsA, depA, C, rowsA, 1, depA); //make the depth continuous
 	}
 	else //dim ==2
 	{
@@ -184,7 +184,6 @@ void max(Tensor3d A, int rowsA, int colsA, int depA, int dim, Tensor3d C)
 				first = true;
 			}
 		}
-		print(C, rowsA, colsA, 1);
 		shrinkTensor(C, rowsA, colsA, depA, C, rowsA, colsA, 1);
 	}
 }
@@ -327,15 +326,24 @@ void reciprocal(Tensor3d A, int rowsA, int colsA, int depA, Tensor3d C)
 
 void sum(Tensor3d A, int rowsA, int colsA, int depA, int dim, Tensor3d C)
 {
-	if (dim == 0 || dim == 1)
+	if (dim == 0)
 	{
 		for (unsigned d = 0; d < depA; d++)
 		{
 			sum(get_layer(A, rowsA, colsA, depA, d), rowsA, colsA, dim, get_layer(C, rowsA, colsA, depA, d));
 		}
+		//we already shrink one dim in the loop, so we shrink it here too.
+		shrinkTensor(C, rowsA, colsA, depA, C, 1, colsA, depA);
 	}
-
-	else //dim = 2
+	else if (dim == 1)
+	{
+		for (unsigned d = 0; d < depA; d++)
+		{
+			sum(get_layer(A, rowsA, colsA, depA, d), rowsA, colsA, dim, get_layer(C, rowsA, colsA, depA, d));
+		}
+		shrinkTensor(C, rowsA, colsA, depA, C, rowsA, 1, depA);
+	}
+	else //dim ==2
 	{
 		float running;
 		running = float(0);
@@ -347,10 +355,11 @@ void sum(Tensor3d A, int rowsA, int colsA, int depA, int dim, Tensor3d C)
 				{
 					running += get(A, rowsA, colsA, depA, j, i, d);
 				}
-				set(C, rowsA, colsA, 1, i, j, 0, running); //C has depth 1.
-				running = 0; 
+				set(C, rowsA, colsA, 1, j, i, 0, running); //C has depth 1.
+				running = 0;
 			}
 		}
+		shrinkTensor(C, rowsA, colsA, depA, C, rowsA, colsA, 1);
 	}
 }
 
@@ -366,7 +375,7 @@ void mean(Tensor3d A, int rowsA, int colsA, int depA, Tensor3d C)
 {
 	for (unsigned d = 0; d < depA; d++)
 	{
-		mean(get_layer(A, rowsA, colsA, depA, d), rowsA, colsA, get_layer(C, rowsA, colsA, depA, d));
+		mean(get_layer(A, rowsA, colsA, depA, d), rowsA, colsA, get_layer(C, 1, 1, depA, d)); //the output matrix C should be a depth vector
 	}
 }
 
@@ -483,13 +492,15 @@ void copy(Tensor3d A, int rowsA, int colsA, int depA, Tensor3d C)
 void shrinkTensor(Tensor3d A, int rowsA, int colsA, int depA, Tensor3d C, int rowsC, int colsC, int depC)
 {
 	//we will assume that one of [rows, cols, or dep] have been collapsed to 1.
+	//we know that each individual layer is correct, but the layers may not be collapsed to be contiguous with one another
 	if (rowsA != rowsC && rowsC == 1)
 	{//we have a 3d matrix who has one row but the values are positioned assuming no dim was collapsed. Iterate over the remaining dims using different assumptions to collapse to C.
 		for (int i = 0; i < depA; i++)
 		{
+			Tensor cur_layer = get_layer(A, rowsA, colsA, depA, i); //this is necessary because the depth is not continuous
 			for (int j = 0; j < colsA; j++)
 			{
-				float take = get(A, rowsA, colsA, depA, 0, j, i);
+				float take = get(cur_layer, 1, colsA, 0, j); //by assuming this layer was collapsed, we can get it correctly
 				set(C, rowsC, colsC, depC, 0, j, i, take);
 			}
 		}
@@ -498,9 +509,10 @@ void shrinkTensor(Tensor3d A, int rowsA, int colsA, int depA, Tensor3d C, int ro
 	{
 		for (int i = 0; i < depA; i++)
 		{
+			Tensor cur_layer = get_layer(A, rowsA, colsA, depA, i); //this is necessary because the depth is not continuous
 			for (int j = 0; j < rowsA; j++)
 			{
-				float take = get(A, rowsA, colsA, depA, j, 0, i);
+				float take = get(cur_layer, rowsA, 1, j, 0); //by assuming this layer was collapsed, we can get it correctly
 				set(C, rowsC, colsC, depC, j, 0, i, take);
 			}
 		}

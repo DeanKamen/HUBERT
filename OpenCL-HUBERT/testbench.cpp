@@ -166,9 +166,10 @@ int main()
 	assert(eq(tensor1space, tensor1r, tensor1c, (Tensor)answerSign, tensor1r, tensor1c));
 
 	//Warning: Mean assumes a row vector
-	mean(tensor1, 1, 12, tensor1space);
+	float oneByone[] = { 0 };
+	mean(tensor1, 1, 12, oneByone);
 	float answerMean = 6.5;
-	assert(eq(tensor1space, 1, 1, &answerMean, 1, 1));
+	assert(eq(oneByone, 1, 1, &answerMean, 1, 1));
 
 	sqrt_tensor(answerPow, tensor1r, tensor1c, tensor1space);
 	assert(eq(tensor1space, tensor1r, tensor1c, tensor1, tensor1r, tensor1c));
@@ -327,9 +328,14 @@ int main()
 	assert(eq(customSpace1, 1, spaceOutc, spaceOutd, (Tensor)answerMaxd0, 1, spaceOutc, spaceOutd));
 
 	float customSpace2[] = { 0,0,0,0,0,0 };
-	max(A3d, Arows, Acols, Adep, 2, customSpace2); //We collapse dimention 2, depth, to 1
+	max(A3d, Arows, Acols, Adep, 1, customSpace2); //We collapse dimention 2, cols, to 1
+	float answerMaxd1[] = { 2,4,6,6,4,2 };
+	assert(eq(customSpace2, spaceOutr, 1, spaceOutd, (Tensor)answerMaxd1, spaceOutr, 1, spaceOutd));
+
+	float customSpace3[] = { 0,0,0,0,0,0 };
+	max(A3d, Arows, Acols, Adep, 2, customSpace3); //We collapse dimention 2, depth, to 1
 	float answerMaxd2[] = { 6,5,4,4,5,6 };
-	assert(eq(customSpace2, spaceOutr, spaceOutc, 1, (Tensor)answerMaxd2, spaceOutr, spaceOutc, 1));
+	assert(eq(customSpace3, spaceOutr, spaceOutc, 1, (Tensor)answerMaxd2, spaceOutr, spaceOutc, 1));
 
 	copy(A3d, Arows, Acols, Adep, spaceOut);
 	max(spaceOut, Arows, Acols, Adep); //matrix fully collapses to a single value
@@ -339,6 +345,10 @@ int main()
 	min(A3d, Arows, Acols, Adep, 0, spaceOut); //We collapse dimention 0, rows, to 1
 	float answerMind0[] = { 1,2,2,1 };
 	assert(eq(spaceOut, 1, spaceOutc, spaceOutd, (Tensor)answerMind0, 1, spaceOutc, spaceOutd));
+
+	min(A3d, Arows, Acols, Adep, 1, spaceOut); //We collapse dimention 1, cols, to 1
+	float answerMind1[] = { 1,3,5,5,3,1 };
+	assert(eq(spaceOut, spaceOutr, 1, spaceOutd, (Tensor)answerMind1, spaceOutr, 1, spaceOutd));
 
 	min(A3d, Arows, Acols, Adep, 2, spaceOut); //We collapse dimention 2, depth, to 1
 	float answerMind2[] = { 1,2,3,3,2,1 };
@@ -357,10 +367,75 @@ int main()
 	float ansMinScalar[] = { 1,2,3,3,3,3,3,3,3,3,2,1 };
 	assert(eq(spaceOut, spaceOutr, spaceOutc, spaceOutd, (Tensor)ansMinScalar, spaceOutr, spaceOutc, spaceOutd));
 
-	float broadcastB[] = { 6,5,4,3,2,1,1,2,3,4,5,6 }; 
+	float broadcastB[] = { 6,5,4,3,2,1 }; 
 	min_dot(A3d, Arows, Acols, Adep, broadcastB,spaceOut);
-	float ansMinDot[] = { 1,2,3,3,2,1,1,2,3,3,2,1 };
+	float ansMinDot[] = { 1,2,3,3,2,1,6,5,4,3,2,1 };
 	assert(eq(spaceOut, spaceOutr, spaceOutc, spaceOutd, (Tensor)ansMinDot, spaceOutr, spaceOutc, spaceOutd));
+
+	//abs, floor, ans exp2 tests
+	mul_scalar(A3d, Arows, Acols, Adep, -1, spaceOut);
+	abs_tensor(spaceOut, Arows, Acols, Adep, spaceOut);
+	float ansAbs[] = { 1,2,3,4,5,6,6,5,4,3,2,1 };
+	assert(eq(spaceOut, spaceOutr, spaceOutc, spaceOutd, (Tensor)ansAbs, spaceOutr, spaceOutc, spaceOutd));
+
+	mul_scalar(A3d, Arows, Acols, Adep, 1.01, spaceOut);
+	floor_tensor(spaceOut, Arows, Acols, Adep, spaceOut);
+	float ansFloor[] = { 1,2,3,4,5,6,6,5,4,3,2,1 };
+	assert(eq(spaceOut, spaceOutr, spaceOutc, spaceOutd, (Tensor)ansFloor, spaceOutr, spaceOutc, spaceOutd));
+
+	exp2_tensor(A3d, Arows, Acols, Adep, spaceOut); //2^A
+	float ansExp2[] = { 2,4,8,16,32,64,64,32,16,8,4,2 };
+	assert(eq(spaceOut, spaceOutr, spaceOutc, spaceOutd, (Tensor)ansExp2, spaceOutr, spaceOutc, spaceOutd));
+
+	//clamp and round
+	clamp(A3d, Arows, Acols, Adep, 3, 4, spaceOut);
+	float ansClamp[] = { 3,3,3,4,4,4,4,4,4,3,3,3 };
+	assert(eq(spaceOut, spaceOutr, spaceOutc, spaceOutd, (Tensor)ansClamp, spaceOutr, spaceOutc, spaceOutd));
+
+	mul_scalar(A3d, Arows, Acols, Adep, 1.01, spaceOut);
+	roundTensor(spaceOut, Arows, Acols, Adep, spaceOut);
+	float ansRound[] = { 1,2,3,4,5,6,6,5,4,3,2,1 };
+	assert(eq(spaceOut, spaceOutr, spaceOutc, spaceOutd, (Tensor)ansRound, spaceOutr, spaceOutc, spaceOutd));
+
+	//recip, sign, and sqrt
+	reciprocal(A3d, Arows, Acols, Adep, spaceOut);
+	float ansReciprocal[] = { 1/1.0f,1/2.0f,1/3.0f,1/4.0f,1/5.0f,1/6.0f,1/6.0f,1/5.0f,1/4.0f,1/3.0f,1/2.0f,1/1.0f };
+	assert(eq(spaceOut, spaceOutr, spaceOutc, spaceOutd, (Tensor)ansReciprocal, spaceOutr, spaceOutc, spaceOutd));
+	
+	copy(A3d, Arows, Acols, Adep, spaceOut);
+	set(spaceOut, Arows, Acols, Adep, 2, 1, 0, -6);
+	sign(spaceOut, Arows, Acols, Adep, spaceOut);
+	float ansSign[] = { 1,1,1,1,1,-1,1,1,1,1,1,1 };
+	assert(eq(spaceOut, spaceOutr, spaceOutc, spaceOutd, (Tensor)ansSign, spaceOutr, spaceOutc, spaceOutd));
+	
+	float PfectSqrs[] = {4,4,1,9,9,16,16,9,9,1,4,4};
+	sqrt_tensor(PfectSqrs, Arows, Acols, Adep, spaceOut);
+	float ansSqr[] = { 2,2,1,3,3,4,4,3,3,1,2,2 };
+	assert(eq(spaceOut, spaceOutr, spaceOutc, spaceOutd, (Tensor)ansSqr, spaceOutr, spaceOutc, spaceOutd));
+
+	//sum 
+	float sumSpace1[] = { 0, 0, 0, 0 };
+	sum(A3d, Arows, Acols, Adep, 0, sumSpace1);
+	float sumAns1[] = { 9, 12, 12, 9 };
+	assert(eq(sumSpace1, 1, spaceOutc, spaceOutd, (Tensor)sumAns1, 1, spaceOutc, spaceOutd));
+	float sumSpace2[] = { 0, 0, 0, 0, 0, 0 };
+	sum(A3d, Arows, Acols, Adep, 1, sumSpace2);
+	float sumAns2[] = { 3, 7, 11, 11, 7, 3 };
+	assert(eq(sumSpace2, spaceOutr, 1, spaceOutd, (Tensor)sumAns2, spaceOutr, 1, spaceOutd));
+	float sumSpace3[] = { 0, 0, 0, 0, 0, 0 };
+	sum(A3d, Arows, Acols, Adep, 2, sumSpace3);
+	float sumAns3[] = { 7, 7, 7, 7, 7, 7 };
+	assert(eq(sumSpace3, spaceOutr, spaceOutc, 1, (Tensor)sumAns3, spaceOutr, spaceOutc, 1));
+	
+	//mean
+	float rowToAvg[] = { 1,2,3,4,5, 2,3,4,5,6 }; //input must be a row vector
+	float meanSpace[] = { 0,0 };
+	mean(rowToAvg, 1, 5, 2, meanSpace); //WARNING: matrix's size changes
+	float meanAns[] = { 3,4 };
+	assert(eq(meanSpace, 1, 1, 2, (Tensor)meanAns, 1, 1, 2));
+	
+
+
 
 	//overflow test
 	/*

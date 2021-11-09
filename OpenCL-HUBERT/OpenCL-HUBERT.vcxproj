@@ -126,8 +126,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="hubertEnums.h" />
     <ClInclude Include="matrix_mult.h" />
     <ClInclude Include="matrix_mult_transpose.h" />
+    <ClInclude Include="quantact.h" />
     <ClInclude Include="tensor3d.h" />
     <ClInclude Include="tensors.h" />
     <ClInclude Include="tensor_matMul.h" />

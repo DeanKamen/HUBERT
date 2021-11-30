@@ -15,14 +15,18 @@ class Softmax
 public:
 	//initializer
 	Softmax(int output_bit, QuantMode quant_mode = QuantMode::none, ForceDequantMode force_dequant = ForceDequantMode::none);
-	~Softmax();
-	//member functions
-	static scaled_tuple3d int_polynomial(Softmax &self, Tensor3d& x_int, TensorXL& scaling_factor);
-	static scaled_tuple3d int_exp(Softmax &self, Tensor3d& x_int, TensorXL& scaling_factor);
-	static scaled_tuple3d softmax_forward(Softmax &self, Tensor3d& x_int, TensorXL& scaling_factor);
-	void set_param(preload x_min_n, preload x_max_n, preload act_scaling_factor_n);
 
-	static void normal_softmax(Softmax &self, Tensor3d& row, Tensor3d& dest);
+	//member functions
+	static scaled_tuple3d int_polynomial(Softmax &self, Tensor3d x_int, const int xr, const int xc, const int xd, Tensor scaling_factor, const int sfr, const int sfc);//returned matrix is size xr xc xd
+	static scaled_tuple3d int_exp(Softmax &self, Tensor3d x_int, const int xr, const int xc, const int xd, Tensor scaling_factor, const int sfr, const int sfc); //returned matrix is size xr xc xd
+	static scaled_tuple3d softmax_forward(Softmax &self, Tensor3d x, const int xr, const int xc, const int xd, Tensor scaling_factor, const int sfr, const int sfc);
+	static void normal_softmax(Softmax &self, Tensor3d src, const int srcr, const int srcc, const int srcd, Tensor3d dest, const int destr, const int destc, const int destd);
+
+	static void set_param(
+		Softmax &self,
+		softmax_memory memory,
+		quantact_memory qa_memory
+	);
 
 	int output_bit;
 	QuantMode quant_mode;
@@ -30,5 +34,8 @@ public:
 	float x0;
 	int n;
 	float coef[3];
+	
+	softmax_memory memory;
+
 };
 #endif

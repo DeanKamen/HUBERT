@@ -11,55 +11,64 @@
 
 class QuantAct
 {
-    public:
-    //initializer
-    QuantAct(int activation_bit, 
-             float act_range_momentum=0.95f,
-             bool running_stat=true,
-             bool per_channel=false,
-             int channel_len= -1,
-             QuantMode quant_mode = QuantMode::none);
+public:
+	//initializer
+	QuantAct(
+		int activation_bit,
+		float act_range_momentum = 0.95f,
+		bool running_stat = true,
+		bool per_channel = false,
+		int channel_len = -1,
+		QuantMode quant_mode = QuantMode::none);
 
-	~QuantAct();
+	//other functions
+	static scaled_tuple3d QuantAct_forward( //returns a matrix of size xr,xc,xd
+		QuantAct& self,
+		Tensor3d x, const int xr, const int xc, const int xd,//identity and x are 22x1x768 or 12x22x22.
+		Tensor pre_act_scaling_factor, const int pasfr, const int pasfc,
+		Tensor3d identity, const int identityr, const int identityc, const int identityd,
+		Tensor identity_scaling_factor, const int isfr, const int isfc,
+		Tensor specified_min,
+		Tensor specified_max);
 
-    //other functions
-	static scaled_tuple3d QuantAct_forward(
+	static Tensor symmetric_linear_quantization_params(
 		QuantAct &self,
-		Tensor x,
-        Tensor pre_act_scaling_factor,
-        Tensor3d identity,
-        Tensor identity_scaling_factor,
-        Tensor specified_min,
-        Tensor specified_max);
-
-    void fix();
-    void unfix();
-
-    static Tensor symmetric_linear_quantization_params(
 		unsigned num_bits,
-        Tensor saturation_min,
-        Tensor saturation_max,
-        bool per_channel=false);
+		Tensor saturation_min,
+		const int smr,
+		const int smc,
+		Tensor saturation_max,
+		bool per_channel);
 
-    static Tensor3d symmetric_quant_forward(QuantAct &self, Tensor3d x, int k, Tensor specified_scale);
-    static Tensor3d linear_quantize(Tensor3d x, Tensor scale, Tensor zero_point);
-    static Tensor3d fixedpoint_mul(
-        Tensor3d pre_act,
-        Tensor pre_act_scaling_factor,
-        int bit_num,
-        QuantMode quant_mode,
-        Tensor z_scaling_factor,
-        Tensor3d identity,
-        Tensor identity_scaling_factor
-    );
-	void set_param(preload x_min_n, preload x_max_n, preload act_scaling_factor_n);
+	static Tensor3d symmetric_quant_forward(QuantAct &self, Tensor3d x, const int xr, const int xc, const int xd, int k, Tensor specified_scale, const int ssr, const int ssc);
+	static Tensor3d linear_quantize(QuantAct &self, Tensor3d x, const int xr, const int xc, const int xd, Tensor scale_c, const int sr, const int sc, Tensor zero_point, const int zr, const int zc);
+	
+	static Tensor3d fixedpoint_mul(
+		QuantAct &self,
+		Tensor3d pre_act, const int par, const int pac, const int pad,
+		Tensor pre_act_scaling_factor, const int pasfr, const int pasfc,
+		int bit_num,
+		QuantMode quant_mode,
+		Tensor z_scaling_factor, const int zsfr, const int zsfc,
+		Tensor3d identity, const int identityr, const int identityc, const int identityd,
+		Tensor identity_scaling_factor, const int isfr, const int isfc
+	);
 
-    //members
-    int activation_bit;
-    float act_range_momentum;
-    bool running_stat;
-    QuantMode quant_mode;
-    bool per_channel;
+
+	static void set_param(//this allocates space for all of the members that are pointers.
+		QuantAct &self,
+		quantact_memory memory
+	); 
+
+	//member variables
+	int activation_bit;
+	float act_range_momentum;
+	bool running_stat;
+	QuantMode quant_mode;
+	bool per_channel;
+
+	//memory
+	quantact_memory memory;
+
 };
-
 #endif

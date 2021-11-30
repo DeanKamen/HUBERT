@@ -6,6 +6,11 @@
 #include "tensor_matMul.h"
 
 //testbench and plus example usage.
+
+float bruh[MAX_ROWS*MAX_COLS];
+float yuh[MAX_ROWS*MAX_COLS];
+
+
 int main()
 {   
 	float tensor1a[] = {1,2,3,4,5,6,7,8,9,10,11,12};
@@ -321,21 +326,18 @@ int main()
 	assert(eq(A3d, Arows, Acols, Adep, (Tensor)spaceOut, Arows, Acols, Adep));
 
 	//Min, max 3d tests
-
-	float customSpace1[] = {0,0,0,0};
-	max(A3d, Arows, Acols, Adep, 0, customSpace1); //We collapse dimention 0, rows, to 1
+	//Even though, in these functions, we shouldnt need a big result space, it needs to be at least as big as the input. You can always collapse it later.
+	max(A3d, Arows, Acols, Adep, 0, spaceOut); //We collapse dimention 0, rows, to 1
 	float answerMaxd0[] = {5,6,6,5};
-	assert(eq(customSpace1, 1, spaceOutc, spaceOutd, (Tensor)answerMaxd0, 1, spaceOutc, spaceOutd));
+	assert(eq(spaceOut, 1, spaceOutc, spaceOutd, (Tensor)answerMaxd0, 1, spaceOutc, spaceOutd));
 
-	float customSpace2[] = { 0,0,0,0,0,0 };
-	max(A3d, Arows, Acols, Adep, 1, customSpace2); //We collapse dimention 2, cols, to 1
+	max(A3d, Arows, Acols, Adep, 1, spaceOut); //We collapse dimention 2, cols, to 1
 	float answerMaxd1[] = { 2,4,6,6,4,2 };
-	assert(eq(customSpace2, spaceOutr, 1, spaceOutd, (Tensor)answerMaxd1, spaceOutr, 1, spaceOutd));
+	assert(eq(spaceOut, spaceOutr, 1, spaceOutd, (Tensor)answerMaxd1, spaceOutr, 1, spaceOutd));
 
-	float customSpace3[] = { 0,0,0,0,0,0 };
-	max(A3d, Arows, Acols, Adep, 2, customSpace3); //We collapse dimention 2, depth, to 1
+	max(A3d, Arows, Acols, Adep, 2, spaceOut); //We collapse dimention 2, depth, to 1
 	float answerMaxd2[] = { 6,5,4,4,5,6 };
-	assert(eq(customSpace3, spaceOutr, spaceOutc, 1, (Tensor)answerMaxd2, spaceOutr, spaceOutc, 1));
+	assert(eq(spaceOut, spaceOutr, spaceOutc, 1, (Tensor)answerMaxd2, spaceOutr, spaceOutc, 1));
 
 	copy(A3d, Arows, Acols, Adep, spaceOut);
 	max(spaceOut, Arows, Acols, Adep); //matrix fully collapses to a single value
@@ -414,18 +416,15 @@ int main()
 	assert(eq(spaceOut, spaceOutr, spaceOutc, spaceOutd, (Tensor)ansSqr, spaceOutr, spaceOutc, spaceOutd));
 
 	//sum 
-	float sumSpace1[] = { 0, 0, 0, 0 };
-	sum(A3d, Arows, Acols, Adep, 0, sumSpace1);
+	sum(A3d, Arows, Acols, Adep, 0, spaceOut);
 	float sumAns1[] = { 9, 12, 12, 9 };
-	assert(eq(sumSpace1, 1, spaceOutc, spaceOutd, (Tensor)sumAns1, 1, spaceOutc, spaceOutd));
-	float sumSpace2[] = { 0, 0, 0, 0, 0, 0 };
-	sum(A3d, Arows, Acols, Adep, 1, sumSpace2);
+	assert(eq(spaceOut, 1, spaceOutc, spaceOutd, (Tensor)sumAns1, 1, spaceOutc, spaceOutd));
+	sum(A3d, Arows, Acols, Adep, 1, spaceOut);
 	float sumAns2[] = { 3, 7, 11, 11, 7, 3 };
-	assert(eq(sumSpace2, spaceOutr, 1, spaceOutd, (Tensor)sumAns2, spaceOutr, 1, spaceOutd));
-	float sumSpace3[] = { 0, 0, 0, 0, 0, 0 };
-	sum(A3d, Arows, Acols, Adep, 2, sumSpace3);
+	assert(eq(spaceOut, spaceOutr, 1, spaceOutd, (Tensor)sumAns2, spaceOutr, 1, spaceOutd));
+	sum(A3d, Arows, Acols, Adep, 2, spaceOut);
 	float sumAns3[] = { 7, 7, 7, 7, 7, 7 };
-	assert(eq(sumSpace3, spaceOutr, spaceOutc, 1, (Tensor)sumAns3, spaceOutr, spaceOutc, 1));
+	assert(eq(spaceOut, spaceOutr, spaceOutc, 1, (Tensor)sumAns3, spaceOutr, spaceOutc, 1));
 	
 	//mean
 	float rowToAvg[] = { 1,2,3,4,5, 2,3,4,5,6 }; //input must be a row vector
@@ -434,13 +433,7 @@ int main()
 	float meanAns[] = { 3,4 };
 	assert(eq(meanSpace, 1, 1, 2, (Tensor)meanAns, 1, 1, 2));
 	
-
-
-
-	//overflow test
-	/*
-	float bruh[MAX_ROWS*MAX_COLS];
-	float yuh[MAX_ROWS*MAX_COLS];
+	//large matrix test
 	for (int i = 0; i < MAX_ROWS; i++)
 	{
 		for (int j = 0; j < MAX_COLS; j++)
@@ -451,5 +444,4 @@ int main()
 	}
 	print_brief(bruh, MAX_ROWS, MAX_COLS);
 	print_brief(bruh, MAX_ROWS, MAX_COLS);
-	*/
 }

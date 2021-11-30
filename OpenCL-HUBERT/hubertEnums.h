@@ -20,8 +20,72 @@ struct scaled_tuple
 
 struct scaled_tuple3d
 {//same as scaled_tuple but 3d
-	Tensor matrix;
+	Tensor3d matrix;
 	Tensor scaling_factor;
+};
+
+struct quantact_memory
+{
+	float* x_min;
+	float* x_max;
+	float* act_scaling_factor;
+	Tensor3d x_act; //dims of x
+	Tensor3d temp; // also same dims of x
+
+	//used in symmetric_linear_quantization_params
+	Tensor slqp_scale;
+
+	//used in symmetric_quant_forward
+	Tensor sqf_scale;
+
+	//used in linear_quantize
+	Tensor lq_scale;
+
+	//used in fixedpoint_mul
+	Tensor3d z_int; //size of pre act 
+	Tensor _A; //size of pre act sf
+	Tensor _B; //size of zsf
+	Tensor new_scale; //size of pasf
+	Tensor m; //size of new scale
+	Tensor e; //size of new scale
+	Tensor output; //size of  self.z_int
+	Tensor twos; //size of output
+	Tensor3d wx_int;
+	Tensor _A1; //size of isf
+	Tensor _B1; //size of zsf
+	Tensor new_scale1; //size of isf
+	Tensor m1;
+	Tensor e1; //size of isf
+	Tensor output1;//size of  self.z_int
+};
+
+struct softmax_memory
+{
+	float* x_min; //preload, but unnecessary
+	float* x_max; //preload, unnecessary
+	float* act_scaling_factor; //preload, unnecessary
+
+	/*pointers to space for the functions to use*/
+
+	//used in int_polynomial
+	Tensor3d z; //size of x_int
+	Tensor b_int; //size of scaling factor
+	Tensor c_int; //size of scaling factor
+
+	//used in int_exp
+	Tensor x0_int;// size of scaling factor
+	Tensor temp; //size of scaling factor
+	Tensor3d q; // size of x_int
+	Tensor3d r; //size of x_int
+	Tensor3d temp2; //size of x_int
+
+	//used in softmax_forward
+	Tensor3d x_int; //size of x
+	Tensor3d exp_int; //size of x
+	Tensor3d x_int_max; //size of x with (one dimention collapsed)
+	Tensor3d exp_int_sum; //size of exp_int (with one dimention collapsed) 
+	Tensor3d factor; //size of exp_int_sum
+	Tensor scaling_return; // 1x1
 };
 
 enum class preload

@@ -126,18 +126,29 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="constant_headers\qa_pasf_softmax.h" />
+    <ClInclude Include="constant_headers\qa_x_softmax.h" />
+    <ClInclude Include="constant_headers\self_attn_softmax_act_act_scaling_factor.h" />
+    <ClInclude Include="constant_headers\self_attn_softmax_act_x_max.h" />
+    <ClInclude Include="constant_headers\self_attn_softmax_act_x_min.h" />
+    <ClInclude Include="constant_headers\softmax_layer0.h" />
+    <ClInclude Include="constant_headers\softmax_layer0_out.h" />
+    <ClInclude Include="constant_headers\softmax_sf_layer0.h" />
     <ClInclude Include="hubertEnums.h" />
     <ClInclude Include="matrix_mult.h" />
     <ClInclude Include="matrix_mult_transpose.h" />
     <ClInclude Include="quantact.h" />
+    <ClInclude Include="softmax.h" />
     <ClInclude Include="tensor3d.h" />
     <ClInclude Include="tensors.h" />
     <ClInclude Include="tensor_matMul.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="BERT_testbench.cpp" />
+    <ClCompile Include="quantact.cpp" />
+    <ClCompile Include="softmax.cpp" />
     <ClCompile Include="tensor3d.cpp" />
     <ClCompile Include="tensors.cpp" />
-    <ClCompile Include="testbench.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

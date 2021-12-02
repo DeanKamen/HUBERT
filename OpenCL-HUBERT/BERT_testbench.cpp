@@ -9,8 +9,6 @@
 #include "softmax.h"
 #include "constant_headers/self_attn_softmax_act_act_scaling_factor.h"
 #include "constant_headers/self_attn_softmax_act_x_max.h"
-#include "constant_headers/qa_pasf_softmax.h"
-#include "constant_headers/qa_x_softmax.h"
 #include "constant_headers/softmax_layer0.h"
 #include "constant_headers/softmax_sf_layer0.h"
 #include "constant_headers/softmax_layer0_out.h"
@@ -25,12 +23,12 @@
 #define CHANNEL_LEN 1
 /*************************** QUANTACT DEFINES ******************************/
 //TODO: let the input be defined in  a header file. 
-const float* quant_act_inside_softmax = qa_x_softmax;
+//const float* quant_act_inside_softmax = qa_x_softmax;
 const int qaisr=22;
 const int qaisc=22;
 const int qaisd=12;
 
-const float* qais_scaling_factor = qa_pasf_softmax; //pre act sf
+//const float* qais_scaling_factor = qa_pasf_softmax; //pre act sf
 const int qaissfr=1;
 const int qaissfc=1;
 
@@ -102,24 +100,24 @@ const int ssfr = 1;
 const int ssfc = 1;
 
 //used in int_polynomial
-Tensor3d z[sir*sic*sid]; //size of x_int
-Tensor b_int[ssfr * ssfc]; //size of scaling factor
-Tensor c_int[ssfr * ssfc]; //size of scaling factor
+float z[sir*sic*sid]; //size of x_int
+float b_int[ssfr * ssfc]; //size of scaling factor
+float c_int[ssfr * ssfc]; //size of scaling factor
 
 //used in int_exp
-Tensor x0_int[ssfr * ssfc];// size of scaling factor
-Tensor temp[ssfr * ssfc]; //size of scaling factor
-Tensor3d q[sir*sic*sid]; // size of x_int
-Tensor3d r[sir*sic*sid]; //size of x_int
-Tensor3d temp2[sir*sic*sid]; //size of x_int
+float x0_int[ssfr * ssfc];// size of scaling factor
+float temp_sm[ssfr * ssfc]; //size of scaling factor
+float q[sir*sic*sid]; // size of x_int
+float r[sir*sic*sid]; //size of x_int
+float temp_sm2[sir*sic*sid]; //size of x_int
 
 //used in softmax_forward
-Tensor3d x_int[sir*sic*sid]; //size of x
-Tensor3d exp_int[sir*sic*sid]; //size of x
-Tensor3d x_int_max[sir*1*sid]; //size of x with (dim 1 collapsed)
-Tensor3d exp_int_sum[sir*1*sid]; //size of exp_int (with dim 1 collapsed) 
-Tensor3d factor[sir * 1 * sid]; //size of exp_int_sum
-Tensor scaling_return [1]; // 1x1
+float x_int[sir*sic*sid]; //size of x
+float exp_int[sir*sic*sid]; //size of x
+float x_int_max[sir*1*sid]; //size of x with (dim 1 collapsed)
+float exp_int_sum[sir*1*sid]; //size of exp_int (with dim 1 collapsed) 
+float factor[sir * 1 * sid]; //size of exp_int_sum
+float scaling_return [1]; // 1x1
 
 softmax_memory sm_memory;
 
@@ -153,23 +151,20 @@ int main()
 	qa_memory.output1 = output1;//size of  self.z_int
 
 	//Softmax memory init
-	sm_memory.x_min; //preload, but unnecessary
-	sm_memory.x_max; //preload, unnecessary
-	sm_memory.act_scaling_factor; //preload, unnecessary
-	sm_memory.z; //size of x_int
-	sm_memory.b_int; //size of scaling factor
-	sm_memory.c_int; //size of scaling factor
-	sm_memory.x0_int;// size of scaling factor
-	sm_memory.temp; //size of scaling factor
-	sm_memory.q; // size of x_int
-	sm_memory.r; //size of x_int
-	sm_memory.temp2; //size of x_int
-	sm_memory.x_int; //size of x
-	sm_memory.exp_int; //size of x
-	sm_memory.x_int_max; //size of x with (one dimention collapsed)
-	sm_memory.exp_int_sum; //size of exp_int (with one dimention collapsed) 
-	sm_memory.factor; //size of exp_int_sum
-	sm_memory.scaling_return; // 1x1
+	sm_memory.z = z; //size of x_int
+	sm_memory.b_int = b_int; //size of scaling factor
+	sm_memory.c_int = c_int; //size of scaling factor
+	sm_memory.x0_int = x0_int;// size of scaling factor
+	sm_memory.temp = temp_sm; //size of scaling factor
+	sm_memory.q = q; // size of x_int
+	sm_memory.r = r; //size of x_int
+	sm_memory.temp2 = temp_sm2; //size of x_int
+	sm_memory.x_int = x_int; //size of x
+	sm_memory.exp_int = exp_int; //size of x
+	sm_memory.x_int_max = x_int_max; //size of x with (one dimention collapsed)
+	sm_memory.exp_int_sum = exp_int_sum; //size of exp_int (with one dimention collapsed) 
+	sm_memory.factor = factor; //size of exp_int_sum
+	sm_memory.scaling_return = scaling_return; // 1x1
 
 	/*
 	QuantAct testQuantAct(8, 0.95f, true, false, -1, QuantMode::symmetric);

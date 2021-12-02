@@ -7,6 +7,9 @@
 #include "hubertEnums.h"
 #include "softmax.h"
 
+//verification
+#include "constant_headers/softmax_b4_int_exp.h"
+
 QuantAct global_quantact_instance_memory(16, 0.95f, true, false, -1, QuantMode::symmetric);
 
 Softmax::Softmax(int output_bit_i, QuantMode quant_mode_i, ForceDequantMode force_dequant)
@@ -108,7 +111,7 @@ scaled_tuple3d Softmax::softmax_forward(Softmax &self, Tensor3d x, const int xr,
 	copy(self.memory.x_int, xr, xc, xd, self.memory.x_int_max); //unnessecary
 	max(self.memory.x_int, xr, xc, xd, 1, self.memory.x_int_max); //TODO: x_int_max should actually be a different size.
 	sub(self.memory.x_int, xr, xc, xd, self.memory.x_int_max, xr, xc, xd, self.memory.x_int);
-	
+	eq(self.memory.x_int, xr, xc, xd, (const Tensor3d)softmax_b4_int_exp, xr, xc, xd);//verification
 	scaled_tuple3d exp = int_exp(self, self.memory.x_int, xr, xc, xd, scaling_factor, sfr, sfc);
 
 	exp = QuantAct::QuantAct_forward(*self.act, exp.matrix, xr, xc, xd, exp.scaling_factor, sfr, sfc, nullptr, 0, 0, 0, nullptr, 0,0, nullptr, nullptr);

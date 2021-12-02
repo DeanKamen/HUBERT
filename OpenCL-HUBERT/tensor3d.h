@@ -17,57 +17,57 @@ typedef float* Tensor3d;
 
 /* FUNCTION DEFINITIONS */
 //element to element type (broadcasting)
-void add(Tensor3d A, const int rowsA, const int colsA, int depA, Tensor B, const int rowsB, const int colsB, Tensor3d C);
-void sub(Tensor3d A, const int rowsA, const int colsA, int depA, Tensor B, const int rowsB, const int colsB, Tensor3d C);
-void mul_dot(Tensor3d A, const int rowsA, const int colsA, int depA, Tensor B, const int rowsB, const int colsB, Tensor3d C);
-void div_dot(Tensor3d A, const int rowsA, const int colsA, int depA, Tensor B, const int rowsB, const int colsB, Tensor3d C);
-void pow_dot(Tensor3d A, const int rowsA, const int colsA, int depA, Tensor B, const int rowsB, const int colsB, Tensor3d C);
+void add(const Tensor3d A, const int rowsA, const int colsA, int depA, Tensor B, const int rowsB, const int colsB, Tensor3d C);
+void sub(const Tensor3d A, const int rowsA, const int colsA, int depA, Tensor B, const int rowsB, const int colsB, Tensor3d C);
+void mul_dot(const Tensor3d A, const int rowsA, const int colsA, int depA, Tensor B, const int rowsB, const int colsB, Tensor3d C);
+void div_dot(const Tensor3d A, const int rowsA, const int colsA, int depA, Tensor B, const int rowsB, const int colsB, Tensor3d C);
+void pow_dot(const Tensor3d A, const int rowsA, const int colsA, int depA, Tensor B, const int rowsB, const int colsB, Tensor3d C);
 //3d and 3d
-void add(Tensor3d A, const int rowsA, const int colsA, int depA, Tensor3d B, const int rowsB, const int colsB, int depB, Tensor3d C);
-void sub(Tensor3d A, const int rowsA, const int colsA, int depA, Tensor3d B, const int rowsB, const int colsB, int depB, Tensor3d C);
-void mul_dot(Tensor3d A, const int rowsA, const int colsA, int depA, Tensor3d B, const int rowsB, const int colsB, int depB, Tensor3d C);
-void div_dot(Tensor3d A, const int rowsA, const int colsA, int depA, Tensor3d B, const int rowsB, const int colsB, int depB, Tensor3d C);
-void pow_dot(Tensor3d A, const int rowsA, const int colsA, int depA, Tensor3d B, const int rowsB, const int colsB, int depB, Tensor3d C);
+void add(const Tensor3d A, const int rowsA, const int colsA, int depA, const Tensor3d B, const int rowsB, const int colsB, int depB, Tensor3d C);
+void sub(const Tensor3d A, const int rowsA, const int colsA, int depA, const Tensor3d B, const int rowsB, const int colsB, int depB, Tensor3d C);
+void mul_dot(const Tensor3d A, const int rowsA, const int colsA, int depA, const Tensor3d B, const int rowsB, const int colsB, int depB, Tensor3d C);
+void div_dot(const Tensor3d A, const int rowsA, const int colsA, int depA, const Tensor3d B, const int rowsB, const int colsB, int depB, Tensor3d C);
+void pow_dot(const Tensor3d A, const int rowsA, const int colsA, int depA, const Tensor3d B, const int rowsB, const int colsB, int depB, Tensor3d C);
 
 //scalar type
-void add_scalar(Tensor3d A, const int rowsA, const int colsA, int depA, float B, Tensor3d C);
-void mul_scalar(Tensor3d A, const int rowsA, const int colsA, int depA, float B, Tensor3d C);
-void sub_scalar(Tensor3d A, const int rowsA, const int colsA, int depA, float B, Tensor3d C);
-void sub_scalar(float B, Tensor3d A, const int rowsA, const int colsA, int depA, Tensor3d C);
-void div_scalar(Tensor3d A, const int rowsA, const int colsA, int depA, float B, Tensor3d C);
-void pow_scalar(Tensor3d A, const int rowsA, const int colsA, int depA, float B, Tensor3d C);
-void max(Tensor3d A, const int rowsA, const int colsA, int depA, int dim, Tensor3d C); //WARNING: matrix's size changes, along one dimention
-void min(Tensor3d A, const int rowsA, const int colsA, int depA, int dim, Tensor3d C); //WARNING: matrix's size changes
-void max(Tensor3d A, const int rowsA, const int colsA, int depA); //WARNING: matrix's size changes to 1x1
-void min(Tensor3d A, const int rowsA, const int colsA, int depA);//WARNING: matrix's size changes to 1x1
-void max_scalar(Tensor3d A, const int rowsA, const int colsA, int depA, float compare, Tensor3d C);
-void min_scalar(Tensor3d A, const int rowsA, const int colsA, int depA, float compare, Tensor3d C);
-void min_dot(Tensor3d A, const int rowsA, const int colsA, int depA, Tensor B, Tensor3d C);
-void abs_tensor(Tensor3d A, const int rowsA, const int colsA, int depA, Tensor3d C);
-void floor_tensor(Tensor3d A, const int rowsA, const int colsA, int depA, Tensor3d C);
-void exp2_tensor(Tensor3d A, const int rowsA, const int colsA, int depA, Tensor3d C);
-void clamp(Tensor3d A, const int rowsA, const int colsA, int depA, float min, float max, Tensor3d C);
-void roundTensor(Tensor3d A, const int rowsA, const int colsA, int depA, Tensor3d C);
-void reciprocal(Tensor3d A, const int rowsA, const int colsA, int depA, Tensor3d C);
-void sum(Tensor3d A, const int rowsA, const int colsA, int depA, int dim, Tensor3d C);
-void sign(Tensor3d A, const int rowsA, const int colsA, int depA, Tensor3d C);
-void mean(Tensor3d A, const int rowsA, const int colsA, int depA, Tensor3d C); //WARNING: matrix's size changes
-void sqrt_tensor(Tensor3d A, const int rowsA, const int colsA, int depA, Tensor3d C);
+void add_scalar(const Tensor3d A, const int rowsA, const int colsA, int depA, float B, Tensor3d C);
+void mul_scalar(const Tensor3d A, const int rowsA, const int colsA, int depA, float B, Tensor3d C);
+void sub_scalar(const Tensor3d A, const int rowsA, const int colsA, int depA, float B, Tensor3d C);
+void sub_scalar(float B, const Tensor3d A, const int rowsA, const int colsA, int depA, Tensor3d C);
+void div_scalar(const Tensor3d A, const int rowsA, const int colsA, int depA, float B, Tensor3d C);
+void pow_scalar(const Tensor3d A, const int rowsA, const int colsA, int depA, float B, Tensor3d C);
+void max(const Tensor3d A, const int rowsA, const int colsA, int depA, int dim, Tensor3d C); //WARNING: matrix's size changes, along one dimention
+void min(const Tensor3d A, const int rowsA, const int colsA, int depA, int dim, Tensor3d C); //WARNING: matrix's size changes
+void max(const Tensor3d A, const int rowsA, const int colsA, int depA); //WARNING: matrix's size changes to 1x1
+void min(const Tensor3d A, const int rowsA, const int colsA, int depA);//WARNING: matrix's size changes to 1x1
+void max_scalar(const Tensor3d A, const int rowsA, const int colsA, int depA, float compare, Tensor3d C);
+void min_scalar(const Tensor3d A, const int rowsA, const int colsA, int depA, float compare, Tensor3d C);
+void min_dot(const Tensor3d A, const int rowsA, const int colsA, int depA, Tensor B, Tensor3d C);
+void abs_tensor(const Tensor3d A, const int rowsA, const int colsA, int depA, Tensor3d C);
+void floor_tensor(const Tensor3d A, const int rowsA, const int colsA, int depA, Tensor3d C);
+void exp2_tensor(const Tensor3d A, const int rowsA, const int colsA, int depA, Tensor3d C);
+void clamp(const Tensor3d A, const int rowsA, const int colsA, int depA, float min, float max, Tensor3d C);
+void roundTensor(const Tensor3d A, const int rowsA, const int colsA, int depA, Tensor3d C);
+void reciprocal(const Tensor3d A, const int rowsA, const int colsA, int depA, Tensor3d C);
+void sum(const Tensor3d A, const int rowsA, const int colsA, int depA, int dim, Tensor3d C);
+void sign(const Tensor3d A, const int rowsA, const int colsA, int depA, Tensor3d C);
+void mean(const Tensor3d A, const int rowsA, const int colsA, int depA, Tensor3d C); //WARNING: matrix's size changes
+void sqrt_tensor(const Tensor3d A, const int rowsA, const int colsA, int depA, Tensor3d C);
 
 //adressing methods where dep is depth and select the 2d array you want.
-float get(Tensor3d A, const int rowsA, const int colsA, int depA, int row, int col, int dep);
-void set(Tensor3d A, const int rowsA, const int colsA, int depA, int row, int col, int dep, float val);
-Tensor get_layer(Tensor3d A, const int rowsA, const int colsA, int depA, int dep); //returns a 2d pointer to a part of this matrix
-void set(Tensor3d A, const int rowsA, const int colsA, int depA, int dep, Tensor slice); //copies the elements of a 2d pointer into a section of the matrix
-void toTwoD(Tensor3d A, const int rowsA, const int colsA, int depA, Tensor C);//takes a tensor that is YxZx1, Yx1xZ, or 1xYxZ and returns the 2d matrix
-void append(Tensor3d A, const int rowsA, const int colsA, Tensor slice); //sets the first layer to be the elements of a 2d matrix 
+float get(const Tensor3d A, const int rowsA, const int colsA, int depA, int row, int col, int dep);
+void set(const Tensor3d A, const int rowsA, const int colsA, int depA, int row, int col, int dep, float val);
+Tensor get_layer(const Tensor3d A, const int rowsA, const int colsA, int depA, int dep); //returns a 2d pointer to a part of this matrix
+void set(const Tensor3d A, const int rowsA, const int colsA, int depA, int dep, Tensor slice); //copies the elements of a 2d pointer into a section of the matrix
+void toTwoD(const Tensor3d A, const int rowsA, const int colsA, int depA, Tensor C);//takes a tensor that is YxZx1, Yx1xZ, or 1xYxZ and returns the 2d matrix
+void append(const Tensor3d A, const int rowsA, const int colsA, Tensor slice); //sets the first layer to be the elements of a 2d matrix 
 
 //helper functions
-void print(Tensor3d A, const int rowsA, const int colsA, int depA);
-void print_brief(Tensor3d A, const int rowsA, const int colsA, int depA);
-void copy(Tensor3d A, const int rowsA, const int colsA, int depA, Tensor3d C);
-void shrinkTensor(Tensor3d A, const int rowsA, const int colsA, int depA, Tensor3d C, const int rowsC, const int colsC, int depC);
-bool eq(Tensor3d A, const int rowsA, const int colsA, int depA, Tensor3d B, const int rowsB, const int colsB, int depB);
+void print(const Tensor3d A, const int rowsA, const int colsA, int depA);
+void print_brief(const Tensor3d A, const int rowsA, const int colsA, int depA);
+void copy(const Tensor3d A, const int rowsA, const int colsA, int depA, Tensor3d C);
+void shrinkTensor(const Tensor3d A, const int rowsA, const int colsA, int depA, Tensor3d C, const int rowsC, const int colsC, int depC);
+bool eq(const Tensor3d A, const int rowsA, const int colsA, int depA, const Tensor3d B, const int rowsB, const int colsB, int depB);
 
 
 #endif

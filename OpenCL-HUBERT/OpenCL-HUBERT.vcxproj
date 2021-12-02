@@ -131,6 +131,7 @@
     <ClInclude Include="constant_headers\self_attn_softmax_act_act_scaling_factor.h" />
     <ClInclude Include="constant_headers\self_attn_softmax_act_x_max.h" />
     <ClInclude Include="constant_headers\self_attn_softmax_act_x_min.h" />
+    <ClInclude Include="constant_headers\softmax_b4_int_exp.h" />
     <ClInclude Include="constant_headers\softmax_layer0.h" />
     <ClInclude Include="constant_headers\softmax_layer0_out.h" />
     <ClInclude Include="constant_headers\softmax_sf_layer0.h" />

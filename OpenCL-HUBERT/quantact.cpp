@@ -5,8 +5,9 @@
 #include "tensors.h" 
 #include <iostream>
 #include "quantact.h"
-//#include "loadTensors.h"
 #include "hubertEnums.h"
+#include "constant_headers/qa_pasf_softmax.h"
+#include "constant_headers/qa_x_softmax.h"
 
 //TEMPORARY DEFINES. Eventually move these to a higher level and pass them in through function parameters
 #define CHANNEL_LEN 1
@@ -55,6 +56,7 @@ scaled_tuple3d QuantAct::QuantAct_forward(
 	Tensor specified_max)
 {
 	copy(x, xr, xc, xd, self.memory.x_act);
+	eq(x, xr, xc, xd, (const Tensor3d)qa_x_softmax, xr, xc, xd);
 	if (!(identity == nullptr))
 	{
 		add(x, xr, xc, xd, identity, identityr, identityc, identityd, self.memory.x_act);

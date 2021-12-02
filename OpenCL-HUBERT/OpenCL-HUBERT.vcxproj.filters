@@ -63,6 +63,9 @@
     <ClInclude Include="constant_headers\softmax_sf_layer0.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="constant_headers\softmax_b4_int_exp.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="tensors.cpp">

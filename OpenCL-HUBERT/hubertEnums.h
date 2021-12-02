@@ -61,10 +61,6 @@ struct quantact_memory
 
 struct softmax_memory
 {
-	float* x_min; //preload, but unnecessary
-	float* x_max; //preload, unnecessary
-	float* act_scaling_factor; //preload, unnecessary
-
 	/*pointers to space for the functions to use*/
 
 	//used in int_polynomial

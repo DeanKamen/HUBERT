@@ -12,7 +12,7 @@
 
 //TODO: translate everything to template?
 
-void add(Tensor A, int rowsA, int colsA, Tensor B, int rowsB, int colsB, Tensor C) 
+void add(const Tensor A, int rowsA, int colsA, const Tensor B, int rowsB, int colsB, Tensor C) 
 //with basic broadcasting
 {
 	int rowMod;
@@ -71,7 +71,7 @@ void add(Tensor A, int rowsA, int colsA, Tensor B, int rowsB, int colsB, Tensor 
 }
 
 
-void sub(Tensor A, int rowsA, int colsA, Tensor B, int rowsB, int colsB, Tensor C)
+void sub(const Tensor A, int rowsA, int colsA, const Tensor B, int rowsB, int colsB, Tensor C)
 {
 	int rowMod;
 	int colMod;
@@ -127,7 +127,7 @@ void sub(Tensor A, int rowsA, int colsA, Tensor B, int rowsB, int colsB, Tensor 
 }
 
 
-void mul_dot(Tensor A, int rowsA, int colsA, Tensor B, int rowsB, int colsB, Tensor C)
+void mul_dot(const Tensor A, int rowsA, int colsA, const Tensor B, int rowsB, int colsB, Tensor C)
 {
 	int rowMod;
 	int colMod;
@@ -183,7 +183,7 @@ void mul_dot(Tensor A, int rowsA, int colsA, Tensor B, int rowsB, int colsB, Ten
 }
 
 
-void div_dot(Tensor A, int rowsA, int colsA, Tensor B, int rowsB, int colsB, Tensor C)
+void div_dot(const Tensor A, int rowsA, int colsA, const Tensor B, int rowsB, int colsB, Tensor C)
 {
 	int rowMod;
 	int colMod;
@@ -239,7 +239,7 @@ void div_dot(Tensor A, int rowsA, int colsA, Tensor B, int rowsB, int colsB, Ten
 }
 
 
-void pow_dot(Tensor A, int rowsA, int colsA, Tensor B, int rowsB, int colsB, Tensor C)
+void pow_dot(const Tensor A, int rowsA, int colsA, const Tensor B, int rowsB, int colsB, Tensor C)
 {// A = B^C, note that there are more efficient functions for 2^X or e^X or 10^X
 	int rowMod;
 	int colMod;
@@ -296,7 +296,7 @@ void pow_dot(Tensor A, int rowsA, int colsA, Tensor B, int rowsB, int colsB, Ten
 }
 
 
-void add_scalar(Tensor A, int rowsA, int colsA, float B, Tensor C)
+void add_scalar(const Tensor A, int rowsA, int colsA, float B, Tensor C)
 {
     unsigned i,j;
     for (i = 0; i < rowsA; i++)
@@ -309,7 +309,7 @@ void add_scalar(Tensor A, int rowsA, int colsA, float B, Tensor C)
 }
 
 
-void mul_scalar(Tensor A, int rowsA, int colsA, float B, Tensor C)
+void mul_scalar(const Tensor A, int rowsA, int colsA, float B, Tensor C)
 {
     unsigned i,j;
     for (i = 0; i < rowsA; i++)
@@ -322,7 +322,7 @@ void mul_scalar(Tensor A, int rowsA, int colsA, float B, Tensor C)
 }
 
 
-void sub_scalar(Tensor A, int rowsA, int colsA, float B, Tensor C)
+void sub_scalar(const Tensor A, int rowsA, int colsA, float B, Tensor C)
 {
     unsigned i,j;
     for (i = 0; i < rowsA; i++)
@@ -335,7 +335,7 @@ void sub_scalar(Tensor A, int rowsA, int colsA, float B, Tensor C)
 }
 
 
-void sub_scalar(float B, Tensor A, int rowsA, int colsA, Tensor C)
+void sub_scalar(float B, const Tensor A, int rowsA, int colsA, Tensor C)
 {
 	unsigned i, j;
 	for (i = 0; i < rowsA; i++)
@@ -348,7 +348,7 @@ void sub_scalar(float B, Tensor A, int rowsA, int colsA, Tensor C)
 }
 
 
-void div_scalar(Tensor A, int rowsA, int colsA, float B, Tensor C)
+void div_scalar(const Tensor A, int rowsA, int colsA, float B, Tensor C)
 {
     unsigned i,j;
     for (i = 0; i < rowsA; i++)
@@ -361,7 +361,7 @@ void div_scalar(Tensor A, int rowsA, int colsA, float B, Tensor C)
 }
 
 
-void pow_scalar(Tensor A, int rowsA, int colsA, float B, Tensor C)
+void pow_scalar(const Tensor A, int rowsA, int colsA, float B, Tensor C)
 {// A = B^C, note that there are more efficient functions for 2^X or e^X or 10^X
     unsigned i,j;
     for (i = 0; i < rowsA; i++)
@@ -374,7 +374,7 @@ void pow_scalar(Tensor A, int rowsA, int colsA, float B, Tensor C)
 }
 
 
-void max(Tensor A, int rowsA, int colsA, int dim, Tensor C)
+void max(const Tensor A, int rowsA, int colsA, int dim, Tensor C)
 //functions similar to https://pytorch.org/docs/stable/generated/torch.max.html#torch.max
 //but only works on 2d tensors and only returns a tensor with the maximums, no indexes. 
 //dim=0 means you find the biggest in each column,
@@ -437,7 +437,7 @@ void max(Tensor A, int rowsA, int colsA, int dim, Tensor C)
     }
 }
 
-void min(Tensor A, int rowsA, int colsA, int dim, Tensor C)
+void min(const Tensor A, int rowsA, int colsA, int dim, Tensor C)
 //virtually same code as MAX
 //dim=0 means you find the smallest in each column,
 //dim=1 means you find the smallest in each row. 
@@ -498,7 +498,7 @@ void min(Tensor A, int rowsA, int colsA, int dim, Tensor C)
     }
 }
 
-void sum(Tensor A, int rowsA, int colsA, int dim, Tensor C)
+void sum(const Tensor A, int rowsA, int colsA, int dim, Tensor C)
 {
 	//dim=0 means you find the sum of each column,
 	//dim=1 means you find the sum of each row. 
@@ -535,7 +535,7 @@ void sum(Tensor A, int rowsA, int colsA, int dim, Tensor C)
 }
 
 
-void max_scalar(Tensor A, int rowsA, int colsA, float compare, Tensor C)
+void max_scalar(const Tensor A, int rowsA, int colsA, float compare, Tensor C)
 { //similar to clamp but more readable
 	unsigned i, j;
 	for (i = 0; i < rowsA; i++)
@@ -549,7 +549,7 @@ void max_scalar(Tensor A, int rowsA, int colsA, float compare, Tensor C)
 	}
 }
 
-void min_scalar(Tensor A, int rowsA, int colsA, float compare, Tensor C)
+void min_scalar(const Tensor A, int rowsA, int colsA, float compare, Tensor C)
 {
 	unsigned i, j;
 	for (i = 0; i < rowsA; i++)
@@ -564,7 +564,7 @@ void min_scalar(Tensor A, int rowsA, int colsA, float compare, Tensor C)
 }
 
 
-void min_dot(Tensor A, int rowsA, int colsA, Tensor B, Tensor C)
+void min_dot(const Tensor A, int rowsA, int colsA, const Tensor B, Tensor C)
 {//element wise min that assumes a and b are the same size
 	//assert(sameSize(A, B));
 	unsigned i, j;
@@ -582,7 +582,7 @@ void min_dot(Tensor A, int rowsA, int colsA, Tensor B, Tensor C)
 }
 
 
-void abs_tensor(Tensor A, int rowsA, int colsA, Tensor C)
+void abs_tensor(const Tensor A, int rowsA, int colsA, Tensor C)
 {
 	unsigned i, j;
 	for (i = 0; i < rowsA; i++)
@@ -597,7 +597,7 @@ void abs_tensor(Tensor A, int rowsA, int colsA, Tensor C)
 }
 
 
-void floor_tensor(Tensor A, int rowsA, int colsA, Tensor C)
+void floor_tensor(const Tensor A, int rowsA, int colsA, Tensor C)
 {//does a cast to a float and then floors it.
     unsigned i,j;
     for (i = 0; i < rowsA; i++)
@@ -612,7 +612,7 @@ void floor_tensor(Tensor A, int rowsA, int colsA, Tensor C)
 }
 
 
-void exp2_tensor(Tensor A, int rowsA, int colsA, Tensor C)
+void exp2_tensor(const Tensor A, int rowsA, int colsA, Tensor C)
 {
 	unsigned i, j;
 	for (i = 0; i < rowsA; i++)
@@ -625,7 +625,7 @@ void exp2_tensor(Tensor A, int rowsA, int colsA, Tensor C)
 }
 
 
-void clamp(Tensor A, int rowsA, int colsA, float min, float max, Tensor C)
+void clamp(const Tensor A, int rowsA, int colsA, float min, float max, Tensor C)
 {
     unsigned i,j;
     for (i = 0; i < rowsA; i++)
@@ -641,7 +641,7 @@ void clamp(Tensor A, int rowsA, int colsA, float min, float max, Tensor C)
 }
 
 
-void roundTensor(Tensor A, int rowsA, int colsA, Tensor C)
+void roundTensor(const Tensor A, int rowsA, int colsA, Tensor C)
 {
     unsigned i,j;
     for (i = 0; i < rowsA; i++)
@@ -660,7 +660,7 @@ void roundTensor(Tensor A, int rowsA, int colsA, Tensor C)
 }
 
 
-void reciprocal(Tensor A, int rowsA, int colsA, Tensor C)
+void reciprocal(const Tensor A, int rowsA, int colsA, Tensor C)
 {
     unsigned i,j;
     for (i = 0; i < rowsA; i++)
@@ -675,7 +675,7 @@ void reciprocal(Tensor A, int rowsA, int colsA, Tensor C)
 }
 
 
-void sign(Tensor A, int rowsA, int colsA, Tensor C)
+void sign(const Tensor A, int rowsA, int colsA, Tensor C)
 {
 	unsigned i, j;
 	for (i = 0; i < rowsA; i++)
@@ -699,7 +699,7 @@ void sign(Tensor A, int rowsA, int colsA, Tensor C)
 }
 
  
-void mean(Tensor A, int rowsA, int colsA, Tensor C)
+void mean(const Tensor A, int rowsA, int colsA, Tensor C)
 {// assume a row vector. can be expanded upon like max and min to work along multiple dimentions
 	//assert(rowsA == 1);
 	float running = 0.f;
@@ -711,7 +711,7 @@ void mean(Tensor A, int rowsA, int colsA, Tensor C)
 }
 
 
-void sqrt_tensor(Tensor A, int rowsA, int colsA, Tensor C)
+void sqrt_tensor(const Tensor A, int rowsA, int colsA, Tensor C)
 {
 	unsigned i, j;
 	for (i = 0; i < rowsA; i++)
@@ -724,7 +724,7 @@ void sqrt_tensor(Tensor A, int rowsA, int colsA, Tensor C)
 }
 /****************************************************manipulation****************************************************/
 
-void fill(Tensor A, int rowsA, int colsA, float fill)
+void fill(const Tensor A, int rowsA, int colsA, float fill)
 {
     unsigned i,j;
     for (i = 0; i < rowsA; i++)
@@ -737,7 +737,7 @@ void fill(Tensor A, int rowsA, int colsA, float fill)
 }
 
 /* TODO: this is probably not a necessary function anymore
-void view(Tensor A, int rowsA, int colsA, const int rows, const int cols, Tensor space)
+void view(const Tensor A, int rowsA, int colsA, const int rows, const int cols, Tensor space)
 {// a PRIMITIVE implementation of https://pytorch.org/docs/stable/generated/torch.Tensor.view.html?highlight=view#torch.Tensor.view
  // currentely only supports (rows, cols) where row and col go from -1 to 3072.
  // reshapes the tensor so that its values fit in a new shape. BE SMART when using this, because the function is dumb
@@ -810,28 +810,28 @@ void tensor_frexp(Tensor In, int rowsIn, int colsIn, Tensor m, int rowsm, int co
 
 /****************************************************adressing methods****************************************************/
 
-float get(Tensor A, int rowsA, int colsA, int row, int col)
+float get(const Tensor A, int rowsA, int colsA, int row, int col)
 {
 	return A[row * colsA + col];
 }
 
-float transposed_get(Tensor A, int rowsA, int colsA, int row, int col)
+float transposed_get(const Tensor A, int rowsA, int colsA, int row, int col)
 {
 	return A[col*rowsA + row];
 }
 
 
-void set(Tensor A, int rowsA, int colsA, int row, int col, float val)
+void set(const Tensor A, int rowsA, int colsA, int row, int col, float val)
 {
 	A[row * colsA + col] = val;
 }
 
-void transposed_set(Tensor A, int rowsA, int colsA, int row, int col, float val)
+void transposed_set(const Tensor A, int rowsA, int colsA, int row, int col, float val)
 {
 	A[col*rowsA + row] = val;
 }
 
-void transpose(Tensor A, int rowsA, int colsA, Tensor C)
+void transpose(const Tensor A, int rowsA, int colsA, Tensor C)
 {
 	for (int i = 0; i < rowsA; i++)
 	{
@@ -842,7 +842,7 @@ void transpose(Tensor A, int rowsA, int colsA, Tensor C)
 	}
 }
 
-void copy(Tensor A, int rowsA, int colsA, Tensor C)
+void copy(const Tensor A, int rowsA, int colsA, Tensor C)
 {
 	for (int i = 0; i < rowsA; i++)
 	{
@@ -853,7 +853,7 @@ void copy(Tensor A, int rowsA, int colsA, Tensor C)
 	}
 }
 
-void shrinkTensor(Tensor A, int rowsA, int colsA, Tensor C, int rowsC, int colsC) //use this after a dimention has been collapsed
+void shrinkTensor(const Tensor A, int rowsA, int colsA, Tensor C, int rowsC, int colsC) //use this after a dimention has been collapsed
 {
 	//we will assume that rows have been collapsed to 1 or cols have been collapsed to 1.
 	if (rowsA != rowsC && rowsC ==1)
@@ -875,7 +875,7 @@ void shrinkTensor(Tensor A, int rowsA, int colsA, Tensor C, int rowsC, int colsC
 }
 
 //helper/debugger/verification functions
-void print(Tensor A, int rowsA, int colsA)
+void print(const Tensor A, int rowsA, int colsA)
 {
 	
     #ifndef HLS_SYNTHESIS
@@ -894,7 +894,7 @@ void print(Tensor A, int rowsA, int colsA)
 }
 
 
-void print_brief(Tensor A, int rowsA, int colsA)
+void print_brief(const Tensor A, int rowsA, int colsA)
 {
 
 	#ifndef HLS_SYNTHESIS
@@ -923,7 +923,7 @@ void print_brief(Tensor A, int rowsA, int colsA)
 }
 
 
-bool eq(Tensor A, int rowsA, int colsA, Tensor B, int rowsB, int colsB)
+bool eq(const Tensor A, int rowsA, int colsA, const Tensor B, int rowsB, int colsB)
 {//returns true if all elements are the same. No broadcasting.
     unsigned i,j;
     for (i = 0; i < rowsA; i++)
@@ -938,7 +938,7 @@ bool eq(Tensor A, int rowsA, int colsA, Tensor B, int rowsB, int colsB)
 }
 
 
-bool eq_verbose(Tensor A, int rowsA, int colsA, Tensor B, int rowsB, int colsB)
+bool eq_verbose(const Tensor A, int rowsA, int colsA, const Tensor B, int rowsB, int colsB)
 {//returns true if all elements are the same. No broadcasting.
 	bool one = false;
 	unsigned i, j;

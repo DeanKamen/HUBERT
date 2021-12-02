@@ -1,1 +1,7 @@
-﻿  OpenCL-HUBERT.vcxproj -> C:\Users\hunto_efxy22i\OpenCL-HUBERT\x64\Debug\OpenCL-HUBERT.exe
+﻿  softmax.cpp
+c:\users\hunto_efxy22i\opencl-hubert\opencl-hubert\constant_headers\softmax_b4_int_exp.h(267): warning C4305: 'initializing': truncation from 'double' to 'const float'
+c:\users\hunto_efxy22i\opencl-hubert\opencl-hubert\softmax.cpp(146): warning C4018: '<': signed/unsigned mismatch
+c:\users\hunto_efxy22i\opencl-hubert\opencl-hubert\softmax.cpp(148): warning C4018: '<': signed/unsigned mismatch
+c:\users\hunto_efxy22i\opencl-hubert\opencl-hubert\softmax.cpp(152): warning C4018: '<': signed/unsigned mismatch
+c:\users\hunto_efxy22i\opencl-hubert\opencl-hubert\softmax.cpp(157): warning C4018: '<': signed/unsigned mismatch
+  OpenCL-HUBERT.vcxproj -> C:\Users\hunto_efxy22i\OpenCL-HUBERT\x64\Debug\OpenCL-HUBERT.exe

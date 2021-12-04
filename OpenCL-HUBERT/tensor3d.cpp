@@ -12,7 +12,7 @@
 /*                    DEFINITIONS                      */
 
 //2d broadcasting across 3d
-void add(const Tensor3d A, int rowsA, int colsA, int depA, Tensor B, int rowsB, int colsB, Tensor3d C)
+component void add(const Tensor3d A, int rowsA, int colsA, int depA, Tensor B, int rowsB, int colsB, Tensor3d C)
 {
 	//defer error checking to a layer by layer basis. 
 	for (unsigned d = 0; d < depA; d++)

@@ -14,6 +14,7 @@ class QuantAct
 public:
 	//initializer
 	QuantAct(
+		quantact_memory memory,
 		int activation_bit,
 		float act_range_momentum = 0.95f,
 		bool running_stat = true,
@@ -23,7 +24,7 @@ public:
 
 	//other functions
 	static scaled_tuple3d QuantAct_forward( //returns a matrix of size xr,xc,xd
-		QuantAct& self,
+		quantact_memory memory,
 		Tensor3d x, const int xr, const int xc, const int xd,//identity and x are 22x1x768 or 12x22x22.
 		Tensor pre_act_scaling_factor, const int pasfr, const int pasfc,
 		Tensor3d identity, const int identityr, const int identityc, const int identityd,
@@ -32,7 +33,7 @@ public:
 		Tensor specified_max);
 
 	static Tensor symmetric_linear_quantization_params(
-		QuantAct &self,
+		quantact_memory memory,
 		unsigned num_bits,
 		Tensor saturation_min,
 		const int smr,
@@ -40,11 +41,11 @@ public:
 		Tensor saturation_max,
 		bool per_channel);
 
-	static Tensor3d symmetric_quant_forward(QuantAct &self, Tensor3d x, const int xr, const int xc, const int xd, int k, Tensor specified_scale, const int ssr, const int ssc);
-	static Tensor3d linear_quantize(QuantAct &self, Tensor3d x, const int xr, const int xc, const int xd, Tensor scale_c, const int sr, const int sc, Tensor zero_point, const int zr, const int zc);
+	static Tensor3d symmetric_quant_forward(quantact_memory memory, Tensor3d x, const int xr, const int xc, const int xd, int k, Tensor specified_scale, const int ssr, const int ssc);
+	static Tensor3d linear_quantize(quantact_memory memory, Tensor3d x, const int xr, const int xc, const int xd, Tensor scale_c, const int sr, const int sc, Tensor zero_point, const int zr, const int zc);
 	
 	static Tensor3d fixedpoint_mul(
-		QuantAct &self,
+		quantact_memory memory,
 		Tensor3d pre_act, const int par, const int pac, const int pad,
 		Tensor pre_act_scaling_factor, const int pasfr, const int pasfc,
 		int bit_num,
@@ -56,17 +57,17 @@ public:
 
 
 	static void set_param(//this allocates space for all of the members that are pointers.
-		QuantAct &self,
 		quantact_memory memory
 	); 
 
 	//member variables
+	/*
 	int activation_bit;
 	float act_range_momentum;
 	bool running_stat;
 	QuantMode quant_mode;
 	bool per_channel;
-
+	*/
 	//memory
 	quantact_memory memory;
 

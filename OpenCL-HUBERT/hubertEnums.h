@@ -57,6 +57,12 @@ struct quantact_memory
 	Tensor m1;
 	Tensor e1; //size of isf
 	Tensor output1;//size of  self.z_int
+
+	int activation_bit;
+	float act_range_momentum;
+	bool running_stat;
+	QuantMode quant_mode;
+	bool per_channel;
 };
 
 struct softmax_memory

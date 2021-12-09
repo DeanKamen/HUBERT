@@ -10,9 +10,10 @@
 //verification
 #include "constant_headers/softmax_b4_int_exp.h"
 
-QuantAct global_quantact_instance_memory(16, 0.95f, true, false, -1, QuantMode::symmetric);
+quantact_memory memory;
+QuantAct global_quantact_instance_memory(memory, 16, 0.95f, true, false, -1, QuantMode::symmetric);
 
-Softmax::Softmax(int output_bit_i, QuantMode quant_mode_i, ForceDequantMode force_dequant)
+Softmax::Softmax(quantact_memory memory, int output_bit_i, QuantMode quant_mode_i, ForceDequantMode force_dequant)
 {
 	output_bit = output_bit_i;
 	quant_mode = quant_mode_i;
@@ -20,7 +21,7 @@ Softmax::Softmax(int output_bit_i, QuantMode quant_mode_i, ForceDequantMode forc
 	{
 		quant_mode = QuantMode::none;
 	}
-	global_quantact_instance_memory = QuantAct(16, 0.95f, true, false, -1, quant_mode);
+	global_quantact_instance_memory = QuantAct(memory, 16, 0.95f, true, false, -1, quant_mode);
 	act = &global_quantact_instance_memory;
 	x0 = -0.6931f; //  - ln2
 	n = 30; // sufficiently large integer
@@ -114,7 +115,7 @@ scaled_tuple3d Softmax::softmax_forward(Softmax &self, Tensor3d x, const int xr,
 	eq(self.memory.x_int, xr, xc, xd, (const Tensor3d)softmax_b4_int_exp, xr, xc, xd);//verification
 	scaled_tuple3d exp = int_exp(self, self.memory.x_int, xr, xc, xd, scaling_factor, sfr, sfc);
 
-	exp = QuantAct::QuantAct_forward(*self.act, exp.matrix, xr, xc, xd, exp.scaling_factor, sfr, sfc, nullptr, 0, 0, 0, nullptr, 0,0, nullptr, nullptr);
+	exp = QuantAct::QuantAct_forward(self.act->memory, exp.matrix, xr, xc, xd, exp.scaling_factor, sfr, sfc, nullptr, 0, 0, 0, nullptr, 0,0, nullptr, nullptr);
 	copy(exp.matrix, xr, xc, xd, self.memory.exp_int);
 	div_scalar(exp.matrix, xr, xc, xd, exp.scaling_factor[0], self.memory.exp_int);
 	copy(self.memory.exp_int, xr, xc, xd, self.memory.exp_int_sum);
@@ -171,5 +172,5 @@ void Softmax::set_param(
 )
 {
 	self.memory = memory;
-	QuantAct::set_param(*self.act, qa_memory); //call setup on the local quantact module
+	self.act->memory = qa_memory; //call setup on the local quantact module
 }

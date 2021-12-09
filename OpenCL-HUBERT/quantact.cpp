@@ -2,6 +2,7 @@
 
 #include "HLS/hls.h"
 #include "HLS/stdio.h"
+#include "HLS/math.h"
 #include "tensors.h" 
 #include <iostream>
 #include "quantact.h"
@@ -21,6 +22,7 @@ const int asfr = 1;
 const int asfc = CHANNEL_LEN;
 
 QuantAct::QuantAct(
+	quantact_memory memory,
 	int activation_bit_i, 
     float act_range_momentum_i,
     bool running_stat_i,
@@ -28,11 +30,11 @@ QuantAct::QuantAct(
     int channel_len,
     QuantMode quant_mode_i)
 {
-    activation_bit = activation_bit_i;
-    act_range_momentum= act_range_momentum_i;
-    running_stat = running_stat_i;
-    quant_mode = quant_mode_i;
-    per_channel = per_channel_i;
+    memory.activation_bit = activation_bit_i;
+	memory.act_range_momentum= act_range_momentum_i;
+	memory.running_stat = running_stat_i;
+	memory.quant_mode = quant_mode_i;
+	memory.per_channel = per_channel_i;
 
 	/*
     if(per_channel)
@@ -46,8 +48,8 @@ QuantAct::QuantAct(
 	//loading xmin and xmax is done by the set param function
 }
 
-scaled_tuple3d QuantAct::QuantAct_forward(
-	QuantAct& self,
+component scaled_tuple3d QuantAct::QuantAct_forward(
+	quantact_memory memory,
 	Tensor3d x, const int xr, const int xc, const int xd,//identity and x are 22x1x768 or 12x22x22.
 	Tensor pre_act_scaling_factor, const int pasfr, const int pasfc,
 	Tensor3d identity, const int identityr, const int identityc, const int identityd,
@@ -55,27 +57,27 @@ scaled_tuple3d QuantAct::QuantAct_forward(
 	Tensor specified_min,
 	Tensor specified_max)
 {
-	copy(x, xr, xc, xd, self.memory.x_act);
+	copy(x, xr, xc, xd, memory.x_act);
 	eq(x, xr, xc, xd, (const Tensor3d)qa_x_softmax, xr, xc, xd);
 	if (!(identity == nullptr))
 	{
-		add(x, xr, xc, xd, identity, identityr, identityc, identityd, self.memory.x_act);
+		add(x, xr, xc, xd, identity, identityr, identityc, identityd, memory.x_act);
 	}
 
 	float local_xmin[] = { 0.f };
 	float local_xmax[] = { 0.f };
 
-	if (self.running_stat)
+	if (memory.running_stat)
 	{
-		if (!self.per_channel)
+		if (!memory.per_channel)
 		{
-			copy(self.memory.x_act, xr, xc, xd, self.memory.temp);
-			min(self.memory.temp, xr, xc, xd, self.memory.temp);
-			toTwoD(self.memory.temp, xr, xc, xd, local_xmin);
+			copy(memory.x_act, xr, xc, xd, memory.temp);
+			min(memory.temp, xr, xc, xd, memory.temp);
+			toTwoD(memory.temp, xr, xc, xd, local_xmin);
 
-			copy(self.memory.x_act, xr, xc, xd, self.memory.temp);
-			max(self.memory.temp, xr, xc, xd, self.memory.temp);
-			toTwoD(self.memory.temp, xr, xc, xd, local_xmax);
+			copy(memory.x_act, xr, xc, xd, memory.temp);
+			max(memory.temp, xr, xc, xd, memory.temp);
+			toTwoD(memory.temp, xr, xc, xd, local_xmax);
 		}
 		else
 		{
@@ -83,85 +85,85 @@ scaled_tuple3d QuantAct::QuantAct_forward(
 		}
 
 		//Initialization 
-		if (eq(self.memory.x_min, x_minr, x_minc, self.memory.x_max, x_maxr, x_maxc))
+		if (eq(memory.x_min, x_minr, x_minc, memory.x_max, x_maxr, x_maxc))
 		{
-			add(self.memory.x_min, x_minr, x_minc, local_xmin, 1, 1, self.memory.x_min);
-			add(self.memory.x_max, x_maxr, x_maxc, local_xmax, 1, 1, self.memory.x_max);
+			add(memory.x_min, x_minr, x_minc, local_xmin, 1, 1, memory.x_min);
+			add(memory.x_max, x_maxr, x_maxc, local_xmax, 1, 1, memory.x_max);
 		}
-		else if (self.act_range_momentum == -1)
+		else if (memory.act_range_momentum == -1)
 		{
-			float obj_min = self.memory.x_min[0];
-			float obj_max = self.memory.x_max[0];
+			float obj_min = memory.x_min[0];
+			float obj_max = memory.x_max[0];
 			float localmin = local_xmin[0];
 			float localmax = local_xmax[0];
 
 			if (localmax > obj_max)
 			{
-				set(self.memory.x_max, x_maxr, x_maxc, 0, 0, localmax);
+				set(memory.x_max, x_maxr, x_maxc, 0, 0, localmax);
 			}
 			if (localmin < obj_min)
 			{
-				set(self.memory.x_min, x_minr, x_minc, 0, 0, localmin);
+				set(memory.x_min, x_minr, x_minc, 0, 0, localmin);
 			}
 		}
 		else
 		{
 			//here I am assuming xmin and xmax are 1x1
-			float objmin = self.memory.x_min[0];
+			float objmin = memory.x_min[0];
 			float localmin = local_xmin[0];
-			set(self.memory.x_min, x_minr, x_minc, 0, 0, objmin*self.act_range_momentum + localmin * (1 - self.act_range_momentum));
+			set(memory.x_min, x_minr, x_minc, 0, 0, objmin*memory.act_range_momentum + localmin * (1 - memory.act_range_momentum));
 
-			float objmax = self.memory.x_max[0];
+			float objmax = memory.x_max[0];
 			float localmax = local_xmax[0];
-			set(self.memory.x_max, x_maxr, x_maxc, 0, 0, objmax*self.act_range_momentum + localmax * (1 - self.act_range_momentum));
+			set(memory.x_max, x_maxr, x_maxc, 0, 0, objmax*memory.act_range_momentum + localmax * (1 - memory.act_range_momentum));
 		}
 	}
 
-	if (self.quant_mode == QuantMode::none)
+	if (memory.quant_mode == QuantMode::none)
 	{
 		scaled_tuple3d returnme;
-		returnme.matrix = self.memory.x_act;
+		returnme.matrix = memory.x_act;
 		returnme.scaling_factor = nullptr;
 		return returnme;
 	}
 
 	if (specified_min != nullptr)
-		self.memory.x_min = specified_min;
+		memory.x_min = specified_min;
 	if (specified_max != nullptr)
-		self.memory.x_min = specified_max;
+		memory.x_min = specified_max;
 
-	self.memory.act_scaling_factor = QuantAct::symmetric_linear_quantization_params(self, self.activation_bit, self.memory.x_min, x_minr, x_minc, self.memory.x_max, self.per_channel);
+	memory.act_scaling_factor = QuantAct::symmetric_linear_quantization_params(memory, memory.activation_bit, memory.x_min, x_minr, x_minc, memory.x_max, memory.per_channel);
 
 	Tensor3d quant_act_int = nullptr; //TODO: size? I dont think i have to allocate this
 	if (pre_act_scaling_factor == nullptr)
 	{
-		quant_act_int = QuantAct::symmetric_quant_forward(self, x, xr, xc, xd, self.activation_bit, self.memory.act_scaling_factor, asfr, asfc); //returns a modified x
+		quant_act_int = QuantAct::symmetric_quant_forward(memory, x, xr, xc, xd, memory.activation_bit, memory.act_scaling_factor, asfr, asfc); //returns a modified x
 	}
 	else
 	{
 		quant_act_int = fixedpoint_mul(
-			self,
+			memory,
 			x, xr, xc, xd, 
 			pre_act_scaling_factor, pasfr, pasfc, 
-			self.activation_bit, 
-			self.quant_mode, 
-			self.memory.act_scaling_factor, asfr, asfc,
+			memory.activation_bit, 
+			memory.quant_mode, 
+			memory.act_scaling_factor, asfr, asfc,
 			identity, identityr, identityc, identityd, 
 			identity_scaling_factor, isfr, isfc);
 	}
 
 	float space[] = { 0.f };
-	float correct_output_scale[] = { self.memory.act_scaling_factor[0] };
+	float correct_output_scale[] = { memory.act_scaling_factor[0] };
 	//correct output scale has just one element while quant act int has 2
     mul_scalar(quant_act_int, xr, xc, xd, correct_output_scale[0], quant_act_int);
     scaled_tuple3d returnme;
     returnme.matrix = quant_act_int;
-    returnme.scaling_factor = self.memory.act_scaling_factor;
+    returnme.scaling_factor = memory.act_scaling_factor;
     return returnme;
 }
 
 Tensor QuantAct::symmetric_linear_quantization_params(
-	QuantAct &self,
+	quantact_memory memory,
 	unsigned num_bits,
     Tensor saturation_min,
 	const int smr,
@@ -178,7 +180,7 @@ Tensor QuantAct::symmetric_linear_quantization_params(
     saturation_max: upper bound for quantization range
     
     */
-    fill(self.memory.slqp_scale, smr, smc, 0.0f);
+    fill(memory.slqp_scale, smr, smc, 0.0f);
     unsigned n =  (unsigned int)exp2( num_bits - 1 ) - 1;
     if (per_channel)
     { // saturation min and max are columns
@@ -188,51 +190,51 @@ Tensor QuantAct::symmetric_linear_quantization_params(
 			float y = fabs(get(saturation_max, smr, smc, 0, i));
 			if (x > y)
 			{
-				set(self.memory.slqp_scale, smr, smc, 0, i, x);
+				set(memory.slqp_scale, smr, smc, 0, i, x);
 			}
 			else
 			{
-				set(self.memory.slqp_scale, smr, smc, 0, i, y);
+				set(memory.slqp_scale, smr, smc, 0, i, y);
 			}
 		}
-		clamp(self.memory.slqp_scale, smr, smc, 1e-8f, FLT_MAX, self.memory.slqp_scale);
-		div_scalar(self.memory.slqp_scale, smr, smc, (float)n, self.memory.slqp_scale);
+		clamp(memory.slqp_scale, smr, smc, 1e-8f, FLT_MAX, memory.slqp_scale);
+		div_scalar(memory.slqp_scale, smr, smc, (float)n, memory.slqp_scale);
     }
     else
     {//saturation min and max are one element tensors
-        set(self.memory.slqp_scale, smr, smc, 0,0, fmax(fabs(saturation_min[0]), fabs(saturation_max[0])));
-        clamp(self.memory.slqp_scale, smr, smc, 1e-8f, FLT_MAX, self.memory.slqp_scale);
-        div_scalar(self.memory.slqp_scale, smr, smc, (float)n, self.memory.slqp_scale);
+        set(memory.slqp_scale, smr, smc, 0,0, fmax(fabs(saturation_min[0]), fabs(saturation_max[0])));
+        clamp(memory.slqp_scale, smr, smc, 1e-8f, FLT_MAX, memory.slqp_scale);
+        div_scalar(memory.slqp_scale, smr, smc, (float)n, memory.slqp_scale);
     }
-    return self.memory.slqp_scale;
+    return memory.slqp_scale;
 }
 
-Tensor3d QuantAct::symmetric_quant_forward(QuantAct &self, Tensor3d x, const int xr, const int xc, const int xd, int k, Tensor specified_scale, const int ssr, const int ssc)
+Tensor3d QuantAct::symmetric_quant_forward(quantact_memory memory, Tensor3d x, const int xr, const int xc, const int xd, int k, Tensor specified_scale, const int ssr, const int ssc)
 {
     if(specified_scale != nullptr)
     {
-        copy(specified_scale,ssr,ssc, self.memory.sqf_scale);
+        copy(specified_scale,ssr,ssc, memory.sqf_scale);
     }
 	float zero_point[] = { 0.f };
     float n = exp2f(float(k - 1)) - 1;
 
-    Tensor3d new_quant_x = QuantAct::linear_quantize(self, x, xr, xc, xd, self.memory.sqf_scale, ssr, ssc, zero_point, 1, 1);
+    Tensor3d new_quant_x = QuantAct::linear_quantize(memory, x, xr, xc, xd, memory.sqf_scale, ssr, ssc, zero_point, 1, 1);
     clamp(new_quant_x, xr, xc, xd, -n, n-1, new_quant_x);
     return new_quant_x;
 }
 
-Tensor3d QuantAct::linear_quantize(QuantAct &self, Tensor3d x, const int xr, const int xc, const int xd, Tensor scale_c, const int sr, const int sc, Tensor zero_point, const int zr, const int zc)
+Tensor3d QuantAct::linear_quantize(quantact_memory memory, Tensor3d x, const int xr, const int xc, const int xd, Tensor scale_c, const int sr, const int sc, Tensor zero_point, const int zr, const int zc)
 {
     //scale is 1 when x is truely 3d. When x is 2d, scale is also 2d (or at least broadcastable.)
-	copy(scale_c, sr, sc, self.memory.lq_scale);
-    reciprocal(self.memory.lq_scale, sr, sc, self.memory.lq_scale);
+	copy(scale_c, sr, sc, memory.lq_scale);
+    reciprocal(memory.lq_scale, sr, sc, memory.lq_scale);
 	if (xd != 1)
 	{
-		mul_scalar(x, xr, xc, xd, self.memory.lq_scale[0], x);
+		mul_scalar(x, xr, xc, xd, memory.lq_scale[0], x);
 	}
 	else
 	{
-		mul_dot(x, xr, xc, xd, self.memory.lq_scale, sr, sc, x);
+		mul_dot(x, xr, xc, xd, memory.lq_scale, sr, sc, x);
 	}
     add_scalar(x, xr, xc, xd, zero_point[0], x);
     roundTensor(x, xr, xc, xd, x);
@@ -240,7 +242,7 @@ Tensor3d QuantAct::linear_quantize(QuantAct &self, Tensor3d x, const int xr, con
 }
 
 Tensor3d QuantAct::fixedpoint_mul(
-	QuantAct &self,
+	quantact_memory memory,
     Tensor3d pre_act, const int par, const int pac, const int pad,
     Tensor pre_act_scaling_factor, const int pasfr, const int pasfc,
     int bit_num,
@@ -260,77 +262,78 @@ Tensor3d QuantAct::fixedpoint_mul(
     }
 	float space[] = { 0.f };
 
-    copy(pre_act, par, pac, pad, self.memory.z_int);
-    div_dot(pre_act, par, pac, pad, pre_act_scaling_factor, pasfr, pasfc, self.memory.z_int);
-    roundTensor(self.memory.z_int, par, pac, pad, self.memory.z_int);
+    copy(pre_act, par, pac, pad, memory.z_int);
+    div_dot(pre_act, par, pac, pad, pre_act_scaling_factor, pasfr, pasfc, memory.z_int);
+    roundTensor(memory.z_int, par, pac, pad, memory.z_int);
 
     //the following is in double precision in the code, but I did not make it double precision here
-	copy(pre_act_scaling_factor, pasfr, pasfc, self.memory._A);
-	copy(z_scaling_factor, zsfr, zsfc, self.memory._B);
-	copy(self.memory._A, pasfr, pasfc, self.memory.new_scale);// this copy is not necessary but gives context to the size of new_scale
-	div_dot(self.memory._A, pasfr, pasfc, self.memory._B, zsfr, zsfc, self.memory.new_scale);
+	copy(pre_act_scaling_factor, pasfr, pasfc, memory._A);
+	copy(z_scaling_factor, zsfr, zsfc, memory._B);
+	copy(memory._A, pasfr, pasfc, memory.new_scale);// this copy is not necessary but gives context to the size of new_scale
+	div_dot(memory._A, pasfr, pasfc, memory._B, zsfr, zsfc, memory.new_scale);
     
-	copy(self.memory.new_scale, pasfr, pasfc, self.memory.m);
-	copy(self.memory.new_scale, pasfr, pasfc, self.memory.e);
-	tensor_frexp(self.memory.new_scale, pasfr, pasfc, self.memory.m, pasfr, pasfc, self.memory.e, pasfr, pasfc);
-    copy(self.memory.z_int, zsfr, zsfc, self.memory.output);
+	copy(memory.new_scale, pasfr, pasfc, memory.m);
+	copy(memory.new_scale, pasfr, pasfc, memory.e);
+	tensor_frexp(memory.new_scale, pasfr, pasfc, memory.m, pasfr, pasfc, memory.e, pasfr, pasfc);
+    copy(memory.z_int, zsfr, zsfc, memory.output);
 
-	fill(self.memory.twos, zsfr, zsfc, 2.0f);
-	pow_dot(self.memory.twos, zsfr, zsfc, self.memory.e, pasfr, pasfc, self.memory.twos); //use twos as temp storage
-	div_dot(self.memory.output, zsfr, zsfc, self.memory.twos, zsfr, zsfc, self.memory.output);
-	mul_dot(self.memory.output, zsfr, zsfc, self.memory.m, pasfr, pasfc, self.memory.output);
-    roundTensor(self.memory.output, zsfr, zsfc, self.memory.output);
+	fill(memory.twos, zsfr, zsfc, 2.0f);
+	pow_dot(memory.twos, zsfr, zsfc, memory.e, pasfr, pasfc, memory.twos); //use twos as temp storage
+	div_dot(memory.output, zsfr, zsfc, memory.twos, zsfr, zsfc, memory.output);
+	mul_dot(memory.output, zsfr, zsfc, memory.m, pasfr, pasfc, memory.output);
+    roundTensor(memory.output, zsfr, zsfc, memory.output);
 
     if(identity != nullptr)
 	{
-        copy(identity, identityr, identityc, identityd, self.memory.wx_int); //also an unnecessary
+        copy(identity, identityr, identityc, identityd, memory.wx_int); //also an unnecessary
 		div_dot(identity, identityr, identityc, identityd, identity_scaling_factor, isfr, isfc, identity);
-        roundTensor(identity, identityr, identityc, identityd, self.memory.wx_int);
+        roundTensor(identity, identityr, identityc, identityd, memory.wx_int);
 
-        copy(identity_scaling_factor, isfr, isfc, self.memory._A1); //_A is also the size of the isf 
-        copy(z_scaling_factor, zsfr, zsfc, self.memory._B1);
-		copy(self.memory._A1, isfr, isfc, self.memory.new_scale1);
-        div_dot(self.memory._A1, isfr, isfc, self.memory._B1, zsfr, zsfc, self.memory.new_scale1);
+        copy(identity_scaling_factor, isfr, isfc, memory._A1); //_A is also the size of the isf 
+        copy(z_scaling_factor, zsfr, zsfc, memory._B1);
+		copy(memory._A1, isfr, isfc, memory.new_scale1);
+        div_dot(memory._A1, isfr, isfc, memory._B1, zsfr, zsfc, memory.new_scale1);
 
-        copy(self.memory.new_scale1, isfr, isfc, self.memory.m1);
-        copy(self.memory.new_scale1, isfr, isfc, self.memory.e1);
-        tensor_frexp(self.memory.new_scale1, isfr, isfc, self.memory.m1, isfr, isfc, self.memory.e1, isfr, isfc);
+        copy(memory.new_scale1, isfr, isfc, memory.m1);
+        copy(memory.new_scale1, isfr, isfc, memory.e1);
+        tensor_frexp(memory.new_scale1, isfr, isfc, memory.m1, isfr, isfc, memory.e1, isfr, isfc);
 
-        copy(self.memory.wx_int, identityr, identityc, identityd, self.memory.output1);
-		mul_dot(self.memory.wx_int, identityr, identityc, identityd, self.memory.m1, isfr, isfc, self.memory.output1);
+        copy(memory.wx_int, identityr, identityc, identityd, memory.output1);
+		mul_dot(memory.wx_int, identityr, identityc, identityd, memory.m1, isfr, isfc, memory.output1);
 
-        pow_dot(self.memory.twos, isfr, isfc, self.memory.e1, isfr, isfc, self.memory.e1); //use e1 as temp storage TODO: what is going on here?
-		div_dot(self.memory.output1, identityr, identityc, identityd, self.memory.e1, isfr, isfc, self.memory.output1); //Can I really use e1 as temp storage?
-        roundTensor(self.memory.output1, identityr, identityc, identityd, self.memory.output1);
+        pow_dot(memory.twos, isfr, isfc, memory.e1, isfr, isfc, memory.e1); //use e1 as temp storage TODO: what is going on here?
+		div_dot(memory.output1, identityr, identityc, identityd, memory.e1, isfr, isfc, memory.output1); //Can I really use e1 as temp storage?
+        roundTensor(memory.output1, identityr, identityc, identityd, memory.output1);
 
-        add(self.memory.output, zsfr, zsfc, self.memory.output1, identityr, identityc, self.memory.output); //TODO: also have no idea what is going on here? assuming 2d...
+        add(memory.output, zsfr, zsfc, memory.output1, identityr, identityc, memory.output); //TODO: also have no idea what is going on here? assuming 2d...
     }
 
     if( bit_num == 4 || bit_num == 8 || bit_num == 16)
     {
         if(quant_mode == QuantMode::symmetric)
         {
-            clamp(self.memory.output, zsfr, zsfc, -n-1, n, self.memory.output);
-            return self.memory.output;
+            clamp(memory.output, zsfr, zsfc, -n-1, n, memory.output);
+            return memory.output;
         }
         else{
-            clamp(self.memory.output, zsfr, zsfc, 0, n, self.memory.output);
-            return self.memory.output;
+            clamp(memory.output, zsfr, zsfc, 0, n, memory.output);
+            return memory.output;
         }
     }
     else{
-        return self.memory.output;
+        return memory.output;
     }
 }
 
-
+/*
 void QuantAct::set_param(
-	QuantAct &self, 
+	quantact_memory memory, 
 	quantact_memory memory
 	)
 {
 	//In this function, I want a pointer to all of these pre allocated arrays and assign them to member variables. These will all be empty
 	//additionally I want a pointer to the "preload" arrays (weights and biases learned from the python model)
-	self.memory = memory;
+	memory = memory;
 }
+*/
 

@@ -184,7 +184,7 @@ int main()
 	//QuantAct + softmax verification
 	
 	scaled_tuple3d softmax_result;
-    Softmax testSoftmax (8, QuantMode::symmetric, ForceDequantMode::layernorm);
+    Softmax testSoftmax (qa_memory, 8, QuantMode::symmetric, ForceDequantMode::layernorm);
 	testSoftmax.set_param(testSoftmax, sm_memory, qa_memory);
     softmax_result = testSoftmax.softmax_forward(
 		testSoftmax,

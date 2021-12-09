@@ -14,7 +14,7 @@ class Softmax
 {
 public:
 	//initializer
-	Softmax(int output_bit, QuantMode quant_mode = QuantMode::none, ForceDequantMode force_dequant = ForceDequantMode::none);
+	Softmax(quantact_memory memory,int output_bit, QuantMode quant_mode = QuantMode::none, ForceDequantMode force_dequant = ForceDequantMode::none);
 
 	//member functions
 	static scaled_tuple3d int_polynomial(Softmax &self, Tensor3d x_int, const int xr, const int xc, const int xd, Tensor scaling_factor, const int sfr, const int sfc);//returned matrix is size xr xc xd

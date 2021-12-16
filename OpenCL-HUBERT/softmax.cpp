@@ -10,136 +10,131 @@
 //verification
 #include "constant_headers/softmax_b4_int_exp.h"
 
-quantact_memory memory;
-QuantAct global_quantact_instance_memory(memory, 16, 0.95f, true, false, -1, QuantMode::symmetric);
-
-Softmax::Softmax(quantact_memory memory, int output_bit_i, QuantMode quant_mode_i, ForceDequantMode force_dequant)
+Softmax::Softmax(softmax_memory memory, quantact_memory qa_memory, int output_bit_i, QuantMode quant_mode_i, ForceDequantMode force_dequant)
 {
-	output_bit = output_bit_i;
-	quant_mode = quant_mode_i;
+	memory.output_bit = output_bit_i;
+	memory.quant_mode = quant_mode_i;
 	if (force_dequant == ForceDequantMode::nonlinear || force_dequant == ForceDequantMode::softmax)
 	{
-		quant_mode = QuantMode::none;
+		memory.quant_mode = QuantMode::none;
 	}
-	global_quantact_instance_memory = QuantAct(memory, 16, 0.95f, true, false, -1, quant_mode);
-	act = &global_quantact_instance_memory;
-	x0 = -0.6931f; //  - ln2
-	n = 30; // sufficiently large integer
-	coef[0] =  0.35815147f;
-	coef[1] = 0.96963238f;
-	coef[2] = 1.f; // ax**2 + bx + c
-	coef[1] /= coef[0];
-	coef[2] /= coef[0];
+	memory.x0 = -0.6931f; //  - ln2
+	memory.n = 30; // sufficiently large integer
+	memory.coef[0] =  0.35815147f;
+	memory.coef[1] = 0.96963238f;
+	memory.coef[2] = 1.f; // ax**2 + bx + c
+	memory.coef[1] /= memory.coef[0];
+	memory.coef[2] /= memory.coef[0];
 }
 
-scaled_tuple3d Softmax::int_polynomial(Softmax &self, Tensor3d x_int, const int xr, const int xc, const int xd, Tensor scaling_factor, const int sfr, const int sfc)
+scaled_tuple3d Softmax::int_polynomial(softmax_memory memory, Tensor3d x_int, const int xr, const int xc, const int xd, Tensor scaling_factor, const int sfr, const int sfc)
 {
-	copy(scaling_factor, sfr, sfc, self.memory.b_int);
-	reciprocal(scaling_factor, sfr, sfc, self.memory.b_int);
-	mul_scalar(self.memory.b_int, sfr, sfc, self.coef[1], self.memory.b_int);
-	floor_tensor(self.memory.b_int, sfr, sfc, self.memory.b_int);
+	copy(scaling_factor, sfr, sfc, memory.b_int);
+	reciprocal(scaling_factor, sfr, sfc, memory.b_int);
+	mul_scalar(memory.b_int, sfr, sfc, memory.coef[1], memory.b_int);
+	floor_tensor(memory.b_int, sfr, sfc, memory.b_int);
 
-	copy(scaling_factor, sfr, sfc, self.memory.c_int);
-	pow_scalar(scaling_factor, sfr, sfc, 2.f, self.memory.c_int); //makes the previous line unnecessary
-	reciprocal(self.memory.c_int, sfr, sfc, self.memory.c_int);
-	mul_scalar(self.memory.c_int, sfr, sfc, self.coef[2], self.memory.c_int);
+	copy(scaling_factor, sfr, sfc, memory.c_int);
+	pow_scalar(scaling_factor, sfr, sfc, 2.f, memory.c_int); //makes the previous line unnecessary
+	reciprocal(memory.c_int, sfr, sfc, memory.c_int);
+	mul_scalar(memory.c_int, sfr, sfc, memory.coef[2], memory.c_int);
 
-	copy(x_int, xr, xc, xd, self.memory.z);
-	add_scalar(x_int, xr, xc, xd, self.memory.b_int[0], self.memory.z);//makes the previous line unnecessary
-	mul_dot(x_int, xr, xc, xd, self.memory.z, xr, xc, xd, self.memory.z);
-	add_scalar(self.memory.z, xr, xc, xd, self.memory.c_int[0], self.memory.z);
+	copy(x_int, xr, xc, xd, memory.z);
+	add_scalar(x_int, xr, xc, xd, memory.b_int[0], memory.z);//makes the previous line unnecessary
+	mul_dot(x_int, xr, xc, xd, memory.z, xr, xc, xd, memory.z);
+	add_scalar(memory.z, xr, xc, xd, memory.c_int[0], memory.z);
 
 	pow_scalar(scaling_factor, sfr, sfc, 2, scaling_factor);
-	mul_scalar(scaling_factor, sfr, sfc, self.coef[0], scaling_factor);
+	mul_scalar(scaling_factor, sfr, sfc, memory.coef[0], scaling_factor);
 	
 	scaled_tuple3d returnme;
-	returnme.matrix = self.memory.z;
+	returnme.matrix = memory.z;
 	returnme.scaling_factor = scaling_factor;
 	return returnme;
 }
 
-scaled_tuple3d Softmax::int_exp(Softmax &self, Tensor3d x_int, const int xr, const int xc, const int xd, Tensor scaling_factor, const int sfr, const int sfc)
+scaled_tuple3d Softmax::int_exp(softmax_memory memory, Tensor3d x_int, const int xr, const int xc, const int xd, Tensor scaling_factor, const int sfr, const int sfc)
 {
-	copy(scaling_factor, sfr, sfc, self.memory.x0_int);
-	reciprocal(scaling_factor, sfr, sfc, self.memory.x0_int); //makes previous line unnecessary
-	mul_scalar(self.memory.x0_int, sfr, sfc, self.x0, self.memory.x0_int);
-	floor_tensor(self.memory.x0_int, sfr, sfc, self.memory.x0_int);
+	copy(scaling_factor, sfr, sfc, memory.x0_int);
+	reciprocal(scaling_factor, sfr, sfc, memory.x0_int); //makes previous line unnecessary
+	mul_scalar(memory.x0_int, sfr, sfc, memory.x0, memory.x0_int);
+	floor_tensor(memory.x0_int, sfr, sfc, memory.x0_int);
 
-	copy(self.memory.x0_int, sfr, sfc, self.memory.temp);
-	mul_scalar(self.memory.temp, sfr, sfc, (float)self.n, self.memory.temp);
-	max_scalar(x_int, sfr, sfc, self.memory.temp[0], x_int);
+	copy(memory.x0_int, sfr, sfc, memory.temp);
+	mul_scalar(memory.temp, sfr, sfc, (float)memory.n, memory.temp);
+	max_scalar(x_int, sfr, sfc, memory.temp[0], x_int);
 
-	copy(x_int,xr,xc,xd, self.memory.q);
-	div_scalar(self.memory.q, xr, xc, xd, self.memory.x0_int[0], self.memory.q);
-	floor_tensor(self.memory.q, xr, xc, xd, self.memory.q);
+	copy(x_int,xr,xc,xd, memory.q);
+	div_scalar(memory.q, xr, xc, xd, memory.x0_int[0], memory.q);
+	floor_tensor(memory.q, xr, xc, xd, memory.q);
 
-	copy(x_int, xr, xc, xd, self.memory.r);
-	copy(self.memory.q,xr,xc,xd, self.memory.temp2);
-	mul_scalar(self.memory.temp2, xr, xc, xd, self.memory.x0_int[0], self.memory.temp2);
-	sub(x_int, xr, xc, xd, self.memory.temp2, xr, xc, xd, self.memory.r);
+	copy(x_int, xr, xc, xd, memory.r);
+	copy(memory.q,xr,xc,xd, memory.temp2);
+	mul_scalar(memory.temp2, xr, xc, xd, memory.x0_int[0], memory.temp2);
+	sub(x_int, xr, xc, xd, memory.temp2, xr, xc, xd, memory.r);
 
-	scaled_tuple3d exp = int_polynomial(self, self.memory.r, xr, xc, xd, scaling_factor, sfr, sfc); //returns a scaled tuple with the size of the first tensor
+	scaled_tuple3d exp = int_polynomial(memory, memory.r, xr, xc, xd, scaling_factor, sfr, sfc); //returns a scaled tuple with the size of the first tensor
 
-	sub_scalar((float)self.n, self.memory.q, xr, xc, xd, self.memory.q);
-	exp2_tensor(self.memory.q, xr, xc, xd, self.memory.q);
-	mul_dot(exp.matrix, xr, xc, xd, self.memory.q, xr, xc, xd, exp.matrix);
+	sub_scalar((float)memory.n, memory.q, xr, xc, xd, memory.q);
+	exp2_tensor(memory.q, xr, xc, xd, memory.q);
+	mul_dot(exp.matrix, xr, xc, xd, memory.q, xr, xc, xd, exp.matrix);
 	floor_tensor(exp.matrix, xr, xc, xd, exp.matrix);
 	clamp(exp.matrix, xr, xc, xd, 0.f, FLT_MAX, exp.matrix);
 
-	float x = (float)exp2(self.n);
+	float x = (float)exp2(memory.n);
 	div_scalar(exp.scaling_factor, xr, xc, xd, x, exp.scaling_factor);
 	
 	return exp;
 }
 
 
-scaled_tuple3d Softmax::softmax_forward(Softmax &self, Tensor3d x, const int xr, const int xc, const int xd, Tensor scaling_factor, const int sfr, const int sfc)
+scaled_tuple3d Softmax::softmax_forward(softmax_memory memory, quantact_memory qa_memory, Tensor3d x, const int xr, const int xc, const int xd, Tensor scaling_factor, const int sfr, const int sfc)
 {
 	//ASSUMPTION x is 12x22x22, scaling factor is 1x1
-	copy(x, xr, xc, xd, self.memory.x_int);
-	if (self.quant_mode == QuantMode::none)
+	copy(x, xr, xc, xd, memory.x_int);
+	if (memory.quant_mode == QuantMode::none)
 	{
-		normal_softmax(self, self.memory.x_int, xr, xc, xd, self.memory.x_int, xr, xc, xd);
+		normal_softmax(memory, memory.x_int, xr, xc, xd, memory.x_int, xr, xc, xd);
 		scaled_tuple3d rm;
-		rm.matrix = self.memory.x_int;
+		rm.matrix = memory.x_int;
 		rm.scaling_factor = nullptr;
 		return rm;
 	}
 	//symmetric mode below
 
 	//not same dims
-	div_scalar(self.memory.x_int, xr, xc, xd, scaling_factor[0], self.memory.x_int);
-	copy(self.memory.x_int, xr, xc, xd, self.memory.x_int_max); //unnessecary
-	max(self.memory.x_int, xr, xc, xd, 1, self.memory.x_int_max); //TODO: x_int_max should actually be a different size.
-	sub(self.memory.x_int, xr, xc, xd, self.memory.x_int_max, xr, xc, xd, self.memory.x_int);
-	eq(self.memory.x_int, xr, xc, xd, (const Tensor3d)softmax_b4_int_exp, xr, xc, xd);//verification
-	scaled_tuple3d exp = int_exp(self, self.memory.x_int, xr, xc, xd, scaling_factor, sfr, sfc);
+	div_scalar(memory.x_int, xr, xc, xd, scaling_factor[0], memory.x_int);
+	copy(memory.x_int, xr, xc, xd, memory.x_int_max); //unnessecary
+	max(memory.x_int, xr, xc, xd, 1, memory.x_int_max); //TODO: x_int_max should actually be a different size.
+	sub(memory.x_int, xr, xc, xd, memory.x_int_max, xr, xc, xd, memory.x_int);
+	eq(memory.x_int, xr, xc, xd, (const Tensor3d)softmax_b4_int_exp, xr, xc, xd);//verification
+	scaled_tuple3d exp = int_exp(memory, memory.x_int, xr, xc, xd, scaling_factor, sfr, sfc);
 
-	exp = QuantAct::QuantAct_forward(self.act->memory, exp.matrix, xr, xc, xd, exp.scaling_factor, sfr, sfc, nullptr, 0, 0, 0, nullptr, 0,0, nullptr, nullptr);
-	copy(exp.matrix, xr, xc, xd, self.memory.exp_int);
-	div_scalar(exp.matrix, xr, xc, xd, exp.scaling_factor[0], self.memory.exp_int);
-	copy(self.memory.exp_int, xr, xc, xd, self.memory.exp_int_sum);
-	sum(self.memory.exp_int, xr, xc, xd, 1, self.memory.exp_int_sum); //TODO: must properly size exp_int_um
+	exp = QuantAct::QuantAct_forward(qa_memory, exp.matrix, xr, xc, xd, exp.scaling_factor, sfr, sfc, nullptr, 0, 0, 0, nullptr, 0,0, nullptr, nullptr);
+	copy(exp.matrix, xr, xc, xd, memory.exp_int);
+	div_scalar(exp.matrix, xr, xc, xd, exp.scaling_factor[0], memory.exp_int);
+	copy(memory.exp_int, xr, xc, xd, memory.exp_int_sum);
+	sum(memory.exp_int, xr, xc, xd, 1, memory.exp_int_sum); //TODO: must properly size exp_int_um
 
-	copy(self.memory.exp_int_sum, xr, xc, xd, self.memory.factor); //TODO: correct dimentions and unnessecary
-	reciprocal(self.memory.exp_int_sum, xr, xc, xd, self.memory.factor); //TODO: correct dimentions in this section on expintsum and factor
-	mul_scalar(self.memory.factor, xr, xc, xd, exp2f(32), self.memory.factor);
-	floor_tensor(self.memory.factor, xr, xc, xd, self.memory.factor);
-	mul_dot(self.memory.exp_int, xr, xc, xd, self.memory.factor, xr, xc, xd, self.memory.exp_int);
-	div_scalar(self.memory.exp_int, xr, xc, xd, exp2f(float(32-self.output_bit)), self.memory.exp_int);
-	floor_tensor(self.memory.exp_int, xr, xc, xd, self.memory.exp_int);
+	copy(memory.exp_int_sum, xr, xc, xd, memory.factor); //TODO: correct dimentions and unnessecary
+	reciprocal(memory.exp_int_sum, xr, xc, xd, memory.factor); //TODO: correct dimentions in this section on expintsum and factor
+	mul_scalar(memory.factor, xr, xc, xd, exp2f(32), memory.factor);
+	floor_tensor(memory.factor, xr, xc, xd, memory.factor);
+	mul_dot(memory.exp_int, xr, xc, xd, memory.factor, xr, xc, xd, memory.exp_int);
+	div_scalar(memory.exp_int, xr, xc, xd, exp2f(float(32-memory.output_bit)), memory.exp_int);
+	floor_tensor(memory.exp_int, xr, xc, xd, memory.exp_int);
 
 	scaled_tuple3d returnme;
-	returnme.matrix = self.memory.exp_int;
-	float sf = 1.f / exp2f((float)self.output_bit);
+	returnme.matrix = memory.exp_int;
+	float sf = 1.f / exp2f((float)memory.output_bit);
 	mul_scalar(returnme.matrix, xr, xc, xd, sf, returnme.matrix);
-	self.memory.scaling_return[0] = sf;
-	returnme.scaling_factor = self.memory.scaling_return;
+	memory.scaling_return[0] = sf;
+	returnme.scaling_factor = memory.scaling_return;
 
 	return returnme;
 }
 
-void Softmax::normal_softmax(Softmax &self, Tensor3d src, const int srcr, const int srcc, const int srcd, Tensor3d dest, const int destr, const int destc, const int destd)
+void Softmax::normal_softmax(softmax_memory memory, Tensor3d src, const int srcr, const int srcc, const int srcd, Tensor3d dest, const int destr, const int destc, const int destd)
 {//according to https ://pytorch.org/docs/stable/generated/torch.nn.Softmax.html?highlight=softmax#torch.nn.Softmax
  // dimention is curretly locked to 1, regarding each row as a unit to perform softmax on.
 	//NOT VERIFIED BTW, not used in testing either
@@ -165,12 +160,3 @@ void Softmax::normal_softmax(Softmax &self, Tensor3d src, const int srcr, const 
 	}
 }
 
-void Softmax::set_param(
-	Softmax &self,
-	softmax_memory memory,
-	quantact_memory qa_memory
-)
-{
-	self.memory = memory;
-	self.act->memory = qa_memory; //call setup on the local quantact module
-}

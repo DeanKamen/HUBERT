@@ -324,16 +324,3 @@ Tensor3d QuantAct::fixedpoint_mul(
         return memory.output;
     }
 }
-
-/*
-void QuantAct::set_param(
-	quantact_memory memory, 
-	quantact_memory memory
-	)
-{
-	//In this function, I want a pointer to all of these pre allocated arrays and assign them to member variables. These will all be empty
-	//additionally I want a pointer to the "preload" arrays (weights and biases learned from the python model)
-	memory = memory;
-}
-*/
-

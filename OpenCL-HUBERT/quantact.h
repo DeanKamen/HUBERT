@@ -55,21 +55,8 @@ public:
 		Tensor identity_scaling_factor, const int isfr, const int isfc
 	);
 
-
-	static void set_param(//this allocates space for all of the members that are pointers.
-		quantact_memory memory
-	); 
-
-	//member variables
-	/*
-	int activation_bit;
-	float act_range_momentum;
-	bool running_stat;
-	QuantMode quant_mode;
-	bool per_channel;
-	*/
-	//memory
-	quantact_memory memory;
+	//all of our member variables are passed in via a global struct
+	//quantact_memory memory;
 
 };
 #endif

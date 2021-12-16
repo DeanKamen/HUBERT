@@ -5,6 +5,7 @@
 
 #include "tensors.h"
 #include "tensor3d.h"
+#include "quantact.h"
 
 //enum to desribe all preloaded Tensors
 enum class QuantMode {none, symmetric};
@@ -58,6 +59,7 @@ struct quantact_memory
 	Tensor e1; //size of isf
 	Tensor output1;//size of  self.z_int
 
+	//Kind of like member variables but not because thats illegal
 	int activation_bit;
 	float act_range_momentum;
 	bool running_stat;
@@ -88,6 +90,14 @@ struct softmax_memory
 	Tensor3d exp_int_sum; //size of exp_int (with one dimention collapsed) 
 	Tensor3d factor; //size of exp_int_sum
 	Tensor scaling_return; // 1x1
+
+
+	//Kind of like member variables but not because thats illegal (pointer to pointer + static funcs)
+	int output_bit;
+	QuantMode quant_mode;
+	float x0;
+	int n;
+	float coef[3];
 };
 
 enum class preload

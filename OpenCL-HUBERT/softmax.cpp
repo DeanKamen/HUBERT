@@ -13,7 +13,7 @@
 //verification
 #include "constant_headers/softmax_b4_int_exp.h"
 
-Softmax::Softmax(softmax_memory memory, quantact_memory qa_memory, int output_bit_i, QuantMode quant_mode_i, ForceDequantMode force_dequant)
+void Softmax(softmax_memory memory, quantact_memory qa_memory, int output_bit_i, QuantMode quant_mode_i, ForceDequantMode force_dequant)
 {
 	memory.output_bit = output_bit_i;
 	memory.quant_mode = quant_mode_i;
@@ -30,7 +30,7 @@ Softmax::Softmax(softmax_memory memory, quantact_memory qa_memory, int output_bi
 	memory.coef[2] /= memory.coef[0];
 }
 
-scaled_tuple3d Softmax::int_polynomial(softmax_memory memory, Tensor3d x_int, const int xr, const int xc, const int xd, Tensor scaling_factor, const int sfr, const int sfc)
+scaled_tuple3d int_polynomial(softmax_memory memory, Tensor3d x_int, const int xr, const int xc, const int xd, Tensor scaling_factor, const int sfr, const int sfc)
 {
 	copy(scaling_factor, sfr, sfc, memory.b_int);
 	reciprocal(scaling_factor, sfr, sfc, memory.b_int);
@@ -56,7 +56,7 @@ scaled_tuple3d Softmax::int_polynomial(softmax_memory memory, Tensor3d x_int, co
 	return returnme;
 }
 
-scaled_tuple3d Softmax::int_exp(softmax_memory memory, Tensor3d x_int, const int xr, const int xc, const int xd, Tensor scaling_factor, const int sfr, const int sfc)
+scaled_tuple3d int_exp(softmax_memory memory, Tensor3d x_int, const int xr, const int xc, const int xd, Tensor scaling_factor, const int sfr, const int sfc)
 {
 	copy(scaling_factor, sfr, sfc, memory.x0_int);
 	reciprocal(scaling_factor, sfr, sfc, memory.x0_int); //makes previous line unnecessary
@@ -91,7 +91,7 @@ scaled_tuple3d Softmax::int_exp(softmax_memory memory, Tensor3d x_int, const int
 }
 
 
-scaled_tuple3d Softmax::softmax_forward(softmax_memory memory, quantact_memory qa_memory, Tensor3d x, const int xr, const int xc, const int xd, Tensor scaling_factor, const int sfr, const int sfc)
+scaled_tuple3d softmax_forward(softmax_memory memory, quantact_memory qa_memory, Tensor3d x, const int xr, const int xc, const int xd, Tensor scaling_factor, const int sfr, const int sfc)
 {
 	//ASSUMPTION x is 12x22x22, scaling factor is 1x1
 	copy(x, xr, xc, xd, memory.x_int);
@@ -113,7 +113,7 @@ scaled_tuple3d Softmax::softmax_forward(softmax_memory memory, quantact_memory q
 	eq(memory.x_int, xr, xc, xd, (const Tensor3d)softmax_b4_int_exp, xr, xc, xd);//verification
 	scaled_tuple3d exp = int_exp(memory, memory.x_int, xr, xc, xd, scaling_factor, sfr, sfc);
 
-	exp = QuantAct::QuantAct_forward(qa_memory, exp.matrix, xr, xc, xd, exp.scaling_factor, sfr, sfc, nullptr, 0, 0, 0, nullptr, 0,0, nullptr, nullptr);
+	exp = QuantAct_forward(qa_memory, exp.matrix, xr, xc, xd, exp.scaling_factor, sfr, sfc, nullptr, 0, 0, 0, nullptr, 0,0, nullptr, nullptr);
 	copy(exp.matrix, xr, xc, xd, memory.exp_int);
 	div_scalar(exp.matrix, xr, xc, xd, exp.scaling_factor[0], memory.exp_int);
 	copy(memory.exp_int, xr, xc, xd, memory.exp_int_sum);
@@ -137,7 +137,7 @@ scaled_tuple3d Softmax::softmax_forward(softmax_memory memory, quantact_memory q
 	return returnme;
 }
 
-void Softmax::normal_softmax(softmax_memory memory, Tensor3d src, const int srcr, const int srcc, const int srcd, Tensor3d dest, const int destr, const int destc, const int destd)
+void normal_softmax(softmax_memory memory, Tensor3d src, const int srcr, const int srcc, const int srcd, Tensor3d dest, const int destr, const int destc, const int destd)
 {//according to https ://pytorch.org/docs/stable/generated/torch.nn.Softmax.html?highlight=softmax#torch.nn.Softmax
  // dimention is curretly locked to 1, regarding each row as a unit to perform softmax on.
 	//NOT VERIFIED BTW, not used in testing either

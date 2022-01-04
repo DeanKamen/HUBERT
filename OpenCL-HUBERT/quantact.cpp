@@ -23,7 +23,7 @@ const int x_maxc = CHANNEL_LEN;
 const int asfr = 1;
 const int asfc = CHANNEL_LEN;
 
-QuantAct::QuantAct(
+void QuantAct(
 	quantact_memory memory,
 	int activation_bit_i, 
     float act_range_momentum_i,
@@ -50,7 +50,7 @@ QuantAct::QuantAct(
 	//loading xmin and xmax is done by the set param function
 }
 
-scaled_tuple3d QuantAct::QuantAct_forward(
+component scaled_tuple3d QuantAct_forward(
 	quantact_memory memory,
 	Tensor3d x, const int xr, const int xc, const int xd,//identity and x are 22x1x768 or 12x22x22.
 	Tensor pre_act_scaling_factor, const int pasfr, const int pasfc,
@@ -134,12 +134,12 @@ scaled_tuple3d QuantAct::QuantAct_forward(
 	if (specified_max != nullptr)
 		memory.x_min = specified_max;
 
-	memory.act_scaling_factor = QuantAct::symmetric_linear_quantization_params(memory, memory.activation_bit, memory.x_min, x_minr, x_minc, memory.x_max, memory.per_channel);
+	memory.act_scaling_factor = symmetric_linear_quantization_params(memory, memory.activation_bit, memory.x_min, x_minr, x_minc, memory.x_max, memory.per_channel);
 
 	Tensor3d quant_act_int = nullptr; //TODO: size? I dont think i have to allocate this
 	if (pre_act_scaling_factor == nullptr)
 	{
-		quant_act_int = QuantAct::symmetric_quant_forward(memory, x, xr, xc, xd, memory.activation_bit, memory.act_scaling_factor, asfr, asfc); //returns a modified x
+		quant_act_int = symmetric_quant_forward(memory, x, xr, xc, xd, memory.activation_bit, memory.act_scaling_factor, asfr, asfc); //returns a modified x
 	}
 	else
 	{
@@ -164,7 +164,7 @@ scaled_tuple3d QuantAct::QuantAct_forward(
     return returnme;
 }
 
-Tensor QuantAct::symmetric_linear_quantization_params(
+Tensor symmetric_linear_quantization_params(
 	quantact_memory memory,
 	unsigned num_bits,
     Tensor saturation_min,
@@ -211,7 +211,7 @@ Tensor QuantAct::symmetric_linear_quantization_params(
     return memory.slqp_scale;
 }
 
-Tensor3d QuantAct::symmetric_quant_forward(quantact_memory memory, Tensor3d x, const int xr, const int xc, const int xd, int k, Tensor specified_scale, const int ssr, const int ssc)
+Tensor3d symmetric_quant_forward(quantact_memory memory, Tensor3d x, const int xr, const int xc, const int xd, int k, Tensor specified_scale, const int ssr, const int ssc)
 {
     if(specified_scale != nullptr)
     {
@@ -220,12 +220,12 @@ Tensor3d QuantAct::symmetric_quant_forward(quantact_memory memory, Tensor3d x, c
 	float zero_point[] = { 0.f };
     float n = exp2f(float(k - 1)) - 1;
 
-    Tensor3d new_quant_x = QuantAct::linear_quantize(memory, x, xr, xc, xd, memory.sqf_scale, ssr, ssc, zero_point, 1, 1);
+    Tensor3d new_quant_x = linear_quantize(memory, x, xr, xc, xd, memory.sqf_scale, ssr, ssc, zero_point, 1, 1);
     clamp(new_quant_x, xr, xc, xd, -n, n-1, new_quant_x);
     return new_quant_x;
 }
 
-Tensor3d QuantAct::linear_quantize(quantact_memory memory, Tensor3d x, const int xr, const int xc, const int xd, Tensor scale_c, const int sr, const int sc, Tensor zero_point, const int zr, const int zc)
+Tensor3d linear_quantize(quantact_memory memory, Tensor3d x, const int xr, const int xc, const int xd, Tensor scale_c, const int sr, const int sc, Tensor zero_point, const int zr, const int zc)
 {
     //scale is 1 when x is truely 3d. When x is 2d, scale is also 2d (or at least broadcastable.)
 	copy(scale_c, sr, sc, memory.lq_scale);
@@ -243,7 +243,7 @@ Tensor3d QuantAct::linear_quantize(quantact_memory memory, Tensor3d x, const int
     return x;
 }
 
-Tensor3d QuantAct::fixedpoint_mul(
+Tensor3d fixedpoint_mul(
 	quantact_memory memory,
     Tensor3d pre_act, const int par, const int pac, const int pad,
     Tensor pre_act_scaling_factor, const int pasfr, const int pasfc,

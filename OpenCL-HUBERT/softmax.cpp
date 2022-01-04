@@ -6,6 +6,9 @@
 #include "quantact.h"
 #include "hubertEnums.h"
 #include "softmax.h"
+#include "HLS/math.h"
+#include <limits.h>
+#include <float.h>
 
 //verification
 #include "constant_headers/softmax_b4_int_exp.h"

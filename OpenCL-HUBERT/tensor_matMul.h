@@ -31,7 +31,7 @@ void matMul_transposeB(Tensor A, Tensor B, Tensor C)
 
 //special multiply
 template<int rowsA, int colsA, int depA, int rowsB, int colsB>
-void linear_mul(Tensor3d A, Tensor B, Tensor3d C)
+component void linear_mul(Tensor3d A, Tensor B, Tensor3d C)
 {
 	for (unsigned d = 0; d < depA; d++)
 	{

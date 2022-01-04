@@ -50,7 +50,7 @@ QuantAct::QuantAct(
 	//loading xmin and xmax is done by the set param function
 }
 
-component scaled_tuple3d QuantAct::QuantAct_forward(
+scaled_tuple3d QuantAct::QuantAct_forward(
 	quantact_memory memory,
 	Tensor3d x, const int xr, const int xc, const int xd,//identity and x are 22x1x768 or 12x22x22.
 	Tensor pre_act_scaling_factor, const int pasfr, const int pasfc,

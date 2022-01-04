@@ -9,7 +9,8 @@
 #include "hubertEnums.h"
 #include "constant_headers/qa_pasf_softmax.h"
 #include "constant_headers/qa_x_softmax.h"
-#include "limits.h"
+#include <limits.h>
+#include <float.h>
 
 //TEMPORARY DEFINES. Eventually move these to a higher level and pass them in through function parameters
 #define CHANNEL_LEN 1

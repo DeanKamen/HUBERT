@@ -141,7 +141,7 @@ void normal_softmax(softmax_memory memory, Tensor3d src, const int srcr, const i
 {//according to https ://pytorch.org/docs/stable/generated/torch.nn.Softmax.html?highlight=softmax#torch.nn.Softmax
  // dimention is curretly locked to 1, regarding each row as a unit to perform softmax on.
 	//NOT VERIFIED BTW, not used in testing either
-	unsigned i, j, d;
+	int i, j, d;
 	for (d = 0; d < srcr; d++)
 	{
 		for (i = 0; i < srcr; i++)

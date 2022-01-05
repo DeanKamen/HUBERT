@@ -186,7 +186,7 @@ Tensor symmetric_linear_quantization_params(
     unsigned n =  (unsigned int)exp2( num_bits - 1 ) - 1;
     if (per_channel)
     { // saturation min and max are columns
-		for (unsigned i = 0; i < smc; i++)
+		for (int i = 0; i < smc; i++)
 		{//custom max loop
 			float x = fabs(get(saturation_min, smr, smc, 0, i)); 
 			float y = fabs(get(saturation_max, smr, smc, 0, i));

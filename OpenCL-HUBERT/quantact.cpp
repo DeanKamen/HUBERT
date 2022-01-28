@@ -12,6 +12,11 @@
 #include <limits.h>
 #include <float.h>
 
+#include "constant_headers/qa_fpm.h"
+#include "constant_headers/fpm_round.h"
+#include "constant_headers/fpm_pidentity.h"
+#include "constant_headers/fpm_AdB.h"
+
 //TEMPORARY DEFINES. Eventually move these to a higher level and pass them in through function parameters
 #define CHANNEL_LEN 1
 const int x_minr = 1;
@@ -24,7 +29,7 @@ const int asfr = 1;
 const int asfc = CHANNEL_LEN;
 
 void QuantAct(
-	quantact_memory memory,
+	quantact_memory& memory,
 	int activation_bit_i, 
     float act_range_momentum_i,
     bool running_stat_i,
@@ -51,7 +56,7 @@ void QuantAct(
 }
 
 component scaled_tuple3d QuantAct_forward(
-	quantact_memory memory,
+	quantact_memory& memory,
 	Tensor3d x, const int xr, const int xc, const int xd,//identity and x are 22x1x768 or 12x22x22.
 	Tensor pre_act_scaling_factor, const int pasfr, const int pasfc,
 	Tensor3d identity, const int identityr, const int identityc, const int identityd,
@@ -74,12 +79,10 @@ component scaled_tuple3d QuantAct_forward(
 		if (!memory.per_channel)
 		{
 			copy(memory.x_act, xr, xc, xd, memory.temp);
-			min(memory.temp, xr, xc, xd, memory.temp);
-			toTwoD(memory.temp, xr, xc, xd, local_xmin);
+			min(memory.temp, xr*xc*xd, 1, 0, local_xmin);
 
 			copy(memory.x_act, xr, xc, xd, memory.temp);
-			max(memory.temp, xr, xc, xd, memory.temp);
-			toTwoD(memory.temp, xr, xc, xd, local_xmax);
+			max(memory.temp, xr*xc*xd, 1, 0, local_xmax);
 		}
 		else
 		{
@@ -153,6 +156,7 @@ component scaled_tuple3d QuantAct_forward(
 			identity, identityr, identityc, identityd, 
 			identity_scaling_factor, isfr, isfc);
 	}
+	//eq(quant_act_int, xr, xc, xd, (const Tensor3d)qa_fpm, xr, xc, xd);//verification
 
 	float space[] = { 0.f };
 	float correct_output_scale[] = { memory.act_scaling_factor[0] };
@@ -165,7 +169,7 @@ component scaled_tuple3d QuantAct_forward(
 }
 
 Tensor symmetric_linear_quantization_params(
-	quantact_memory memory,
+	quantact_memory& memory,
 	unsigned num_bits,
     Tensor saturation_min,
 	const int smr,
@@ -211,7 +215,7 @@ Tensor symmetric_linear_quantization_params(
     return memory.slqp_scale;
 }
 
-Tensor3d symmetric_quant_forward(quantact_memory memory, Tensor3d x, const int xr, const int xc, const int xd, int k, Tensor specified_scale, const int ssr, const int ssc)
+Tensor3d symmetric_quant_forward(quantact_memory& memory, Tensor3d x, const int xr, const int xc, const int xd, int k, Tensor specified_scale, const int ssr, const int ssc)
 {
     if(specified_scale != nullptr)
     {
@@ -225,7 +229,7 @@ Tensor3d symmetric_quant_forward(quantact_memory memory, Tensor3d x, const int x
     return new_quant_x;
 }
 
-Tensor3d linear_quantize(quantact_memory memory, Tensor3d x, const int xr, const int xc, const int xd, Tensor scale_c, const int sr, const int sc, Tensor zero_point, const int zr, const int zc)
+Tensor3d linear_quantize(quantact_memory& memory, Tensor3d x, const int xr, const int xc, const int xd, Tensor scale_c, const int sr, const int sc, Tensor zero_point, const int zr, const int zc)
 {
     //scale is 1 when x is truely 3d. When x is 2d, scale is also 2d (or at least broadcastable.)
 	copy(scale_c, sr, sc, memory.lq_scale);
@@ -244,7 +248,7 @@ Tensor3d linear_quantize(quantact_memory memory, Tensor3d x, const int xr, const
 }
 
 Tensor3d fixedpoint_mul(
-	quantact_memory memory,
+	quantact_memory& memory,
     Tensor3d pre_act, const int par, const int pac, const int pad,
     Tensor pre_act_scaling_factor, const int pasfr, const int pasfc,
     int bit_num,
@@ -264,29 +268,30 @@ Tensor3d fixedpoint_mul(
     }
 	float space[] = { 0.f };
 
-    copy(pre_act, par, pac, pad, memory.z_int);
     div_dot(pre_act, par, pac, pad, pre_act_scaling_factor, pasfr, pasfc, memory.z_int);
     roundTensor(memory.z_int, par, pac, pad, memory.z_int);
+	//eq(memory.z_int, par, pac, pad, (const Tensor3d)fpm_round, par, pac, pad);//verification
 
     //the following is in double precision in the code, but I did not make it double precision here
 	copy(pre_act_scaling_factor, pasfr, pasfc, memory._A);
 	copy(z_scaling_factor, zsfr, zsfc, memory._B);
-	copy(memory._A, pasfr, pasfc, memory.new_scale);// this copy is not necessary but gives context to the size of new_scale
-	div_dot(memory._A, pasfr, pasfc, memory._B, zsfr, zsfc, memory.new_scale);
-    
+	div_dot(memory._A, pasfr, pasfc, memory._B, zsfr, zsfc, memory.new_scale); //new scale is pasfr by pasfc
+	//eq(memory.new_scale, pasfr, pasfc, 1, (const Tensor3d)fpm_AdB, pasfr, pasfc, 1);//verification
+
 	copy(memory.new_scale, pasfr, pasfc, memory.m);
 	copy(memory.new_scale, pasfr, pasfc, memory.e);
 	tensor_frexp(memory.new_scale, pasfr, pasfc, memory.m, pasfr, pasfc, memory.e, pasfr, pasfc);
-    copy(memory.z_int, zsfr, zsfc, memory.output);
+    copy(memory.z_int, par, pac, pad, memory.output);
 
-	fill(memory.twos, zsfr, zsfc, 2.0f);
-	pow_dot(memory.twos, zsfr, zsfc, memory.e, pasfr, pasfc, memory.twos); //use twos as temp storage
-	div_dot(memory.output, zsfr, zsfc, memory.twos, zsfr, zsfc, memory.output);
-	mul_dot(memory.output, zsfr, zsfc, memory.m, pasfr, pasfc, memory.output);
-    roundTensor(memory.output, zsfr, zsfc, memory.output);
+	fill(memory.twos, pasfr, pasfc, 2.0f);
+	pow_dot(memory.twos, pasfr, pasfc, memory.e, pasfr, pasfc, memory.twos); //use twos as temp storage
+	div_dot(memory.output, par, pac, pad, memory.twos, pasfr, pasfc, memory.output);
+	mul_dot(memory.output, par, pac, pad, memory.m, pasfr, pasfc, memory.output);
+    roundTensor(memory.output, par, pac, pad, memory.output);
+	//eq(memory.output, par, pac, pad, (const Tensor3d)fpm_pidentity, par, pac, pad);//verification
 
     if(identity != nullptr)
-	{
+	{//TODO: this section does not work at all right now, come back
         copy(identity, identityr, identityc, identityd, memory.wx_int); //also an unnecessary
 		div_dot(identity, identityr, identityc, identityd, identity_scaling_factor, isfr, isfc, identity);
         roundTensor(identity, identityr, identityc, identityd, memory.wx_int);
@@ -314,11 +319,11 @@ Tensor3d fixedpoint_mul(
     {
         if(quant_mode == QuantMode::symmetric)
         {
-            clamp(memory.output, zsfr, zsfc, -n-1, n, memory.output);
+            clamp(memory.output, par, pac, pad, -n-1, n, memory.output);
             return memory.output;
         }
         else{
-            clamp(memory.output, zsfr, zsfc, 0, n, memory.output);
+            clamp(memory.output, par, pac, pad, 0, n, memory.output);
             return memory.output;
         }
     }

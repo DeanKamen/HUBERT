@@ -11,7 +11,7 @@
 
 //initializer
 void QuantAct(
-	quantact_memory memory,
+	quantact_memory& memory,
 	int activation_bit,
 	float act_range_momentum = 0.95f,
 	bool running_stat = true,
@@ -21,7 +21,7 @@ void QuantAct(
 
 //other functions
 scaled_tuple3d QuantAct_forward( //returns a matrix of size xr,xc,xd
-	quantact_memory memory,
+	quantact_memory& memory,
 	Tensor3d x, const int xr, const int xc, const int xd,//identity and x are 22x1x768 or 12x22x22.
 	Tensor pre_act_scaling_factor, const int pasfr, const int pasfc,
 	Tensor3d identity, const int identityr, const int identityc, const int identityd,
@@ -30,7 +30,7 @@ scaled_tuple3d QuantAct_forward( //returns a matrix of size xr,xc,xd
 	Tensor specified_max);
 
 Tensor symmetric_linear_quantization_params(
-	quantact_memory memory,
+	quantact_memory& memory,
 	unsigned num_bits,
 	Tensor saturation_min,
 	const int smr,
@@ -38,11 +38,11 @@ Tensor symmetric_linear_quantization_params(
 	Tensor saturation_max,
 	bool per_channel);
 
-Tensor3d symmetric_quant_forward(quantact_memory memory, Tensor3d x, const int xr, const int xc, const int xd, int k, Tensor specified_scale, const int ssr, const int ssc);
-Tensor3d linear_quantize(quantact_memory memory, Tensor3d x, const int xr, const int xc, const int xd, Tensor scale_c, const int sr, const int sc, Tensor zero_point, const int zr, const int zc);
+Tensor3d symmetric_quant_forward(quantact_memory& memory, Tensor3d x, const int xr, const int xc, const int xd, int k, Tensor specified_scale, const int ssr, const int ssc);
+Tensor3d linear_quantize(quantact_memory& memory, Tensor3d x, const int xr, const int xc, const int xd, Tensor scale_c, const int sr, const int sc, Tensor zero_point, const int zr, const int zc);
 	
 Tensor3d fixedpoint_mul(
-	quantact_memory memory,
+	quantact_memory& memory,
 	Tensor3d pre_act, const int par, const int pac, const int pad,
 	Tensor pre_act_scaling_factor, const int pasfr, const int pasfc,
 	int bit_num,

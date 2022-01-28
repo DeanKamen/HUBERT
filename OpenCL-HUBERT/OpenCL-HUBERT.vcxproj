@@ -126,15 +126,30 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="constant_headers\fpm_AdB.h" />
+    <ClInclude Include="constant_headers\fpm_pidentity.h" />
+    <ClInclude Include="constant_headers\fpm_round.h" />
+    <ClInclude Include="constant_headers\qa_fpm.h" />
     <ClInclude Include="constant_headers\qa_pasf_softmax.h" />
     <ClInclude Include="constant_headers\qa_x_softmax.h" />
     <ClInclude Include="constant_headers\self_attn_softmax_act_act_scaling_factor.h" />
     <ClInclude Include="constant_headers\self_attn_softmax_act_x_max.h" />
     <ClInclude Include="constant_headers\self_attn_softmax_act_x_min.h" />
+    <ClInclude Include="constant_headers\softmax_after_act.h" />
+    <ClInclude Include="constant_headers\softmax_b4_act.h" />
     <ClInclude Include="constant_headers\softmax_b4_int_exp.h" />
+    <ClInclude Include="constant_headers\softmax_b4_max.h" />
+    <ClInclude Include="constant_headers\softmax_int_exp_IP.h" />
+    <ClInclude Include="constant_headers\softmax_int_poly.h" />
+    <ClInclude Include="constant_headers\softmax_int_poly_z.h" />
+    <ClInclude Include="constant_headers\softmax_ip_2q.h" />
+    <ClInclude Include="constant_headers\softmax_ip_exp1.h" />
+    <ClInclude Include="constant_headers\softmax_ip_floor.h" />
+    <ClInclude Include="constant_headers\softmax_ip_q.h" />
     <ClInclude Include="constant_headers\softmax_layer0.h" />
     <ClInclude Include="constant_headers\softmax_layer0_out.h" />
     <ClInclude Include="constant_headers\softmax_sf_layer0.h" />
+    <ClInclude Include="constant_headers\softmax_x_int_max.h" />
     <ClInclude Include="hubertEnums.h" />
     <ClInclude Include="matrix_mult.h" />
     <ClInclude Include="matrix_mult_transpose.h" />
@@ -146,6 +161,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BERT_testbench.cpp" />
+    <ClCompile Include="constant_headers\softmax_layer0.cpp" />
     <ClCompile Include="quantact.cpp" />
     <ClCompile Include="softmax.cpp" />
     <ClCompile Include="tensor3d.cpp" />

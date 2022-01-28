@@ -15,7 +15,7 @@
 void add(const Tensor3d A, int rowsA, int colsA, int depA, Tensor B, int rowsB, int colsB, Tensor3d C)
 {
 	//defer error checking to a layer by layer basis. 
-	for (unsigned d = 0; d < depA; d++)
+	for (int d = 0; d < depA; d++)
 	{
 		add(get_layer(A, rowsA, colsA, depA, d), rowsA, colsA, B, rowsB, colsB, get_layer(C, rowsA, colsA, depA, d));
 	}
@@ -23,7 +23,7 @@ void add(const Tensor3d A, int rowsA, int colsA, int depA, Tensor B, int rowsB, 
 
 void sub(const Tensor3d A, int rowsA, int colsA, int depA, Tensor B, int rowsB, int colsB, Tensor3d C)
 {
-	for (unsigned d = 0; d < depA; d++)
+	for (int d = 0; d < depA; d++)
 	{
 		sub(get_layer(A, rowsA, colsA, depA, d), rowsA, colsA, B, rowsB, colsB, get_layer(C, rowsA, colsA, depA, d));
 	}
@@ -31,7 +31,7 @@ void sub(const Tensor3d A, int rowsA, int colsA, int depA, Tensor B, int rowsB, 
 
 void mul_dot(const Tensor3d A, int rowsA, int colsA, int depA, Tensor B, int rowsB, int colsB, Tensor3d C)
 {
-	for (unsigned d = 0; d < depA; d++)
+	for (int d = 0; d < depA; d++)
 	{
 		mul_dot(get_layer(A, rowsA, colsA, depA, d), rowsA, colsA, B, rowsB, colsB, get_layer(C, rowsA, colsA, depA, d));
 	}
@@ -39,7 +39,7 @@ void mul_dot(const Tensor3d A, int rowsA, int colsA, int depA, Tensor B, int row
 
 void div_dot(const Tensor3d A, int rowsA, int colsA, int depA, Tensor B, int rowsB, int colsB, Tensor3d C)
 {
-	for (unsigned d = 0; d < depA; d++)
+	for (int d = 0; d < depA; d++)
 	{
 		div_dot(get_layer(A, rowsA, colsA, depA, d), rowsA, colsA, B, rowsB, colsB, get_layer(C, rowsA, colsA, depA, d));
 	}
@@ -47,7 +47,7 @@ void div_dot(const Tensor3d A, int rowsA, int colsA, int depA, Tensor B, int row
 
 void pow_dot(const Tensor3d A, int rowsA, int colsA, int depA, Tensor B, int rowsB, int colsB, Tensor3d C)
 {
-	for (unsigned d = 0; d < depA; d++)
+	for (int d = 0; d < depA; d++)
 	{
 		pow_dot(get_layer(A, rowsA, colsA, depA, d), rowsA, colsA, B, rowsB, colsB, get_layer(C, rowsA, colsA, depA, d));
 	}
@@ -55,14 +55,14 @@ void pow_dot(const Tensor3d A, int rowsA, int colsA, int depA, Tensor B, int row
 
 void add(const Tensor3d A, int rowsA, int colsA, int depA, const Tensor3d B, int rowsB, int colsB, int depB, Tensor3d C)
 {
-	for (unsigned d = 0; d < depA; d++)
+	for (int d = 0; d < depA; d++)
 	{
 		add(get_layer(A, rowsA, colsA, depA, d), rowsA, colsA, get_layer(B, rowsB, colsB, depB, d), rowsB, colsB, get_layer(C, rowsA, colsA, depA, d));
 	}
 }
 void sub(const Tensor3d A, int rowsA, int colsA, int depA, const Tensor3d B, int rowsB, int colsB, int depB, Tensor3d C)
 {
-	for (unsigned d = 0; d < depA; d++)
+	for (int d = 0; d < depA; d++)
 	{
 		sub(get_layer(A, rowsA, colsA, depA, d), rowsA, colsA, get_layer(B, rowsB, colsB, depB, d), rowsB, colsB, get_layer(C, rowsA, colsA, depA, d));
 	}
@@ -70,14 +70,14 @@ void sub(const Tensor3d A, int rowsA, int colsA, int depA, const Tensor3d B, int
 
 void mul_dot(const Tensor3d A, int rowsA, int colsA, int depA, const Tensor3d B, int rowsB, int colsB, int depB, Tensor3d C)
 {
-	for (unsigned d = 0; d < depA; d++)
+	for (int d = 0; d < depA; d++)
 	{
 		mul_dot(get_layer(A, rowsA, colsA, depA, d), rowsA, colsA, get_layer(B, rowsB, colsB, depB, d), rowsB, colsB, get_layer(C, rowsA, colsA, depA, d));
 	}
 }
 void div_dot(const Tensor3d A, int rowsA, int colsA, int depA, const Tensor3d B, int rowsB, int colsB, int depB, Tensor3d C)
 {
-	for (unsigned d = 0; d < depA; d++)
+	for (int d = 0; d < depA; d++)
 	{
 		div_dot(get_layer(A, rowsA, colsA, depA, d), rowsA, colsA, get_layer(B, rowsB, colsB, depB, d), rowsB, colsB, get_layer(C, rowsA, colsA, depA, d));
 	}
@@ -85,7 +85,7 @@ void div_dot(const Tensor3d A, int rowsA, int colsA, int depA, const Tensor3d B,
 
 void pow_dot(const Tensor3d A, int rowsA, int colsA, int depA, const Tensor3d B, int rowsB, int colsB, int depB, Tensor3d C)
 {
-	for (unsigned d = 0; d < depA; d++)
+	for (int d = 0; d < depA; d++)
 	{
 		pow_dot(get_layer(A, rowsA, colsA, depA, d), rowsA, colsA, get_layer(B, rowsB, colsB, depB, d), rowsB, colsB, get_layer(C, rowsA, colsA, depA, d));
 	}
@@ -94,7 +94,7 @@ void pow_dot(const Tensor3d A, int rowsA, int colsA, int depA, const Tensor3d B,
 //scalar type
 void add_scalar(const Tensor3d A, int rowsA, int colsA, int depA, float B, Tensor3d C)
 {
-	for (unsigned d = 0; d < depA; d++)
+	for (int d = 0; d < depA; d++)
 	{
 		add_scalar(get_layer(A, rowsA, colsA, depA, d), rowsA, colsA, B, get_layer(C, rowsA, colsA, depA, d));
 	}
@@ -102,7 +102,7 @@ void add_scalar(const Tensor3d A, int rowsA, int colsA, int depA, float B, Tenso
 
 void mul_scalar(const Tensor3d A, int rowsA, int colsA, int depA, float B, Tensor3d C)
 {
-	for (unsigned d = 0; d < depA; d++)
+	for (int d = 0; d < depA; d++)
 	{
 		mul_scalar(get_layer(A, rowsA, colsA, depA, d), rowsA, colsA, B, get_layer(C, rowsA, colsA, depA, d));
 	}
@@ -110,21 +110,21 @@ void mul_scalar(const Tensor3d A, int rowsA, int colsA, int depA, float B, Tenso
 
 void sub_scalar(const Tensor3d A, int rowsA, int colsA, int depA, float B, Tensor3d C)
 {
-	for (unsigned d = 0; d < depA; d++)
+	for (int d = 0; d < depA; d++)
 	{
 		sub_scalar(get_layer(A, rowsA, colsA, depA, d), rowsA, colsA, B, get_layer(C, rowsA, colsA, depA, d));
 	}
 }
 void sub_scalar(float B, const Tensor3d A, int rowsA, int colsA, int depA, Tensor3d C)
 {
-	for (unsigned d = 0; d < depA; d++)
+	for (int d = 0; d < depA; d++)
 	{
 		sub_scalar(B, get_layer(A, rowsA, colsA, depA, d), rowsA, colsA, get_layer(C, rowsA, colsA, depA, d));
 	}
 }
 void div_scalar(const Tensor3d A, int rowsA, int colsA, int depA, float B, Tensor3d C)
 {
-	for (unsigned d = 0; d < depA; d++)
+	for (int d = 0; d < depA; d++)
 	{
 		div_scalar(get_layer(A, rowsA, colsA, depA, d), rowsA, colsA, B, get_layer(C, rowsA, colsA, depA, d));
 	}
@@ -132,7 +132,7 @@ void div_scalar(const Tensor3d A, int rowsA, int colsA, int depA, float B, Tenso
 
 void pow_scalar(const Tensor3d A, int rowsA, int colsA, int depA, float B, Tensor3d C)
 {
-	for (unsigned d = 0; d < depA; d++)
+	for (int d = 0; d < depA; d++)
 	{
 		pow_scalar(get_layer(A, rowsA, colsA, depA, d), rowsA, colsA, B, get_layer(C, rowsA, colsA, depA, d));
 	}
@@ -142,7 +142,7 @@ void max(const Tensor3d A, int rowsA, int colsA, int depA, int dim, Tensor3d C)
 {
 	if (dim == 0 )
 	{
-		for (unsigned d = 0; d < depA; d++)
+		for (int d = 0; d < depA; d++)
 		{
 			max(get_layer(A, rowsA, colsA, depA, d), rowsA, colsA, dim, get_layer(C, rowsA, colsA, depA, d));
 		}
@@ -151,7 +151,7 @@ void max(const Tensor3d A, int rowsA, int colsA, int depA, int dim, Tensor3d C)
 	}
 	else if (dim == 1)
 	{
-		for (unsigned d = 0; d < depA; d++)
+		for (int d = 0; d < depA; d++) 
 		{
 			max(get_layer(A, rowsA, colsA, depA, d), rowsA, colsA, dim, get_layer(C, rowsA, colsA, depA, d));
 		}
@@ -159,14 +159,14 @@ void max(const Tensor3d A, int rowsA, int colsA, int depA, int dim, Tensor3d C)
 	}
 	else //dim ==2
 	{
-		unsigned i, j;
+		int i, j;
 		float largest;
 		bool first = true;
 		for (i = 0; i < colsA; i++)
 		{
 			for (j = 0; j < rowsA; j++)
 			{
-				for (unsigned d = 0; d < depA; d++)
+				for (int d = 0; d < depA; d++)
 				{
 					if (first)
 					{
@@ -192,7 +192,7 @@ void min(const Tensor3d A, int rowsA, int colsA, int depA, int dim, Tensor3d C)
 {
 	if (dim == 0)
 	{
-		for (unsigned d = 0; d < depA; d++)
+		for (int d = 0; d < depA; d++)
 		{
 			min(get_layer(A, rowsA, colsA, depA, d), rowsA, colsA, dim, get_layer(C, rowsA, colsA, depA, d));
 		}
@@ -201,7 +201,7 @@ void min(const Tensor3d A, int rowsA, int colsA, int depA, int dim, Tensor3d C)
 	}
 	else if (dim == 1)
 	{
-		for (unsigned d = 0; d < depA; d++)
+		for (int d = 0; d < depA; d++)
 		{
 			min(get_layer(A, rowsA, colsA, depA, d), rowsA, colsA, dim, get_layer(C, rowsA, colsA, depA, d));
 		}
@@ -209,14 +209,14 @@ void min(const Tensor3d A, int rowsA, int colsA, int depA, int dim, Tensor3d C)
 	}
 	else //dim ==2
 	{
-		unsigned i, j;
+		int i, j;
 		float smallest;
 		bool first = true;
 		for (i = 0; i < colsA; i++)
 		{
 			for (j = 0; j < rowsA; j++)
 			{
-				for (unsigned d = 0; d < depA; d++)
+				for (int d = 0; d < depA; d++)
 				{
 					if (first)
 					{
@@ -254,7 +254,7 @@ void min(const Tensor3d A, int rowsA, int colsA, int depA)
 
 void max_scalar(const Tensor3d A, int rowsA, int colsA, int depA, float compare, Tensor3d C)
 {
-	for (unsigned d = 0; d < depA; d++)
+	for (int d = 0; d < depA; d++)
 	{
 		max_scalar(get_layer(A, rowsA, colsA, depA, d), rowsA, colsA, compare, get_layer(C, rowsA, colsA, depA, d));
 	}
@@ -262,7 +262,7 @@ void max_scalar(const Tensor3d A, int rowsA, int colsA, int depA, float compare,
 
 void min_scalar(const Tensor3d A, int rowsA, int colsA, int depA, float compare, Tensor3d C)
 {
-	for (unsigned d = 0; d < depA; d++)
+	for (int d = 0; d < depA; d++)
 	{
 		min_scalar(get_layer(A, rowsA, colsA, depA, d), rowsA, colsA, compare, get_layer(C, rowsA, colsA, depA, d));
 	}
@@ -270,7 +270,7 @@ void min_scalar(const Tensor3d A, int rowsA, int colsA, int depA, float compare,
 
 void min_dot(const Tensor3d A, int rowsA, int colsA, int depA, Tensor B, Tensor3d C)
 { //assuming a and B are the same size.
-	for (unsigned d = 0; d < depA; d++)
+	for (int d = 0; d < depA; d++)
 	{
 		min_dot(get_layer(A, rowsA, colsA, depA, d), rowsA, colsA, B, get_layer(C, rowsA, colsA, depA, d));
 	}
@@ -278,7 +278,7 @@ void min_dot(const Tensor3d A, int rowsA, int colsA, int depA, Tensor B, Tensor3
 
 void abs_tensor(const Tensor3d A, int rowsA, int colsA, int depA, Tensor3d C)
 {
-	for (unsigned d = 0; d < depA; d++)
+	for (int d = 0; d < depA; d++)
 	{
 		abs_tensor(get_layer(A, rowsA, colsA, depA, d), rowsA, colsA, get_layer(C, rowsA, colsA, depA, d));
 	}
@@ -286,7 +286,7 @@ void abs_tensor(const Tensor3d A, int rowsA, int colsA, int depA, Tensor3d C)
 
 void floor_tensor(const Tensor3d A, int rowsA, int colsA, int depA, Tensor3d C)
 {
-	for (unsigned d = 0; d < depA; d++)
+	for (int d = 0; d < depA; d++)
 	{
 		floor_tensor(get_layer(A, rowsA, colsA, depA, d), rowsA, colsA, get_layer(C, rowsA, colsA, depA, d));
 	}
@@ -294,7 +294,7 @@ void floor_tensor(const Tensor3d A, int rowsA, int colsA, int depA, Tensor3d C)
 
 void exp2_tensor(const Tensor3d A, int rowsA, int colsA, int depA, Tensor3d C)
 {
-	for (unsigned d = 0; d < depA; d++)
+	for (int d = 0; d < depA; d++)
 	{
 		exp2_tensor(get_layer(A, rowsA, colsA, depA, d), rowsA, colsA, get_layer(C, rowsA, colsA, depA, d));
 	}
@@ -302,7 +302,7 @@ void exp2_tensor(const Tensor3d A, int rowsA, int colsA, int depA, Tensor3d C)
 
 void clamp(const Tensor3d A, int rowsA, int colsA, int depA, float min, float max, Tensor3d C)
 {
-	for (unsigned d = 0; d < depA; d++)
+	for (int d = 0; d < depA; d++)
 	{
 		clamp(get_layer(A, rowsA, colsA, depA, d), rowsA, colsA, min, max, get_layer(C, rowsA, colsA, depA, d));
 	}
@@ -310,7 +310,7 @@ void clamp(const Tensor3d A, int rowsA, int colsA, int depA, float min, float ma
 
 void roundTensor(const Tensor3d A, int rowsA, int colsA, int depA, Tensor3d C)
 {
-	for (unsigned d = 0; d < depA; d++)
+	for (int d = 0; d < depA; d++)
 	{
 		roundTensor(get_layer(A, rowsA, colsA, depA, d), rowsA, colsA, get_layer(C, rowsA, colsA, depA, d));
 	}
@@ -318,7 +318,7 @@ void roundTensor(const Tensor3d A, int rowsA, int colsA, int depA, Tensor3d C)
 
 void reciprocal(const Tensor3d A, int rowsA, int colsA, int depA, Tensor3d C)
 {
-	for (unsigned d = 0; d < depA; d++)
+	for (int d = 0; d < depA; d++)
 	{
 		reciprocal(get_layer(A, rowsA, colsA, depA, d), rowsA, colsA, get_layer(C, rowsA, colsA, depA, d));
 	}
@@ -328,7 +328,7 @@ void sum(const Tensor3d A, int rowsA, int colsA, int depA, int dim, Tensor3d C)
 {
 	if (dim == 0)
 	{
-		for (unsigned d = 0; d < depA; d++)
+		for (int d = 0; d < depA; d++)
 		{
 			sum(get_layer(A, rowsA, colsA, depA, d), rowsA, colsA, dim, get_layer(C, rowsA, colsA, depA, d));
 		}
@@ -337,7 +337,7 @@ void sum(const Tensor3d A, int rowsA, int colsA, int depA, int dim, Tensor3d C)
 	}
 	else if (dim == 1)
 	{
-		for (unsigned d = 0; d < depA; d++)
+		for (int d = 0; d < depA; d++)
 		{
 			sum(get_layer(A, rowsA, colsA, depA, d), rowsA, colsA, dim, get_layer(C, rowsA, colsA, depA, d));
 		}
@@ -347,11 +347,11 @@ void sum(const Tensor3d A, int rowsA, int colsA, int depA, int dim, Tensor3d C)
 	{
 		float running;
 		running = float(0);
-		for (unsigned i = 0; i < colsA; i++)
+		for (int i = 0; i < colsA; i++)
 		{
-			for (unsigned j = 0; j < rowsA; j++)
+			for (int j = 0; j < rowsA; j++)
 			{
-				for (unsigned d = 0; d < depA; d++)
+				for (int d = 0; d < depA; d++)
 				{
 					running += get(A, rowsA, colsA, depA, j, i, d);
 				}
@@ -365,7 +365,7 @@ void sum(const Tensor3d A, int rowsA, int colsA, int depA, int dim, Tensor3d C)
 
 void sign(const Tensor3d A, int rowsA, int colsA, int depA, Tensor3d C)
 {
-	for (unsigned d = 0; d < depA; d++)
+	for (int d = 0; d < depA; d++)
 	{
 		sign(get_layer(A, rowsA, colsA, depA, d), rowsA, colsA, get_layer(C, rowsA, colsA, depA, d));
 	}
@@ -373,7 +373,7 @@ void sign(const Tensor3d A, int rowsA, int colsA, int depA, Tensor3d C)
 
 void mean(const Tensor3d A, int rowsA, int colsA, int depA, Tensor3d C)
 {
-	for (unsigned d = 0; d < depA; d++)
+	for (int d = 0; d < depA; d++)
 	{
 		mean(get_layer(A, rowsA, colsA, depA, d), rowsA, colsA, get_layer(C, 1, 1, depA, d)); //the output matrix C should be a depth vector
 	}
@@ -381,7 +381,7 @@ void mean(const Tensor3d A, int rowsA, int colsA, int depA, Tensor3d C)
 
 void sqrt_tensor(const Tensor3d A, int rowsA, int colsA, int depA, Tensor3d C)
 {
-	for (unsigned d = 0; d < depA; d++)
+	for (int d = 0; d < depA; d++)
 	{
 		sqrt_tensor(get_layer(A, rowsA, colsA, depA, d), rowsA, colsA, get_layer(C, rowsA, colsA, depA, d));
 	}
@@ -418,9 +418,9 @@ void toTwoD(const Tensor3d A, int rowsA, int colsA, int depA, Tensor C)
 {
 	if (depA == 1)
 	{
-		for (unsigned r = 0; r < rowsA; r++)
+		for (int r = 0; r < rowsA; r++)
 		{
-			for (unsigned c = 0; c < colsA; c++)
+			for (int c = 0; c < colsA; c++)
 			{
 				set(C, rowsA, colsA, r, c, get(A, rowsA, colsA, depA, 0, r, c));
 			}
@@ -428,9 +428,9 @@ void toTwoD(const Tensor3d A, int rowsA, int colsA, int depA, Tensor C)
 	}
 	else if (rowsA == 1)
 	{// Here we transform depth into rows. depth 0 being the first row
-		for (unsigned d = 0; d < depA; d++)
+		for (int d = 0; d < depA; d++)
 		{
-			for (unsigned c = 0; c < colsA; c++)
+			for (int c = 0; c < colsA; c++)
 			{
 				set(C, rowsA, colsA, d, c, get(A, rowsA, colsA, depA, 0, c, d));
 			}
@@ -438,9 +438,9 @@ void toTwoD(const Tensor3d A, int rowsA, int colsA, int depA, Tensor C)
 	}
 	else if (colsA == 1)
 	{// Here we transform depth into cols. depth 0 being the first column
-		for (unsigned d = 0; d < depA; d++)
+		for (int d = 0; d < depA; d++)
 		{
-			for (unsigned r = 0; r < rowsA; r++)
+			for (int r = 0; r < rowsA; r++)
 			{
 				set(C, rowsA, colsA, r, d, get(A, rowsA, colsA, depA, r, 0, d));
 			}
@@ -462,7 +462,7 @@ void append(const Tensor3d A, int rowsA, int colsA, Tensor slice)
 void print(const Tensor3d A, int rowsA, int colsA, int depA)
 {
 	printf("Tensor3d\n[");
-	for (unsigned d = 0; d < depA; d++)
+	for (int d = 0; d < depA; d++)
 	{
 		print(get_layer(A, rowsA, colsA, depA,d), rowsA, colsA);
 		printf(",\n");
@@ -473,7 +473,7 @@ void print(const Tensor3d A, int rowsA, int colsA, int depA)
 void print_brief(const Tensor3d A, int rowsA, int colsA, int depA)
 {
 	printf("Tensor3d\n[");
-	for (unsigned d = 0; d < depA; d++)
+	for (int d = 0; d < depA; d++)
 	{
 		print_brief(get_layer(A, rowsA, colsA, depA, d), rowsA, colsA);
 		printf(",\n");
@@ -483,7 +483,7 @@ void print_brief(const Tensor3d A, int rowsA, int colsA, int depA)
 
 void copy(const Tensor3d A, int rowsA, int colsA, int depA, Tensor3d C)
 {
-	for (unsigned d = 0; d < depA; d++)
+	for (int d = 0; d < depA; d++)
 	{
 		copy(get_layer(A, rowsA, colsA, depA, d), rowsA, colsA, get_layer(C, rowsA, colsA, depA, d));
 	}
@@ -532,10 +532,11 @@ void shrinkTensor(const Tensor3d A, int rowsA, int colsA, int depA, Tensor3d C, 
 
 bool eq(const Tensor3d A, int rowsA, int colsA, int depA, const Tensor3d B, int rowsB, int colsB, int depB)
 {
-	for (unsigned d = 0; d < depA; d++)
+	for (int d = 0; d < depA; d++)
 	{
 		if (!eq_verbose(get_layer(A, rowsA, colsA, depA,d), rowsA, colsA, get_layer(B, rowsB, colsB, depB,d), rowsB, colsB))
 		{
+			printf("Layer %d\n", d);
 			return false;
 		}
 	}

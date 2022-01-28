@@ -9,6 +9,7 @@
 #include "softmax.h"
 #include "constant_headers/self_attn_softmax_act_act_scaling_factor.h"
 #include "constant_headers/self_attn_softmax_act_x_max.h"
+#include "constant_headers/self_attn_softmax_act_x_min.h"
 #include "constant_headers/softmax_layer0.h"
 #include "constant_headers/softmax_sf_layer0.h"
 #include "constant_headers/softmax_layer0_out.h"
@@ -114,9 +115,9 @@ float temp_sm2[sir*sic*sid]; //size of x_int
 //used in softmax_forward
 float x_int[sir*sic*sid]; //size of x
 float exp_int[sir*sic*sid]; //size of x
-float x_int_max[sir*1*sid]; //size of x with (dim 1 collapsed)
-float exp_int_sum[sir*1*sid]; //size of exp_int (with dim 1 collapsed) 
-float factor[sir * 1 * sid]; //size of exp_int_sum
+float x_int_max[sir * sic * sid]; //size of x with (dim 1 collapsed) 
+float exp_int_sum[sir* sic *sid]; //size of exp_int (with dim 1 collapsed) 
+float factor[sir * sic * sid]; //size of exp_int_sum
 float scaling_return [1]; // 1x1
 
 softmax_memory sm_memory;
@@ -136,7 +137,7 @@ int main()
 	qa_memory.lq_scale = lq_scale;
 	qa_memory.z_int = z_int; //size of pre act 
 	qa_memory._A = _A; //size of pre act sf
-	qa_memory._B = _A; //size of zsf
+	qa_memory._B = _B; //size of zsf
 	qa_memory.new_scale = new_scale; //size of pasf
 	qa_memory.m = m; //size of new scale
 	qa_memory.e = e; //size of new scale
@@ -182,7 +183,10 @@ int main()
 	*/
 
 	//QuantAct + softmax verification
-	
+	copy((const Tensor)self_attn_softmax_act_x_min, x_minr, x_minc, qa_memory.x_min);
+	copy((const Tensor)self_attn_softmax_act_x_max, x_maxr, x_maxc, qa_memory.x_max);
+	copy((const Tensor)self_attn_softmax_act_act_scaling_factor, asfr, asfc, qa_memory.act_scaling_factor);
+
 	scaled_tuple3d softmax_result;
     Softmax(sm_memory, qa_memory, 8, QuantMode::symmetric, ForceDequantMode::layernorm);
 	//testSoftmax.set_param(sm_memory, qa_memory);

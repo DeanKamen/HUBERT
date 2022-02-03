@@ -1,4 +1,4 @@
-SOURCE_FILES  := BERT_testbench.cpp quantact.cpp softmax.cpp tensor3d.cpp tensors.cpp
+SOURCE_FILES  := BERT_testbench.cpp quantact.cpp softmax.cpp tensor3d.cpp tensors.cpp constant_headers/softmax_layer0.cpp
 override HLS_CXX_FLAGS := $(HLS_CXX_FLAGS) 
 CXX := i++
 DEVICE := Cyclone10GX

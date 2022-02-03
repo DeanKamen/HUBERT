@@ -97,7 +97,9 @@ struct softmax_memory
 	QuantMode quant_mode;
 	float x0;
 	int n;
-	float coef[3];
+	float coef0;
+	float coef1;
+	float coef2;
 };
 
 enum class preload

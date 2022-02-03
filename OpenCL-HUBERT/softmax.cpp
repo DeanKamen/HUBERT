@@ -25,22 +25,22 @@ void Softmax(softmax_memory& memory, quantact_memory& qa_memory, int output_bit_
 	}
 	memory.x0 = -0.6931f; //  - ln2
 	memory.n = 30; // sufficiently large integer
-	memory.coef[0] =  0.35815147f;
-	memory.coef[1] = 0.96963238f;
-	memory.coef[2] = 1.f; // ax**2 + bx + c
-	memory.coef[1] /= memory.coef[0];
-	memory.coef[2] /= memory.coef[0];
+	memory.coef0 =  0.35815147f;
+	memory.coef1 = 0.96963238f;
+	memory.coef2 = 1.f; // ax**2 + bx + c
+	memory.coef1 /= memory.coef0;
+	memory.coef2 /= memory.coef0;
 }
 
 scaled_tuple3d int_polynomial(softmax_memory& memory, Tensor3d x_int, const int xr, const int xc, const int xd, Tensor scaling_factor, const int sfr, const int sfc)
 {
 	reciprocal(scaling_factor, sfr, sfc, memory.b_int);
-	mul_scalar(memory.b_int, sfr, sfc, memory.coef[1], memory.b_int);
+	mul_scalar(memory.b_int, sfr, sfc, memory.coef1, memory.b_int);
 	floor_tensor(memory.b_int, sfr, sfc, memory.b_int);
 
 	pow_scalar(scaling_factor, sfr, sfc, 2.f, memory.c_int); 
 	reciprocal(memory.c_int, sfr, sfc, memory.c_int);
-	mul_scalar(memory.c_int, sfr, sfc, memory.coef[2], memory.c_int);
+	mul_scalar(memory.c_int, sfr, sfc, memory.coef2, memory.c_int);
 	floor_tensor(memory.c_int, sfr, sfc, memory.c_int);
 
 	add_scalar(x_int, xr, xc, xd, memory.b_int[0], memory.z);
@@ -48,7 +48,7 @@ scaled_tuple3d int_polynomial(softmax_memory& memory, Tensor3d x_int, const int 
 	add_scalar(memory.z, xr, xc, xd, memory.c_int[0], memory.z);
 
 	pow_scalar(scaling_factor, sfr, sfc, 2, scaling_factor);
-	mul_scalar(scaling_factor, sfr, sfc, memory.coef[0], scaling_factor);
+	mul_scalar(scaling_factor, sfr, sfc, memory.coef0, scaling_factor);
 	
 	scaled_tuple3d returnme;
 	returnme.matrix = memory.z;

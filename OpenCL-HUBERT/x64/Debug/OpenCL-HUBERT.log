@@ -3,4 +3,6 @@ c:\users\hunto_efxy22i\opencl-hubert\opencl-hubert\constant_headers\self_attn_so
 c:\users\hunto_efxy22i\opencl-hubert\opencl-hubert\constant_headers\self_attn_softmax_act_x_max.h(4): warning C4305: 'initializing': truncation from 'double' to 'const float'
 c:\users\hunto_efxy22i\opencl-hubert\opencl-hubert\constant_headers\self_attn_softmax_act_x_min.h(4): warning C4305: 'initializing': truncation from 'double' to 'const float'
 c:\users\hunto_efxy22i\opencl-hubert\opencl-hubert\constant_headers\softmax_sf_layer0.h(4): warning C4305: 'initializing': truncation from 'double' to 'float'
+  softmax.cpp
+  Generating Code...
   OpenCL-HUBERT.vcxproj -> C:\Users\hunto_efxy22i\OpenCL-HUBERT\x64\Debug\OpenCL-HUBERT.exe

@@ -21,7 +21,7 @@ void QuantAct(
 
 //other functions
 scaled_tuple3d QuantAct_forward( //returns a matrix of size xr,xc,xd
-	quantact_memory& memory,
+	quantact_memory memory,//TODO: pass by reference
 	Tensor3d x, const int xr, const int xc, const int xd,//identity and x are 22x1x768 or 12x22x22.
 	Tensor pre_act_scaling_factor, const int pasfr, const int pasfc,
 	Tensor3d identity, const int identityr, const int identityc, const int identityd,

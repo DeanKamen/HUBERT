@@ -91,7 +91,7 @@ scaled_tuple3d int_exp(softmax_memory& memory, Tensor3d x_int, const int xr, con
 }
 
 
-scaled_tuple3d softmax_forward(softmax_memory& memory, quantact_memory& qa_memory, Tensor3d x, const int xr, const int xc, const int xd, Tensor scaling_factor, const int sfr, const int sfc)
+component scaled_tuple3d softmax_forward(softmax_memory memory, quantact_memory qa_memory, Tensor3d x, const int xr, const int xc, const int xd, Tensor scaling_factor, const int sfr, const int sfc)
 {
 	//ASSUMPTION x is 12x22x22, scaling factor is 1x1
 	copy(x, xr, xc, xd, memory.x_int);
@@ -128,7 +128,7 @@ scaled_tuple3d softmax_forward(softmax_memory& memory, quantact_memory& qa_memor
 	memory.scaling_return[0] = sf;
 	returnme.scaling_factor = memory.scaling_return;
 
-	//eq(returnme.matrix, xr, xc, xd, (const Tensor3d)softmax_layer0_out, xr, xc, xd);//verification
+	eq(returnme.matrix, xr, xc, xd, (const Tensor3d)softmax_layer0_out, xr, xc, xd);//verification
 
 	return returnme;
 }

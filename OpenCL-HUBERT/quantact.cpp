@@ -55,8 +55,8 @@ void QuantAct(
 	//loading xmin and xmax is done by the set param function
 }
 
-component scaled_tuple3d QuantAct_forward(
-	quantact_memory& memory,
+scaled_tuple3d QuantAct_forward(
+	quantact_memory memory, //TODO: to work this needs to be passed by reference
 	Tensor3d x, const int xr, const int xc, const int xd,//identity and x are 22x1x768 or 12x22x22.
 	Tensor pre_act_scaling_factor, const int pasfr, const int pasfc,
 	Tensor3d identity, const int identityr, const int identityc, const int identityd,

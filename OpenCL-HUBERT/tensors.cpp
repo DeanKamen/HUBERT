@@ -61,8 +61,10 @@ void add(const Tensor A, int rowsA, int colsA, const Tensor B, int rowsB, int co
 
 	//now for the actual math
     int i,j;
+#pragma max_concurrency 1
     for (i = 0; i < rowsA; i++)
     {
+#pragma max_concurrency 1
         for (j = 0; j < colsA; j++)
         {
             set(C, rowsA, colsA, i,j,get(larger, rowsA, colsA, i, j) + get(smaller, rowsB, colsB, i % rowMod, j % colMod));
@@ -117,8 +119,10 @@ void sub(const Tensor A, int rowsA, int colsA, const Tensor B, int rowsB, int co
 
 	//now for the actual math
 	int i, j;
+#pragma max_concurrency 1
 	for (i = 0; i < rowsA; i++)
 	{
+#pragma max_concurrency 1
 		for (j = 0; j < colsA; j++)
 		{
 			set(C, rowsA, colsA, i, j, get(larger, rowsA, colsA, i, j) - get(smaller, rowsB, colsB, i % rowMod, j % colMod));
@@ -173,8 +177,10 @@ void mul_dot(const Tensor A, int rowsA, int colsA, const Tensor B, int rowsB, in
 
 	//now for the actual math
 	int i, j;
+#pragma max_concurrency 1
 	for (i = 0; i < rowsA; i++)
 	{
+#pragma max_concurrency 1
 		for (j = 0; j < colsA; j++)
 		{
 			set(C, rowsA, colsA, i, j, get(larger, rowsA, colsA, i, j) * get(smaller, rowsB, colsB, i % rowMod, j % colMod));
@@ -229,8 +235,10 @@ void div_dot(const Tensor A, int rowsA, int colsA, const Tensor B, int rowsB, in
 
 	//now for the actual math
 	int i, j;
+#pragma max_concurrency 1
 	for (i = 0; i < rowsA; i++)
 	{
+#pragma max_concurrency 1
 		for (j = 0; j < colsA; j++)
 		{
 			set(C, rowsA, colsA, i, j, get(larger, rowsA, colsA, i, j) / get(smaller, rowsB, colsB, i % rowMod, j % colMod));
@@ -286,8 +294,10 @@ void pow_dot(const Tensor A, int rowsA, int colsA, const Tensor B, int rowsB, in
 
 	//now for the actual math
 	int i, j;
+#pragma max_concurrency 1
 	for (i = 0; i < rowsA; i++)
 	{
+#pragma max_concurrency 1
 		for (j = 0; j < colsA; j++)
 		{
 			set(C, rowsA, colsA, i, j, pow(get(larger, rowsA, colsA, i, j), get(smaller, rowsB, colsB, i % rowMod, j % colMod)));
@@ -299,8 +309,10 @@ void pow_dot(const Tensor A, int rowsA, int colsA, const Tensor B, int rowsB, in
 void add_scalar(const Tensor A, int rowsA, int colsA, float B, Tensor C)
 {
     int i,j;
+#pragma max_concurrency 1
     for (i = 0; i < rowsA; i++)
     {
+#pragma max_concurrency 1
         for (j = 0; j < colsA; j++)
         {
             set(C, rowsA, colsA, i,j,get(A, rowsA, colsA, i,j) + B);
@@ -312,8 +324,10 @@ void add_scalar(const Tensor A, int rowsA, int colsA, float B, Tensor C)
 void mul_scalar(const Tensor A, int rowsA, int colsA, float B, Tensor C)
 {
     int i,j;
+#pragma max_concurrency 1
     for (i = 0; i < rowsA; i++)
     {
+#pragma max_concurrency 1
         for (j = 0; j < colsA; j++)
         {
             set(C, rowsA, colsA, i,j,get(A, rowsA, colsA, i,j) * B);
@@ -325,8 +339,10 @@ void mul_scalar(const Tensor A, int rowsA, int colsA, float B, Tensor C)
 void sub_scalar(const Tensor A, int rowsA, int colsA, float B, Tensor C)
 {
     int i,j;
+#pragma max_concurrency 1
     for (i = 0; i < rowsA; i++)
     {
+#pragma max_concurrency 1
         for (j = 0; j < colsA; j++)
         {
             set(C, rowsA, colsA, i,j,get(A, rowsA, colsA, i,j) - B);
@@ -338,8 +354,10 @@ void sub_scalar(const Tensor A, int rowsA, int colsA, float B, Tensor C)
 void sub_scalar(float B, const Tensor A, int rowsA, int colsA, Tensor C)
 {
 	int i, j;
+#pragma max_concurrency 1
 	for (i = 0; i < rowsA; i++)
 	{
+#pragma max_concurrency 1
 		for (j = 0; j < colsA; j++)
 		{
 			set(C, rowsA, colsA, i, j, B - get(A, rowsA, colsA, i, j));
@@ -351,8 +369,10 @@ void sub_scalar(float B, const Tensor A, int rowsA, int colsA, Tensor C)
 void div_scalar(const Tensor A, int rowsA, int colsA, float B, Tensor C)
 {
     int i,j;
+#pragma max_concurrency 1
     for (i = 0; i < rowsA; i++)
     {
+#pragma max_concurrency 1
         for (j = 0; j < colsA; j++)
         {
             set(C, rowsA, colsA, i,j,get(A, rowsA, colsA, i,j) / B);
@@ -364,8 +384,10 @@ void div_scalar(const Tensor A, int rowsA, int colsA, float B, Tensor C)
 void pow_scalar(const Tensor A, int rowsA, int colsA, float B, Tensor C)
 {// A = B^C, note that there are more efficient functions for 2^X or e^X or 10^X
     int i,j;
+#pragma max_concurrency 1
     for (i = 0; i < rowsA; i++)
     {
+#pragma max_concurrency 1
         for (j = 0; j < colsA; j++)
         {
             set(C, rowsA, colsA, i,j, pow(get(A, rowsA, colsA, i,j), B));
@@ -386,6 +408,7 @@ void max(const Tensor A, int rowsA, int colsA, int dim, Tensor C)
         int i,j;
         float largest;
         bool first = true;
+#pragma max_concurrency 1
         for (i = 0; i < colsA; i++)
         {
             for (j = 0; j < rowsA; j++)
@@ -413,6 +436,7 @@ void max(const Tensor A, int rowsA, int colsA, int dim, Tensor C)
         int i,j;
         float largest;
         bool first = true;
+#pragma max_concurrency 1
         for (i = 0; i < rowsA; i++)
         {
             for (j = 0; j < colsA; j++)
@@ -447,6 +471,7 @@ void min(const Tensor A, int rowsA, int colsA, int dim, Tensor C)
         int i,j;
         float smallest;
         bool first = true;
+#pragma max_concurrency 1
         for (i = 0; i < colsA; i++)
         {
             for (j = 0; j < rowsA; j++)
@@ -474,6 +499,7 @@ void min(const Tensor A, int rowsA, int colsA, int dim, Tensor C)
         int i,j;
         float smallest;
         bool first = true;
+#pragma max_concurrency 1
         for (i = 0; i < rowsA; i++)
         {
             for (j = 0; j < colsA; j++)
@@ -506,6 +532,7 @@ void sum(const Tensor A, int rowsA, int colsA, int dim, Tensor C)
 	float running = 0.0f;
 	if (dim == 0)
 	{
+#pragma max_concurrency 1
 		for (i = 0; i < colsA; i++)
 		{
 			for (j = 0; j < rowsA; j++)
@@ -520,6 +547,7 @@ void sum(const Tensor A, int rowsA, int colsA, int dim, Tensor C)
 	}
 	else
 	{ //dim ==1
+#pragma max_concurrency 1
 		for (i = 0; i < rowsA; i++)
 		{
 			for (j = 0; j < colsA; j++)
@@ -538,8 +566,10 @@ void sum(const Tensor A, int rowsA, int colsA, int dim, Tensor C)
 void max_scalar(const Tensor A, int rowsA, int colsA, float compare, Tensor C)
 { //similar to clamp but more readable
 	int i, j;
+#pragma max_concurrency 1
 	for (i = 0; i < rowsA; i++)
 	{
+#pragma max_concurrency 1
 		for (j = 0; j < colsA; j++)
 		{
 			float mat = get(A, rowsA, colsA, i, j);
@@ -552,8 +582,10 @@ void max_scalar(const Tensor A, int rowsA, int colsA, float compare, Tensor C)
 void min_scalar(const Tensor A, int rowsA, int colsA, float compare, Tensor C)
 {
 	int i, j;
+#pragma max_concurrency 1
 	for (i = 0; i < rowsA; i++)
 	{
+#pragma max_concurrency 1
 		for (j = 0; j < colsA; j++)
 		{
 			float mini = get(A, rowsA, colsA, i, j);
@@ -568,8 +600,10 @@ void min_dot(const Tensor A, int rowsA, int colsA, const Tensor B, Tensor C)
 {//element wise min that assumes a and b are the same size
 	//assert(sameSize(A, B));
 	int i, j;
+#pragma max_concurrency 1
 	for (i = 0; i < rowsA; i++)
 	{
+#pragma max_concurrency 1
 		for (j = 0; j < colsA; j++)
 		{
 			float left = get(A, rowsA, colsA, i, j);
@@ -585,8 +619,10 @@ void min_dot(const Tensor A, int rowsA, int colsA, const Tensor B, Tensor C)
 void abs_tensor(const Tensor A, int rowsA, int colsA, Tensor C)
 {
 	int i, j;
+#pragma max_concurrency 1
 	for (i = 0; i < rowsA; i++)
 	{
+#pragma max_concurrency 1
 		for (j = 0; j < colsA; j++)
 		{
 			float el = get(A, rowsA, colsA, i, j);
@@ -600,8 +636,10 @@ void abs_tensor(const Tensor A, int rowsA, int colsA, Tensor C)
 void floor_tensor(const Tensor A, int rowsA, int colsA, Tensor C)
 {//does a cast to a float and then floors it.
     int i,j;
+#pragma max_concurrency 1
     for (i = 0; i < rowsA; i++)
     {
+#pragma max_concurrency 1
         for (j = 0; j < colsA; j++)
         {
             float temp = get(A, rowsA, colsA, i,j);
@@ -615,8 +653,10 @@ void floor_tensor(const Tensor A, int rowsA, int colsA, Tensor C)
 void exp2_tensor(const Tensor A, int rowsA, int colsA, Tensor C)
 {
 	int i, j;
+#pragma max_concurrency 1
 	for (i = 0; i < rowsA; i++)
 	{
+#pragma max_concurrency 1
 		for (j = 0; j < colsA; j++)
 		{
 			set(C, rowsA, colsA, i, j, exp2f(get(A, rowsA, colsA, i, j)));
@@ -628,8 +668,10 @@ void exp2_tensor(const Tensor A, int rowsA, int colsA, Tensor C)
 void clamp(const Tensor A, int rowsA, int colsA, float min, float max, Tensor C)
 {
     int i,j;
+#pragma max_concurrency 1
     for (i = 0; i < rowsA; i++)
     {
+#pragma max_concurrency 1
         for (j = 0; j < colsA; j++)
         {
             float viq = get(A, rowsA, colsA, i,j);
@@ -644,8 +686,10 @@ void clamp(const Tensor A, int rowsA, int colsA, float min, float max, Tensor C)
 void roundTensor(const Tensor A, int rowsA, int colsA, Tensor C)
 {
     int i,j;
+#pragma max_concurrency 1
     for (i = 0; i < rowsA; i++)
     {
+#pragma max_concurrency 1
         for (j = 0; j < colsA; j++)
         {
             float roundme = get(A, rowsA, colsA, i,j);
@@ -663,8 +707,10 @@ void roundTensor(const Tensor A, int rowsA, int colsA, Tensor C)
 void reciprocal(const Tensor A, int rowsA, int colsA, Tensor C)
 {
     int i,j;
+#pragma max_concurrency 1
     for (i = 0; i < rowsA; i++)
     {
+#pragma max_concurrency 1
         for (j = 0; j < colsA; j++)
         {
             float recip = get(A, rowsA, colsA, i,j);
@@ -678,8 +724,10 @@ void reciprocal(const Tensor A, int rowsA, int colsA, Tensor C)
 void sign(const Tensor A, int rowsA, int colsA, Tensor C)
 {
 	int i, j;
+#pragma max_concurrency 1
 	for (i = 0; i < rowsA; i++)
 	{
+#pragma max_concurrency 1
 		for (j = 0; j < colsA; j++)
 		{
 			if (get(A, rowsA, colsA, i, j) < 0)
@@ -703,6 +751,7 @@ void mean(const Tensor A, int rowsA, int colsA, Tensor C)
 {// assume a row vector. can be expanded upon like max and min to work along multiple dimentions
 	//assert(rowsA == 1);
 	float running = 0.f;
+#pragma max_concurrency 1
 	for (int j = 0; j < colsA; j++)
 	{
 		running += get(A, rowsA, colsA, 0, j);
@@ -714,8 +763,10 @@ void mean(const Tensor A, int rowsA, int colsA, Tensor C)
 void sqrt_tensor(const Tensor A, int rowsA, int colsA, Tensor C)
 {
 	int i, j;
+#pragma max_concurrency 1
 	for (i = 0; i < rowsA; i++)
 	{
+#pragma max_concurrency 1
 		for (j = 0; j < colsA; j++)
 		{
 			set(C, rowsA, colsA, i, j, sqrt(get(A, rowsA, colsA, i,j)));
@@ -727,8 +778,10 @@ void sqrt_tensor(const Tensor A, int rowsA, int colsA, Tensor C)
 void fill(const Tensor A, int rowsA, int colsA, float fill)
 {
     int i,j;
+#pragma max_concurrency 1
     for (i = 0; i < rowsA; i++)
     {
+#pragma max_concurrency 1
         for (j = 0; j < colsA; j++)
         {
             set(A, rowsA, colsA, i,j, fill);
@@ -789,8 +842,10 @@ void tensor_frexp(Tensor In, int rowsIn, int colsIn, Tensor m, int rowsm, int co
     //reutrns the mantissas and then put the exponents in a seperate tensor.
 	const int MAX_BIT = 31;
     int i,j;
+#pragma max_concurrency 1
     for (i = 0; i < rowsIn; i++)
     {
+#pragma max_concurrency 1
         for (j = 0; j < colsIn; j++)
         {
             float m1;
@@ -833,8 +888,10 @@ void transposed_set(const Tensor A, int rowsA, int colsA, int row, int col, floa
 
 void transpose(const Tensor A, int rowsA, int colsA, Tensor C)
 {
+#pragma max_concurrency 1
 	for (int i = 0; i < rowsA; i++)
 	{
+#pragma max_concurrency 1
 		for (int j = 0; j < colsA; i++)
 		{
 			set(C, colsA, rowsA, j, i, get(A, rowsA, colsA, i, j));
@@ -844,8 +901,10 @@ void transpose(const Tensor A, int rowsA, int colsA, Tensor C)
 
 void copy(const Tensor A, int rowsA, int colsA, Tensor C)
 {
+#pragma max_concurrency 1
 	for (int i = 0; i < rowsA; i++)
 	{
+#pragma max_concurrency 1
 		for (int j = 0; j < colsA; j++)
 		{
 			set(C, rowsA, colsA, i, j, get(A, rowsA, colsA, i, j));
@@ -858,6 +917,7 @@ void shrinkTensor(const Tensor A, int rowsA, int colsA, Tensor C, int rowsC, int
 	//we will assume that rows have been collapsed to 1 or cols have been collapsed to 1.
 	if (rowsA != rowsC && rowsC ==1)
 	{//we have a 2d matrix who has one row but the values are positioned assuming multiple columns. Iterate over that row using different assumptions to collapse to C.
+#pragma max_concurrency 1
 		for (int i = 0; i < colsA; i++)
 		{
 			float take = get(A, rowsA, colsA, 0, i);
@@ -866,6 +926,7 @@ void shrinkTensor(const Tensor A, int rowsA, int colsA, Tensor C, int rowsC, int
 	}
 	else if (colsA != colsC && colsC == 1)
 	{
+#pragma max_concurrency 1
 		for (int i = 0; i < rowsA; i++)
 		{
 			float take = get(A, rowsA, colsA, i, 0);

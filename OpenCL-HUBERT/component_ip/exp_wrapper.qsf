@@ -1,0 +1,13 @@
+set_global_assignment -name FAMILY "Cyclone 10 GX"
+set_global_assignment -name TOP_LEVEL_ENTITY exp_wrapper
+set_global_assignment -name ORIGINAL_QUARTUS_VERSION 21.1.0
+set_global_assignment -name PROJECT_CREATION_TIME_DATE "09:51:50  FEBRUARY 22, 2022"
+set_global_assignment -name LAST_QUARTUS_VERSION "21.1.0 Pro Edition"
+set_global_assignment -name VERILOG_FILE Out6.v
+set_global_assignment -name VERILOG_FILE exp_wrapper.v
+set_global_assignment -name PROJECT_OUTPUT_DIRECTORY output_files
+set_global_assignment -name MIN_CORE_JUNCTION_TEMP 0
+set_global_assignment -name MAX_CORE_JUNCTION_TEMP 100
+set_global_assignment -name DEVICE 10CX085YF672E5G
+set_global_assignment -name ERROR_CHECK_FREQUENCY_DIVISOR 1
+set_instance_assignment -name PARTITION_COLOUR 4294935520 -to exp_wrapper -entity exp_wrapper

@@ -1,0 +1,6 @@
+# TCL commands history
+# Tue Feb 22 10:19:37 2022
+ssv_tcl_open_attaching_singleton_window -attaching_window_app_name "RTL Viewer" -attach_to_frame [ssv_active_ss_frame]
+ssv_get_netlist_if_needed -snapshot final
+qsta_utility::generate_top_failures_per_clock "Top Failing Paths" 200 -full_path
+ssv_display_timing_failing_paths -frame [ssv_active_ss_frame] -tcl_action {Report Worst-Case Path} -context_menu "failing_path_in_schematic;failing_path_in_chip_view;failing_path_characteristics"

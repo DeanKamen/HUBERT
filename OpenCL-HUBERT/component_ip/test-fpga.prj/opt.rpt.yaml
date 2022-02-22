@@ -1,0 +1,125 @@
+--- !Missed
+Pass:            inline
+Name:            NoDefinition
+DebugLoc:        { File: 'C:\Users\hunto_efxy22i\OpenCL-HUBERT\OpenCL-HUBERT\component_ip\component_testbench.cpp', 
+                   Line: 9, Column: 12 }
+Function:        '?executeexp@@YAEE@Z'
+Args:
+  - Callee:          '?expHBU@@YAEE@Z'
+  - String:          ' will not be inlined into '
+  - Caller:          '?executeexp@@YAEE@Z'
+    DebugLoc:        { File: 'C:\Users\hunto_efxy22i\OpenCL-HUBERT\OpenCL-HUBERT\component_ip\component_testbench.cpp', 
+                       Line: 8, Column: 0 }
+  - String:          ' because its definition is unavailable'
+...
+--- !Missed
+Pass:            inline
+Name:            NoDefinition
+DebugLoc:        { File: 'C:\Users\hunto_efxy22i\OpenCL-HUBERT\OpenCL-HUBERT\component_ip\component_testbench.cpp', 
+                   Line: 13, Column: 12 }
+Function:        '?executeexp_basic@@YAEE@Z'
+Args:
+  - Callee:          __acl__expfd
+  - String:          ' will not be inlined into '
+  - Caller:          '?executeexp_basic@@YAEE@Z'
+    DebugLoc:        { File: 'C:\Users\hunto_efxy22i\OpenCL-HUBERT\OpenCL-HUBERT\component_ip\component_testbench.cpp', 
+                       Line: 12, Column: 0 }
+  - String:          ' because its definition is unavailable'
+...
+--- !Missed
+Pass:            inline
+Name:            NoDefinition
+DebugLoc:        { File: 'C:\Users\hunto_efxy22i\OpenCL-HUBERT\OpenCL-HUBERT\component_ip\component_testbench.cpp', 
+                   Line: 9, Column: 12 }
+Function:        '?executeexp@@YAEE@Z'
+Args:
+  - Callee:          '?expHBU@@YAEE@Z'
+  - String:          ' will not be inlined into '
+  - Caller:          '?executeexp@@YAEE@Z'
+    DebugLoc:        { File: 'C:\Users\hunto_efxy22i\OpenCL-HUBERT\OpenCL-HUBERT\component_ip\component_testbench.cpp', 
+                       Line: 8, Column: 0 }
+  - String:          ' because its definition is unavailable'
+...
+--- !Missed
+Pass:            inline
+Name:            NoDefinition
+DebugLoc:        { File: 'C:\Users\hunto_efxy22i\OpenCL-HUBERT\OpenCL-HUBERT\component_ip\component_testbench.cpp', 
+                   Line: 13, Column: 12 }
+Function:        '?executeexp_basic@@YAEE@Z'
+Args:
+  - Callee:          __acl__expfd
+  - String:          ' will not be inlined into '
+  - Caller:          '?executeexp_basic@@YAEE@Z'
+    DebugLoc:        { File: 'C:\Users\hunto_efxy22i\OpenCL-HUBERT\OpenCL-HUBERT\component_ip\component_testbench.cpp', 
+                       Line: 12, Column: 0 }
+  - String:          ' because its definition is unavailable'
+...
+--- !Missed
+Pass:            inline
+Name:            NoDefinition
+DebugLoc:        { File: 'C:\Users\hunto_efxy22i\OpenCL-HUBERT\OpenCL-HUBERT\component_ip\component_testbench.cpp', 
+                   Line: 9, Column: 12 }
+Function:        executeexp
+Args:
+  - Callee:          '?expHBU@@YAEE@Z'
+  - String:          ' will not be inlined into '
+  - Caller:          executeexp
+    DebugLoc:        { File: 'C:\Users\hunto_efxy22i\OpenCL-HUBERT\OpenCL-HUBERT\component_ip\component_testbench.cpp', 
+                       Line: 8, Column: 0 }
+  - String:          ' because its definition is unavailable'
+...
+--- !Missed
+Pass:            inline
+Name:            NoDefinition
+DebugLoc:        { File: 'C:\Users\hunto_efxy22i\OpenCL-HUBERT\OpenCL-HUBERT\component_ip\component_testbench.cpp', 
+                   Line: 13, Column: 12 }
+Function:        executeexp_basic
+Args:
+  - Callee:          __acl__expfd
+  - String:          ' will not be inlined into '
+  - Caller:          executeexp_basic
+    DebugLoc:        { File: 'C:\Users\hunto_efxy22i\OpenCL-HUBERT\OpenCL-HUBERT\component_ip\component_testbench.cpp', 
+                       Line: 12, Column: 0 }
+  - String:          ' because its definition is unavailable'
+...
+--- !Passed
+Pass:            licm
+Name:            InstSunk
+Function:        executeexp
+Args:
+  - String:          'sinking '
+  - Inst:            extractvalue
+...
+--- !Passed
+Pass:            licm
+Name:            InstSunk
+Function:        executeexp
+Args:
+  - String:          'sinking '
+  - Inst:            extractvalue
+...
+--- !Passed
+Pass:            licm
+Name:            InstSunk
+Function:        executeexp_basic
+Args:
+  - String:          'sinking '
+  - Inst:            extractvalue
+...
+--- !Passed
+Pass:            licm
+Name:            InstSunk
+Function:        executeexp_basic
+Args:
+  - String:          'sinking '
+  - Inst:            extractvalue
+...
+--- !Passed
+Pass:            licm
+Name:            InstSunk
+Function:        executeexp
+Args:
+  - String:          'sinking '
+  - Inst:            extractvalue
+...
+-

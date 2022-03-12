@@ -17,5 +17,6 @@ int main()
 {   
     uint8_t exponent = 3;
     uint8_t result = executeexp(exponent);
-    printf("result %d", result);
+    printf("result %d \n", result);
+    return 0;
 }

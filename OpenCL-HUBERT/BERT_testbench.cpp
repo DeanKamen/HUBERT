@@ -13,6 +13,7 @@
 #include "constant_headers/softmax_layer0.h"
 #include "constant_headers/softmax_sf_layer0.h"
 #include "constant_headers/softmax_layer0_out.h"
+#include "HLS/ac_fixed.h"
 //#include "QuantLinear.h"
 //#include "IntLayerNorm.h"
 //#include "IntGELU.h"
@@ -195,6 +196,19 @@ int main()
 		qa_memory,
 		softmax_in, sir, sic, sid, 
 		softmax_scaling_factor, ssfr, ssfc);
+
+	ac_fixed<16, 1, true> oneSeventeenth(1.0 / 17.0);
+	ac_fixed<16, 9, true> oneHundredSeventy(170);
+	auto result1 = oneSeventeenth * oneHundredSeventy;
+	printf("result1: %f*%f = %f\n", oneSeventeenth.to_double(), oneHundredSeventy.to_double(), result1.to_double());
+
+	ac_fixed<16, 2, true> oneAndHalf(3.0 / 2.0);
+	ac_fixed<16, 3, true> threeAndHalf(7.0/2.0);
+	auto result2 = oneAndHalf * threeAndHalf;
+	printf("result2: %f*%f = %f\n", oneAndHalf.to_double(), threeAndHalf.to_double(), result2.to_double());
+
+	//TODO test matrix template with this?
+
 	
 	/*
 	 //QuantLinear verification

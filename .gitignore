@@ -10,4 +10,4 @@
 *.ilk
 *.pdb
 *.obj
-OpenCL-HUBERT/test-fpga.prj
+OpenCL-HUBERT/*.prj

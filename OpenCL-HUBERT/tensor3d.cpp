@@ -102,7 +102,7 @@ void pow_dot(const Tensor3d A, int rowsA, int colsA, int depA, const Tensor3d B,
 }
 
 //scalar type
-void add_scalar(const Tensor3d A, int rowsA, int colsA, int depA, float B, Tensor3d C)
+void add_scalar(const Tensor3d A, int rowsA, int colsA, int depA, int B, Tensor3d C)
 {
 #pragma max_concurrency 1
 	for (int d = 0; d < depA; d++)
@@ -111,7 +111,7 @@ void add_scalar(const Tensor3d A, int rowsA, int colsA, int depA, float B, Tenso
 	}
 }
 
-void mul_scalar(const Tensor3d A, int rowsA, int colsA, int depA, float B, Tensor3d C)
+void mul_scalar(const Tensor3d A, int rowsA, int colsA, int depA, int B, Tensor3d C)
 {
 #pragma max_concurrency 1
 	for (int d = 0; d < depA; d++)
@@ -120,7 +120,7 @@ void mul_scalar(const Tensor3d A, int rowsA, int colsA, int depA, float B, Tenso
 	}
 }
 
-void sub_scalar(const Tensor3d A, int rowsA, int colsA, int depA, float B, Tensor3d C)
+void sub_scalar(const Tensor3d A, int rowsA, int colsA, int depA, int B, Tensor3d C)
 {
 #pragma max_concurrency 1
 	for (int d = 0; d < depA; d++)
@@ -128,7 +128,7 @@ void sub_scalar(const Tensor3d A, int rowsA, int colsA, int depA, float B, Tenso
 		sub_scalar(get_layer(A, rowsA, colsA, depA, d), rowsA, colsA, B, get_layer(C, rowsA, colsA, depA, d));
 	}
 }
-void sub_scalar(float B, const Tensor3d A, int rowsA, int colsA, int depA, Tensor3d C)
+void sub_scalar(int B, const Tensor3d A, int rowsA, int colsA, int depA, Tensor3d C)
 {
 #pragma max_concurrency 1
 	for (int d = 0; d < depA; d++)
@@ -136,7 +136,7 @@ void sub_scalar(float B, const Tensor3d A, int rowsA, int colsA, int depA, Tenso
 		sub_scalar(B, get_layer(A, rowsA, colsA, depA, d), rowsA, colsA, get_layer(C, rowsA, colsA, depA, d));
 	}
 }
-void div_scalar(const Tensor3d A, int rowsA, int colsA, int depA, float B, Tensor3d C)
+void div_scalar(const Tensor3d A, int rowsA, int colsA, int depA, int B, Tensor3d C)
 {
 #pragma max_concurrency 1
 	for (int d = 0; d < depA; d++)
@@ -145,7 +145,7 @@ void div_scalar(const Tensor3d A, int rowsA, int colsA, int depA, float B, Tenso
 	}
 }
 
-void pow_scalar(const Tensor3d A, int rowsA, int colsA, int depA, float B, Tensor3d C)
+void pow_scalar(const Tensor3d A, int rowsA, int colsA, int depA, int B, Tensor3d C)
 {
 #pragma max_concurrency 1
 	for (int d = 0; d < depA; d++)
@@ -178,7 +178,7 @@ void max(const Tensor3d A, int rowsA, int colsA, int depA, int dim, Tensor3d C)
 	else //dim ==2
 	{
 		int i, j;
-		float largest;
+		int largest;
 		bool first = true;
 #pragma loop_coalesce
 		for (i = 0; i < colsA; i++)
@@ -231,7 +231,7 @@ void min(const Tensor3d A, int rowsA, int colsA, int depA, int dim, Tensor3d C)
 	else //dim ==2
 	{
 		int i, j;
-		float smallest;
+		int smallest;
 		bool first = true;
 #pragma loop_coalesce
 		for (i = 0; i < colsA; i++)
@@ -274,7 +274,7 @@ void min(const Tensor3d A, int rowsA, int colsA, int depA)
 	min(A, 1, colsA, 1, 1, A); //now A is a scalar
 }
 
-void max_scalar(const Tensor3d A, int rowsA, int colsA, int depA, float compare, Tensor3d C)
+void max_scalar(const Tensor3d A, int rowsA, int colsA, int depA, int compare, Tensor3d C)
 {
 #pragma max_concurrency 1
 	for (int d = 0; d < depA; d++)
@@ -283,7 +283,7 @@ void max_scalar(const Tensor3d A, int rowsA, int colsA, int depA, float compare,
 	}
 }
 
-void min_scalar(const Tensor3d A, int rowsA, int colsA, int depA, float compare, Tensor3d C)
+void min_scalar(const Tensor3d A, int rowsA, int colsA, int depA, int compare, Tensor3d C)
 {
 #pragma max_concurrency 1
 	for (int d = 0; d < depA; d++)
@@ -310,6 +310,7 @@ void abs_tensor(const Tensor3d A, int rowsA, int colsA, int depA, Tensor3d C)
 	}
 }
 
+/*
 void floor_tensor(const Tensor3d A, int rowsA, int colsA, int depA, Tensor3d C)
 {
 #pragma max_concurrency 1
@@ -317,7 +318,7 @@ void floor_tensor(const Tensor3d A, int rowsA, int colsA, int depA, Tensor3d C)
 	{
 		floor_tensor(get_layer(A, rowsA, colsA, depA, d), rowsA, colsA, get_layer(C, rowsA, colsA, depA, d));
 	}
-}
+}*/
 
 void exp2_tensor(const Tensor3d A, int rowsA, int colsA, int depA, Tensor3d C)
 {
@@ -328,7 +329,7 @@ void exp2_tensor(const Tensor3d A, int rowsA, int colsA, int depA, Tensor3d C)
 	}
 }
 
-void clamp(const Tensor3d A, int rowsA, int colsA, int depA, float min, float max, Tensor3d C)
+void clamp(const Tensor3d A, int rowsA, int colsA, int depA, int min, int max, Tensor3d C)
 {
 #pragma max_concurrency 1
 	for (int d = 0; d < depA; d++)
@@ -337,6 +338,7 @@ void clamp(const Tensor3d A, int rowsA, int colsA, int depA, float min, float ma
 	}
 }
 
+/*
 void roundTensor(const Tensor3d A, int rowsA, int colsA, int depA, Tensor3d C)
 {
 #pragma max_concurrency 1
@@ -344,8 +346,9 @@ void roundTensor(const Tensor3d A, int rowsA, int colsA, int depA, Tensor3d C)
 	{
 		roundTensor(get_layer(A, rowsA, colsA, depA, d), rowsA, colsA, get_layer(C, rowsA, colsA, depA, d));
 	}
-}
+}*/
 
+/*
 void reciprocal(const Tensor3d A, int rowsA, int colsA, int depA, Tensor3d C)
 {
 #pragma max_concurrency 1
@@ -353,7 +356,7 @@ void reciprocal(const Tensor3d A, int rowsA, int colsA, int depA, Tensor3d C)
 	{
 		reciprocal(get_layer(A, rowsA, colsA, depA, d), rowsA, colsA, get_layer(C, rowsA, colsA, depA, d));
 	}
-}
+}*/
 
 void sum(const Tensor3d A, int rowsA, int colsA, int depA, int dim, Tensor3d C)
 {
@@ -378,8 +381,8 @@ void sum(const Tensor3d A, int rowsA, int colsA, int depA, int dim, Tensor3d C)
 	}
 	else //dim ==2
 	{
-		float running;
-		running = float(0);
+		int running;
+		running = int(0);
 #pragma loop_coalesce
 		for (int i = 0; i < colsA; i++)
 		{
@@ -415,6 +418,7 @@ void mean(const Tensor3d A, int rowsA, int colsA, int depA, Tensor3d C)
 	}
 }
 
+/*
 void sqrt_tensor(const Tensor3d A, int rowsA, int colsA, int depA, Tensor3d C)
 {
 #pragma max_concurrency 1
@@ -422,16 +426,16 @@ void sqrt_tensor(const Tensor3d A, int rowsA, int colsA, int depA, Tensor3d C)
 	{
 		sqrt_tensor(get_layer(A, rowsA, colsA, depA, d), rowsA, colsA, get_layer(C, rowsA, colsA, depA, d));
 	}
-}
+}*/
 
 //adressing methods where dep is depth and select the 2d array you want.
-float get(const Tensor3d A, int rowsA, int colsA, int depA, int row, int col, int dep)
+int get(const Tensor3d A, int rowsA, int colsA, int depA, int row, int col, int dep)
 {
 	int first_el_of_layer = dep*rowsA*colsA;
 	return A[first_el_of_layer + row * colsA + col];
 }
 
-void set(const Tensor3d A, int rowsA, int colsA, int depA, int row, int col, int dep, float val)
+void set(const Tensor3d A, int rowsA, int colsA, int depA, int row, int col, int dep, int val)
 {
 	int first_el_of_layer = dep*rowsA*colsA;
 	A[first_el_of_layer + row * colsA + col] = val;
@@ -540,7 +544,7 @@ void shrinkTensor(const Tensor3d A, int rowsA, int colsA, int depA, Tensor3d C, 
 			Tensor cur_layer = get_layer(A, rowsA, colsA, depA, i); //this is necessary because the depth is not continuous
 			for (int j = 0; j < colsA; j++)
 			{
-				float take = get(cur_layer, 1, colsA, 0, j); //by assuming this layer was collapsed, we can get it correctly
+				int take = get(cur_layer, 1, colsA, 0, j); //by assuming this layer was collapsed, we can get it correctly
 				set(C, rowsC, colsC, depC, 0, j, i, take);
 			}
 		}
@@ -553,7 +557,7 @@ void shrinkTensor(const Tensor3d A, int rowsA, int colsA, int depA, Tensor3d C, 
 			Tensor cur_layer = get_layer(A, rowsA, colsA, depA, i); //this is necessary because the depth is not continuous
 			for (int j = 0; j < rowsA; j++)
 			{
-				float take = get(cur_layer, rowsA, 1, j, 0); //by assuming this layer was collapsed, we can get it correctly
+				int take = get(cur_layer, rowsA, 1, j, 0); //by assuming this layer was collapsed, we can get it correctly
 				set(C, rowsC, colsC, depC, j, 0, i, take);
 			}
 		}
@@ -565,7 +569,7 @@ void shrinkTensor(const Tensor3d A, int rowsA, int colsA, int depA, Tensor3d C, 
 		{
 			for (int j = 0; j < colsA; j++)
 			{
-				float take = get(A, rowsA, colsA, depA, i, j, 0);
+				int take = get(A, rowsA, colsA, depA, i, j, 0);
 				set(C, rowsC, colsC, depC, i, j, 0, take);
 			}
 		}

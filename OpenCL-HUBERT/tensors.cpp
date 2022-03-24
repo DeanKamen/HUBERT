@@ -7,7 +7,6 @@
 #include "HLS/stdio.h"
 #include "tensors.h"
 #include <iostream>
-
 /*                    DEFINITIONS                      */
 
 //TODO: translate everything to template?
@@ -300,13 +299,13 @@ void pow_dot(const Tensor A, int rowsA, int colsA, const Tensor B, int rowsB, in
 #pragma max_concurrency 1
 		for (j = 0; j < colsA; j++)
 		{
-			set(C, rowsA, colsA, i, j, pow(get(larger, rowsA, colsA, i, j), get(smaller, rowsB, colsB, i % rowMod, j % colMod)));
+			set(C, rowsA, colsA, i, j, (int)pow(get(larger, rowsA, colsA, i, j), get(smaller, rowsB, colsB, i % rowMod, j % colMod)));
 		}
 	}
 }
 
 
-void add_scalar(const Tensor A, int rowsA, int colsA, float B, Tensor C)
+void add_scalar(const Tensor A, int rowsA, int colsA, int B, Tensor C)
 {
     int i,j;
 #pragma max_concurrency 1
@@ -321,7 +320,7 @@ void add_scalar(const Tensor A, int rowsA, int colsA, float B, Tensor C)
 }
 
 
-void mul_scalar(const Tensor A, int rowsA, int colsA, float B, Tensor C)
+void mul_scalar(const Tensor A, int rowsA, int colsA, int B, Tensor C)
 {
     int i,j;
 #pragma max_concurrency 1
@@ -336,7 +335,7 @@ void mul_scalar(const Tensor A, int rowsA, int colsA, float B, Tensor C)
 }
 
 
-void sub_scalar(const Tensor A, int rowsA, int colsA, float B, Tensor C)
+void sub_scalar(const Tensor A, int rowsA, int colsA, int B, Tensor C)
 {
     int i,j;
 #pragma max_concurrency 1
@@ -351,7 +350,7 @@ void sub_scalar(const Tensor A, int rowsA, int colsA, float B, Tensor C)
 }
 
 
-void sub_scalar(float B, const Tensor A, int rowsA, int colsA, Tensor C)
+void sub_scalar(int B, const Tensor A, int rowsA, int colsA, Tensor C)
 {
 	int i, j;
 #pragma max_concurrency 1
@@ -366,7 +365,7 @@ void sub_scalar(float B, const Tensor A, int rowsA, int colsA, Tensor C)
 }
 
 
-void div_scalar(const Tensor A, int rowsA, int colsA, float B, Tensor C)
+void div_scalar(const Tensor A, int rowsA, int colsA, int B, Tensor C)
 {
     int i,j;
 #pragma max_concurrency 1
@@ -381,7 +380,7 @@ void div_scalar(const Tensor A, int rowsA, int colsA, float B, Tensor C)
 }
 
 
-void pow_scalar(const Tensor A, int rowsA, int colsA, float B, Tensor C)
+void pow_scalar(const Tensor A, int rowsA, int colsA, int B, Tensor C)
 {// A = B^C, note that there are more efficient functions for 2^X or e^X or 10^X
     int i,j;
 #pragma max_concurrency 1
@@ -390,7 +389,7 @@ void pow_scalar(const Tensor A, int rowsA, int colsA, float B, Tensor C)
 #pragma max_concurrency 1
         for (j = 0; j < colsA; j++)
         {
-            set(C, rowsA, colsA, i,j, pow(get(A, rowsA, colsA, i,j), B));
+            set(C, rowsA, colsA, i,j, (int)pow(get(A, rowsA, colsA, i,j), B));
         }
     }  
 }
@@ -406,7 +405,7 @@ void max(const Tensor A, int rowsA, int colsA, int dim, Tensor C)
     if(dim == 0)
     {
         int i,j;
-        float largest;
+        int largest;
         bool first = true;
 #pragma max_concurrency 1
         for (i = 0; i < colsA; i++)
@@ -434,7 +433,7 @@ void max(const Tensor A, int rowsA, int colsA, int dim, Tensor C)
     else
     {
         int i,j;
-        float largest;
+        int largest;
         bool first = true;
 #pragma max_concurrency 1
         for (i = 0; i < rowsA; i++)
@@ -469,7 +468,7 @@ void min(const Tensor A, int rowsA, int colsA, int dim, Tensor C)
     if(dim == 0)
     {
         int i,j;
-        float smallest;
+        int smallest;
         bool first = true;
 #pragma max_concurrency 1
         for (i = 0; i < colsA; i++)
@@ -497,7 +496,7 @@ void min(const Tensor A, int rowsA, int colsA, int dim, Tensor C)
     else
     { //dim ==1
         int i,j;
-        float smallest;
+        int smallest;
         bool first = true;
 #pragma max_concurrency 1
         for (i = 0; i < rowsA; i++)
@@ -529,7 +528,7 @@ void sum(const Tensor A, int rowsA, int colsA, int dim, Tensor C)
 	//dim=0 means you find the sum of each column,
 	//dim=1 means you find the sum of each row. 
 	int i, j;
-	float running = 0.0f;
+	int running = 0.0f;
 	if (dim == 0)
 	{
 #pragma max_concurrency 1
@@ -563,7 +562,7 @@ void sum(const Tensor A, int rowsA, int colsA, int dim, Tensor C)
 }
 
 
-void max_scalar(const Tensor A, int rowsA, int colsA, float compare, Tensor C)
+void max_scalar(const Tensor A, int rowsA, int colsA, int compare, Tensor C)
 { //similar to clamp but more readable
 	int i, j;
 #pragma max_concurrency 1
@@ -572,14 +571,14 @@ void max_scalar(const Tensor A, int rowsA, int colsA, float compare, Tensor C)
 #pragma max_concurrency 1
 		for (j = 0; j < colsA; j++)
 		{
-			float mat = get(A, rowsA, colsA, i, j);
+			int mat = get(A, rowsA, colsA, i, j);
 			if (mat < compare) { set(C, rowsA, colsA, i, j, compare); }
 			else { set(C, rowsA, colsA, i, j, mat); }
 		}
 	}
 }
 
-void min_scalar(const Tensor A, int rowsA, int colsA, float compare, Tensor C)
+void min_scalar(const Tensor A, int rowsA, int colsA, int compare, Tensor C)
 {
 	int i, j;
 #pragma max_concurrency 1
@@ -588,7 +587,7 @@ void min_scalar(const Tensor A, int rowsA, int colsA, float compare, Tensor C)
 #pragma max_concurrency 1
 		for (j = 0; j < colsA; j++)
 		{
-			float mini = get(A, rowsA, colsA, i, j);
+			int mini = get(A, rowsA, colsA, i, j);
 			if (mini > compare) { set(C, rowsA, colsA, i, j, compare); }
 			else { set(C, rowsA, colsA, i, j, mini); }
 		}
@@ -606,8 +605,8 @@ void min_dot(const Tensor A, int rowsA, int colsA, const Tensor B, Tensor C)
 #pragma max_concurrency 1
 		for (j = 0; j < colsA; j++)
 		{
-			float left = get(A, rowsA, colsA, i, j);
-			float right = get(B, rowsA, colsA, i, j);
+			int left = get(A, rowsA, colsA, i, j);
+			int right = get(B, rowsA, colsA, i, j);
 
 			if (left > right) { set(C, rowsA, colsA, i, j, right); }
 			else { set(C, rowsA, colsA, i, j, left); }
@@ -625,14 +624,14 @@ void abs_tensor(const Tensor A, int rowsA, int colsA, Tensor C)
 #pragma max_concurrency 1
 		for (j = 0; j < colsA; j++)
 		{
-			float el = get(A, rowsA, colsA, i, j);
+			int el = get(A, rowsA, colsA, i, j);
 			el = abs(el);
 			set(C, rowsA, colsA, i, j, el);
 		}
 	}
 }
 
-
+/*
 void floor_tensor(const Tensor A, int rowsA, int colsA, Tensor C)
 {//does a cast to a float and then floors it.
     int i,j;
@@ -647,7 +646,7 @@ void floor_tensor(const Tensor A, int rowsA, int colsA, Tensor C)
             set(C, rowsA, colsA, i,j,temp);
         }
     }
-}
+}*/
 
 
 void exp2_tensor(const Tensor A, int rowsA, int colsA, Tensor C)
@@ -659,13 +658,13 @@ void exp2_tensor(const Tensor A, int rowsA, int colsA, Tensor C)
 #pragma max_concurrency 1
 		for (j = 0; j < colsA; j++)
 		{
-			set(C, rowsA, colsA, i, j, exp2f(get(A, rowsA, colsA, i, j)));
+			set(C, rowsA, colsA, i, j, (int)exp2(get(A, rowsA, colsA, i, j)));
 		}
 	}
 }
 
 
-void clamp(const Tensor A, int rowsA, int colsA, float min, float max, Tensor C)
+void clamp(const Tensor A, int rowsA, int colsA, int min, int max, Tensor C)
 {
     int i,j;
 #pragma max_concurrency 1
@@ -674,7 +673,7 @@ void clamp(const Tensor A, int rowsA, int colsA, float min, float max, Tensor C)
 #pragma max_concurrency 1
         for (j = 0; j < colsA; j++)
         {
-            float viq = get(A, rowsA, colsA, i,j);
+            int viq = get(A, rowsA, colsA, i,j);
             if(viq > max) {set(C, rowsA, colsA, i,j,max);}
             else if (viq < min) {set(C, rowsA, colsA, i,j,min);}
 			else { set(C, rowsA, colsA, i, j, viq); }
@@ -682,7 +681,7 @@ void clamp(const Tensor A, int rowsA, int colsA, float min, float max, Tensor C)
     }     
 }
 
-
+/*
 void roundTensor(const Tensor A, int rowsA, int colsA, Tensor C)
 {
     int i,j;
@@ -701,9 +700,9 @@ void roundTensor(const Tensor A, int rowsA, int colsA, Tensor C)
             set(C, rowsA, colsA, i,j, rounded);
         }
     }     
-}
+}*/
 
-
+/*
 void reciprocal(const Tensor A, int rowsA, int colsA, Tensor C)
 {
     int i,j;
@@ -718,8 +717,24 @@ void reciprocal(const Tensor A, int rowsA, int colsA, Tensor C)
             set(C, rowsA, colsA, i,j,recip);
         }
     }     
+}*/
+/*
+void reciprocal(const Flensor A, int rowsA, int colsA, Flensor C)
+{//incoming big tensor array
+	int i, j;
+#pragma max_concurrency 1
+	for (i = 0; i < rowsA; i++)
+	{
+#pragma max_concurrency 1
+		for (j = 0; j < colsA; j++)
+		{
+			auto recip = get(A, rowsA, colsA, i, j);
+			recip = reciprocal_fixed(recip);
+			set(C, rowsA, colsA, i, j, recip);
+		}
+	}
 }
-
+*/
 
 void sign(const Tensor A, int rowsA, int colsA, Tensor C)
 {
@@ -732,15 +747,15 @@ void sign(const Tensor A, int rowsA, int colsA, Tensor C)
 		{
 			if (get(A, rowsA, colsA, i, j) < 0)
 			{
-				set(C, rowsA, colsA, i, j, (float)-1);
+				set(C, rowsA, colsA, i, j, -1);
 			}
 			else if (get(A, rowsA, colsA, i, j) > 0)
 			{
-				set(C, rowsA, colsA, i, j, (float)1);
+				set(C, rowsA, colsA, i, j, 1);
 			}
 			else
 			{
-				set(C, rowsA, colsA, i, j, (float)0);
+				set(C, rowsA, colsA, i, j, 0);
 			}
 		}
 	}
@@ -750,16 +765,16 @@ void sign(const Tensor A, int rowsA, int colsA, Tensor C)
 void mean(const Tensor A, int rowsA, int colsA, Tensor C)
 {// assume a row vector. can be expanded upon like max and min to work along multiple dimentions
 	//assert(rowsA == 1);
-	float running = 0.f;
+	int running = 0.f;
 #pragma max_concurrency 1
 	for (int j = 0; j < colsA; j++)
 	{
 		running += get(A, rowsA, colsA, 0, j);
 	}
-	set(C, rowsA, colsA, 0, 0, running / (float)colsA);
+	set(C, rowsA, colsA, 0, 0, running / colsA);
 }
 
-
+/*
 void sqrt_tensor(const Tensor A, int rowsA, int colsA, Tensor C)
 {
 	int i, j;
@@ -772,10 +787,10 @@ void sqrt_tensor(const Tensor A, int rowsA, int colsA, Tensor C)
 			set(C, rowsA, colsA, i, j, sqrt(get(A, rowsA, colsA, i,j)));
 		}
 	}
-}
+}*/
 /****************************************************manipulation****************************************************/
 
-void fill(const Tensor A, int rowsA, int colsA, float fill)
+void fill(const Tensor A, int rowsA, int colsA, int fill)
 {
     int i,j;
 #pragma max_concurrency 1
@@ -833,7 +848,7 @@ void view(const Tensor A, int rowsA, int colsA, const int rows, const int cols, 
     setCols(A, newCols);
 }
 */
-
+/*
 void tensor_frexp(Tensor In, int rowsIn, int colsIn, Tensor m, int rowsm, int colsm, Tensor e, int rowse, int colse)
 {
     //I am writing this one myself as I dont have access to numpy
@@ -861,11 +876,16 @@ void tensor_frexp(Tensor In, int rowsIn, int colsIn, Tensor m, int rowsm, int co
 			set(e, rowse, colse, i, j, float(MAX_BIT - e1));
         }
     }
-}
+}*/
 
 /****************************************************adressing methods****************************************************/
 
-float get(const Tensor A, int rowsA, int colsA, int row, int col)
+//float get(const Tensor A, int rowsA, int colsA, int row, int col)
+//{
+//	return A[row * colsA + col];
+//}
+
+template<typename T> T get(T* A, int rowsA, int colsA, int row, int col)
 {
 	return A[row * colsA + col];
 }
@@ -876,8 +896,12 @@ float transposed_get(const Tensor A, int rowsA, int colsA, int row, int col)
 }
 
 
-void set(const Tensor A, int rowsA, int colsA, int row, int col, float val)
-{ //TODO: change to inline
+//void set(const Tensor A, int rowsA, int colsA, int row, int col, float val)
+//{ //TODO: change to inline
+//	A[row * colsA + col] = val;
+//}
+template<typename T> void set(T* A, int rowsA, int colsA, int row, int col, T val)
+{
 	A[row * colsA + col] = val;
 }
 
@@ -920,7 +944,7 @@ void shrinkTensor(const Tensor A, int rowsA, int colsA, Tensor C, int rowsC, int
 #pragma max_concurrency 1
 		for (int i = 0; i < colsA; i++)
 		{
-			float take = get(A, rowsA, colsA, 0, i);
+			int take = get(A, rowsA, colsA, 0, i);
 			set(C, rowsC, colsC, 0, i, take);
 		}
 	}
@@ -929,7 +953,7 @@ void shrinkTensor(const Tensor A, int rowsA, int colsA, Tensor C, int rowsC, int
 #pragma max_concurrency 1
 		for (int i = 0; i < rowsA; i++)
 		{
-			float take = get(A, rowsA, colsA, i, 0);
+			int take = get(A, rowsA, colsA, i, 0);
 			set(C, rowsC, colsC, i, 0, take);
 		}
 	}
@@ -1009,7 +1033,7 @@ bool eq_verbose(const Tensor A, int rowsA, int colsA, const Tensor B, int rowsB,
 		{
 			if (fabs(get(A, rowsA, colsA, i, j) - get(B, rowsB, colsB, i, j)) > 0.001f)
 			{
-				printf("row %d col %d, LHS is %f, and RHS is %f \n", i, j, get(A, rowsA, colsA, i, j), get(B, rowsB, colsB, i, j));
+				printf("row %d col %d, LHS is %d, and RHS is %d \n", i, j, get(A, rowsA, colsA, i, j), get(B, rowsB, colsB, i, j));
 				one = true;
 			}
 		}

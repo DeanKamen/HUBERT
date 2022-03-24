@@ -1,5 +1,6 @@
 
 .vs/OpenCL-HUBERT/v15/.suo
+.vs/*
 *.ipch
 *.opendb
 *.log

@@ -102,6 +102,21 @@ struct softmax_memory
 	float coef2;
 };
 
+struct gelu_memory
+{
+	Tensor shift_int; //these ints are known at compile time but theyre arrays, so they come from header files.
+	Tensor b_int; //Export these from your finished python model, they change after training but are const through inference
+	Tensor c_int;
+	Tensor neg_b_int; //b_int but negative. I am also loading this in a header.
+	int sfr, sfc; //size of the prev three tensors
+	Tensor3d sigmoid_int; //size of sigmoid_int is the same as x_int, we just want a new sigmoid int. Must allocate on our own.
+	Tensor3d sign;// also size of gleu input x_int
+	Tensor3d abs_int; //also size of x_int
+	Tensor3d temp; //wozah, you guess the size!
+	Tensor3d y_int; //also size of x_int, could be optimized away probably
+	
+};
+
 enum class preload
 { //same name but with double underscore as word seperators instead of dots
     activation_fn_approx__input_scaling_factor=0,

@@ -33,12 +33,6 @@
     <ClInclude Include="hubertEnums.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="quantact.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="softmax.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="constant_headers\self_attn_softmax_act_act_scaling_factor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -111,6 +105,30 @@
     <ClInclude Include="constant_headers\fpm_AdB.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="constant_headers\gelu_b_int.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="constant_headers\gelu_c_int.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="constant_headers\gelu_neg_b_int.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="constant_headers\gelu_shift_int.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="constant_headers\gelu_x_int.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="gelu.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="constant_headers\gelu_result_int.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="constant_headers\gelu_pre_fte.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="tensors.cpp">
@@ -119,16 +137,13 @@
     <ClCompile Include="tensor3d.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="quantact.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="softmax.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="BERT_testbench.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="constant_headers\softmax_layer0.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="gelu.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="gelu_testbench.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

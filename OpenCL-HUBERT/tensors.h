@@ -19,7 +19,8 @@ const unsigned UNITS_PER_MULTIPLY= 32; //must be a factor of the MAX_COLS
 static int RETURN_NOTHING = 0;
 
 
-typedef float* Tensor;
+typedef int* Tensor;
+//typedef ac_fixed<32, 16, true>* Flensor;
 /* FUNCTION DEFINITIONS */
 //dot type (broadcasting)
 void add(const Tensor A, const int rowsA, const int colsA, const Tensor B, const int rowsB, const int colsB, Tensor C);
@@ -28,35 +29,38 @@ void mul_dot(const Tensor A, const int rowsA, const int colsA, const Tensor B, c
 void div_dot(const Tensor A, const int rowsA, const int colsA, const Tensor B, const int rowsB, const int colsB, Tensor C);
 void pow_dot(const Tensor A, const int rowsA, const int colsA, const Tensor B, const int rowsB, const int colsB, Tensor C);
 //scalar type
-void add_scalar(const Tensor A, const int rowsA, const int colsA, float B, Tensor C);
-void mul_scalar(const Tensor A, const int rowsA, const int colsA, float B, Tensor C);
-void sub_scalar(const Tensor A, const int rowsA, const int colsA, float B, Tensor C);
-void sub_scalar(float B, const Tensor A, const int rowsA, const int colsA, Tensor C);
-void div_scalar(const Tensor A, const int rowsA, const int colsA, float B, Tensor C);
-void pow_scalar(const Tensor A, const int rowsA, const int colsA, float B, Tensor C);
+void add_scalar(const Tensor A, const int rowsA, const int colsA, int B, Tensor C);
+void mul_scalar(const Tensor A, const int rowsA, const int colsA, int B, Tensor C);
+void sub_scalar(const Tensor A, const int rowsA, const int colsA, int B, Tensor C);
+void sub_scalar(int B, const Tensor A, const int rowsA, const int colsA, Tensor C);
+void div_scalar(const Tensor A, const int rowsA, const int colsA, int B, Tensor C);
+void pow_scalar(const Tensor A, const int rowsA, const int colsA, int B, Tensor C);
 void max(const Tensor A, const int rowsA, const int colsA, int dim, Tensor C); //WARNING: matrix's size changes
 void min(const Tensor A, const int rowsA, const int colsA, int dim, Tensor C); //WARNING: matrix's size changes
 void sum(const Tensor A, const int rowsA, const int colsA, int dim, Tensor C); //WARNING: matrix's size changes
-void max_scalar(const Tensor A, const int rowsA, const int colsA, float compare, Tensor C);
-void min_scalar(const Tensor A, const int rowsA, const int colsA, float compare, Tensor C);
+void max_scalar(const Tensor A, const int rowsA, const int colsA, int compare, Tensor C);
+void min_scalar(const Tensor A, const int rowsA, const int colsA, int compare, Tensor C);
 void min_dot(const Tensor A, const int rowsA, const int colsA, const Tensor B, Tensor C); //implied A.size == B.size
 void abs_tensor(const Tensor A, const int rowsA, const int colsA, Tensor C);
-void floor_tensor(const Tensor A, const int rowsA, const int colsA, Tensor C);
+//void floor_tensor(const Tensor A, const int rowsA, const int colsA, Tensor C); //commented functions like this one assume float inputs, change to FLENSOR when necessary
 void exp2_tensor(const Tensor A, const int rowsA, const int colsA, Tensor C);
-void clamp(const Tensor A, const int rowsA, const int colsA, float min, float max, Tensor C);
-void roundTensor(const Tensor A, const int rowsA, const int colsA, Tensor C);
-void reciprocal(const Tensor A, const int rowsA, const int colsA, Tensor C);
+void clamp(const Tensor A, const int rowsA, const int colsA, int min, int max, Tensor C);
+//void roundTensor(const Tensor A, const int rowsA, const int colsA, Tensor C);
+//void reciprocal(const Tensor A, const int rowsA, const int colsA, Tensor C);
+//void reciprocal(const Flensor A, const int rowsA, const int colsA, Flensor C);
 void sign(const Tensor A, const int rowsA, const int colsA, Tensor C);
 void mean(const Tensor A, const int rowsA, const int colsA, Tensor C); //WARNING: matrix's size changes
-void sqrt_tensor(const Tensor A, const int rowsA, const int colsA, Tensor C);
+//void sqrt_tensor(const Tensor A, const int rowsA, const int colsA, Tensor C);
 //manipulation
-void fill(const Tensor A, const int rowsA, const int colsA, float fill);
+void fill(const Tensor A, const int rowsA, const int colsA, int fill);
 //void view(const Tensor A, const int rowsA, const int colsA, int rows, int cols, Tensor space);
-void tensor_frexp(Tensor In, int rowsIn, int colsIn, Tensor m, int rowsm, int colsm, Tensor e, int rowse, int colse);
+//void tensor_frexp(Tensor In, int rowsIn, int colsIn, Tensor m, int rowsm, int colsm, Tensor e, int rowse, int colse);
 //adressing methods
-float get(const Tensor A, const int rowsA, const int colsA, int row, int col);
+//float get(const Tensor A, const int rowsA, const int colsA, int row, int col);
+template<typename T> T get(T* A, int rowsA, int colsA, int row, int col);
 float transposed_get(const Tensor A, const int rowsA, const int colsA, int row, int col);
-void set(const Tensor A, const int rowsA, const int colsA, int row, int col, float val);
+//void set(const Tensor A, const int rowsA, const int colsA, int row, int col, float val);
+template<typename T> void set(T* A, const int rowsA, const int colsA, int row, int col, T val);
 void transposed_set(const Tensor A, const int rowsA, const int colsA, int row, int col, float val);
 
 //helper functions

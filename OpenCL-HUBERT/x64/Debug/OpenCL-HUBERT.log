@@ -1,24 +1,4 @@
 ﻿  gelu.cpp
-c:\users\hunto_efxy22i\opencl-hubert\opencl-hubert\constant_headers\gelu_pre_fte.h(4): warning C4244: 'initializing': conversion from 'double' to 'const int', possible loss of data
-c:\users\hunto_efxy22i\opencl-hubert\opencl-hubert\constant_headers\gelu_pre_fte.h(5): warning C4244: 'initializing': conversion from 'double' to 'const int', possible loss of data
-c:\users\hunto_efxy22i\opencl-hubert\opencl-hubert\constant_headers\gelu_pre_fte.h(6): warning C4244: 'initializing': conversion from 'double' to 'const int', possible loss of data
-c:\users\hunto_efxy22i\opencl-hubert\opencl-hubert\constant_headers\gelu_pre_fte.h(7): warning C4244: 'initializing': conversion from 'double' to 'const int', possible loss of data
-c:\users\hunto_efxy22i\opencl-hubert\opencl-hubert\constant_headers\gelu_pre_fte.h(8): warning C4244: 'initializing': conversion from 'double' to 'const int', possible loss of data
-c:\users\hunto_efxy22i\opencl-hubert\opencl-hubert\constant_headers\gelu_pre_fte.h(9): warning C4244: 'initializing': conversion from 'double' to 'const int', possible loss of data
-c:\users\hunto_efxy22i\opencl-hubert\opencl-hubert\constant_headers\gelu_pre_fte.h(10): warning C4244: 'initializing': conversion from 'double' to 'const int', possible loss of data
-c:\users\hunto_efxy22i\opencl-hubert\opencl-hubert\constant_headers\gelu_pre_fte.h(11): warning C4244: 'initializing': conversion from 'double' to 'const int', possible loss of data
-c:\users\hunto_efxy22i\opencl-hubert\opencl-hubert\constant_headers\gelu_pre_fte.h(12): warning C4244: 'initializing': conversion from 'double' to 'const int', possible loss of data
-c:\users\hunto_efxy22i\opencl-hubert\opencl-hubert\constant_headers\gelu_pre_fte.h(13): warning C4244: 'initializing': conversion from 'double' to 'const int', possible loss of data
-c:\users\hunto_efxy22i\opencl-hubert\opencl-hubert\constant_headers\gelu_pre_fte.h(14): warning C4244: 'initializing': conversion from 'double' to 'const int', possible loss of data
-c:\users\hunto_efxy22i\opencl-hubert\opencl-hubert\constant_headers\gelu_pre_fte.h(15): warning C4244: 'initializing': conversion from 'double' to 'const int', possible loss of data
-c:\users\hunto_efxy22i\opencl-hubert\opencl-hubert\constant_headers\gelu_pre_fte.h(16): warning C4244: 'initializing': conversion from 'double' to 'const int', possible loss of data
-c:\users\hunto_efxy22i\opencl-hubert\opencl-hubert\constant_headers\gelu_pre_fte.h(17): warning C4244: 'initializing': conversion from 'double' to 'const int', possible loss of data
-c:\users\hunto_efxy22i\opencl-hubert\opencl-hubert\constant_headers\gelu_pre_fte.h(18): warning C4244: 'initializing': conversion from 'double' to 'const int', possible loss of data
-c:\users\hunto_efxy22i\opencl-hubert\opencl-hubert\constant_headers\gelu_pre_fte.h(19): warning C4244: 'initializing': conversion from 'double' to 'const int', possible loss of data
-c:\users\hunto_efxy22i\opencl-hubert\opencl-hubert\constant_headers\gelu_pre_fte.h(20): warning C4244: 'initializing': conversion from 'double' to 'const int', possible loss of data
-c:\users\hunto_efxy22i\opencl-hubert\opencl-hubert\constant_headers\gelu_pre_fte.h(21): warning C4244: 'initializing': conversion from 'double' to 'const int', possible loss of data
-c:\users\hunto_efxy22i\opencl-hubert\opencl-hubert\constant_headers\gelu_pre_fte.h(22): warning C4244: 'initializing': conversion from 'double' to 'const int', possible loss of data
-c:\users\hunto_efxy22i\opencl-hubert\opencl-hubert\constant_headers\gelu_pre_fte.h(23): warning C4244: 'initializing': conversion from 'double' to 'const int', possible loss of data
-c:\users\hunto_efxy22i\opencl-hubert\opencl-hubert\constant_headers\gelu_pre_fte.h(24): warning C4244: 'initializing': conversion from 'double' to 'const int', possible loss of data
-c:\users\hunto_efxy22i\opencl-hubert\opencl-hubert\constant_headers\gelu_pre_fte.h(25): warning C4244: 'initializing': conversion from 'double' to 'const int', possible loss of data
+  gelu_testbench.cpp
+  Generating Code...
   OpenCL-HUBERT.vcxproj -> C:\Users\hunto_efxy22i\OpenCL-HUBERT\x64\Debug\OpenCL-HUBERT.exe

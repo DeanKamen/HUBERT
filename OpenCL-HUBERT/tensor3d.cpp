@@ -428,6 +428,16 @@ void sqrt_tensor(const Tensor3d A, int rowsA, int colsA, int depA, Tensor3d C)
 	}
 }*/
 
+//manipulation
+void fill(const Tensor3d A, const int rowsA, const int colsA, int depA, int fillnum)
+{
+#pragma max_concurrency 1
+	for (int d = 0; d < depA; d++)
+	{
+		fill(get_layer(A, rowsA, colsA, depA, d), rowsA, colsA, fillnum); 
+	}
+}
+
 //adressing methods where dep is depth and select the 2d array you want.
 int get(const Tensor3d A, int rowsA, int colsA, int depA, int row, int col, int dep)
 {

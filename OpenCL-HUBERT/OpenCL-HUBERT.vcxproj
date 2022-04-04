@@ -127,49 +127,29 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="constant_headers\fpm_AdB.h" />
-    <ClInclude Include="constant_headers\fpm_pidentity.h" />
-    <ClInclude Include="constant_headers\fpm_round.h" />
     <ClInclude Include="constant_headers\gelu_b_int.h" />
     <ClInclude Include="constant_headers\gelu_c_int.h" />
     <ClInclude Include="constant_headers\gelu_neg_b_int.h" />
     <ClInclude Include="constant_headers\gelu_pre_fte.h" />
     <ClInclude Include="constant_headers\gelu_result_int.h" />
     <ClInclude Include="constant_headers\gelu_shift_int.h" />
-    <ClInclude Include="constant_headers\gelu_x_int.h" />
-    <ClInclude Include="constant_headers\qa_fpm.h" />
-    <ClInclude Include="constant_headers\qa_pasf_softmax.h" />
-    <ClInclude Include="constant_headers\qa_x_softmax.h" />
-    <ClInclude Include="constant_headers\self_attn_softmax_act_act_scaling_factor.h" />
-    <ClInclude Include="constant_headers\self_attn_softmax_act_x_max.h" />
-    <ClInclude Include="constant_headers\self_attn_softmax_act_x_min.h" />
-    <ClInclude Include="constant_headers\softmax_after_act.h" />
-    <ClInclude Include="constant_headers\softmax_b4_act.h" />
-    <ClInclude Include="constant_headers\softmax_b4_int_exp.h" />
-    <ClInclude Include="constant_headers\softmax_b4_max.h" />
-    <ClInclude Include="constant_headers\softmax_int_exp_IP.h" />
-    <ClInclude Include="constant_headers\softmax_int_poly.h" />
-    <ClInclude Include="constant_headers\softmax_int_poly_z.h" />
-    <ClInclude Include="constant_headers\softmax_ip_2q.h" />
-    <ClInclude Include="constant_headers\softmax_ip_exp1.h" />
-    <ClInclude Include="constant_headers\softmax_ip_floor.h" />
-    <ClInclude Include="constant_headers\softmax_ip_q.h" />
-    <ClInclude Include="constant_headers\softmax_layer0.h" />
-    <ClInclude Include="constant_headers\softmax_layer0_out.h" />
-    <ClInclude Include="constant_headers\softmax_sf_layer0.h" />
-    <ClInclude Include="constant_headers\softmax_x_int_max.h" />
+    <ClInclude Include="constant_headers\softmax_b_int.h" />
+    <ClInclude Include="constant_headers\softmax_c_int.h" />
+    <ClInclude Include="constant_headers\softmax_x0_int.h" />
+    <ClInclude Include="constant_headers\softmax_x_int.h" />
     <ClInclude Include="gelu.h" />
     <ClInclude Include="hubertEnums.h" />
     <ClInclude Include="matrix_mult.h" />
     <ClInclude Include="matrix_mult_transpose.h" />
+    <ClInclude Include="softmax.h" />
     <ClInclude Include="tensor3d.h" />
     <ClInclude Include="tensors.h" />
     <ClInclude Include="tensor_matMul.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="constant_headers\softmax_layer0.cpp" />
     <ClCompile Include="gelu.cpp" />
-    <ClCompile Include="gelu_testbench.cpp" />
+    <ClCompile Include="softmax.cpp" />
+    <ClCompile Include="softmax_testbench.cpp" />
     <ClCompile Include="tensor3d.cpp" />
     <ClCompile Include="tensors.cpp" />
   </ItemGroup>

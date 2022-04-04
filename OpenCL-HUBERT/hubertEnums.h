@@ -72,9 +72,11 @@ struct softmax_memory
 	/*pointers to space for the functions to use*/
 
 	//used in int_polynomial
+	//Export these from your finished python model, they change after training but are const through inference
 	Tensor3d z; //size of x_int
 	Tensor b_int; //size of scaling factor
-	Tensor c_int; //size of scaling factor
+	Tensor c_int; //size of scaling factor - > one row 1x3072
+	int sfr, sfc; //sizes of the scaling factor
 
 	//used in int_exp
 	Tensor x0_int;// size of scaling factor
@@ -84,22 +86,14 @@ struct softmax_memory
 	Tensor3d temp2; //size of x_int
 
 	//used in softmax_forward
-	Tensor3d x_int; //size of x
+	Tensor3d x_int_max; //size of x with columns collapsed
 	Tensor3d exp_int; //size of x
-	Tensor3d x_int_max; //size of x with (one dimention collapsed)
-	Tensor3d exp_int_sum; //size of exp_int (with one dimention collapsed) 
+	Tensor3d exp_int_sum; //size of exp_int (with columns collapsed) 
 	Tensor3d factor; //size of exp_int_sum
-	Tensor scaling_return; // 1x1
-
 
 	//Kind of like member variables but not because thats illegal (pointer to pointer + static funcs)
 	int output_bit;
-	QuantMode quant_mode;
-	float x0;
 	int n;
-	float coef0;
-	float coef1;
-	float coef2;
 };
 
 struct gelu_memory

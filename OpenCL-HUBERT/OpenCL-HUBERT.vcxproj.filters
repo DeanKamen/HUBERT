@@ -33,78 +33,6 @@
     <ClInclude Include="hubertEnums.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="constant_headers\self_attn_softmax_act_act_scaling_factor.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="constant_headers\self_attn_softmax_act_x_max.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="constant_headers\self_attn_softmax_act_x_min.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="constant_headers\qa_pasf_softmax.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="constant_headers\qa_x_softmax.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="constant_headers\softmax_layer0_out.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="constant_headers\softmax_sf_layer0.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="constant_headers\softmax_b4_int_exp.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="constant_headers\softmax_b4_max.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="constant_headers\softmax_x_int_max.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="constant_headers\softmax_layer0.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="constant_headers\softmax_b4_act.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="constant_headers\softmax_int_exp_IP.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="constant_headers\softmax_int_poly.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="constant_headers\softmax_int_poly_z.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="constant_headers\softmax_ip_floor.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="constant_headers\softmax_ip_q.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="constant_headers\softmax_ip_2q.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="constant_headers\softmax_ip_exp1.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="constant_headers\softmax_after_act.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="constant_headers\qa_fpm.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="constant_headers\fpm_round.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="constant_headers\fpm_pidentity.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="constant_headers\fpm_AdB.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="constant_headers\gelu_b_int.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -117,9 +45,6 @@
     <ClInclude Include="constant_headers\gelu_shift_int.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="constant_headers\gelu_x_int.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="gelu.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -127,6 +52,21 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="constant_headers\gelu_pre_fte.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="softmax.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="constant_headers\softmax_x0_int.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="constant_headers\softmax_x_int.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="constant_headers\softmax_c_int.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="constant_headers\softmax_b_int.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -137,13 +77,13 @@
     <ClCompile Include="tensor3d.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="constant_headers\softmax_layer0.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="gelu.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="gelu_testbench.cpp">
+    <ClCompile Include="softmax.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="softmax_testbench.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

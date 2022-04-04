@@ -30,9 +30,6 @@ int abs_int[xr*xc*xd]; //also size of x_int
 int temp[xr*xc*xd]; //wozah, you guess the size!
 int y_int[xr*xc*xd]; //also size of x_int, could be optimized away probably
 
-//This last one is because I need to cast the .h file to int, and I need a function to do that or rewrite np_to_h.py
-int input_gelu[xr*xc*xd];
-
 
 gelu_memory g_memory;
 /************************* END GELU DEFINES ****************************/

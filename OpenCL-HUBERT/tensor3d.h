@@ -45,7 +45,7 @@ void min_scalar(const Tensor3d A, const int rowsA, const int colsA, int depA, in
 void min_dot(const Tensor3d A, const int rowsA, const int colsA, int depA, Tensor B, Tensor3d C);
 void abs_tensor(const Tensor3d A, const int rowsA, const int colsA, int depA, Tensor3d C);
 //void floor_tensor(const Tensor3d A, const int rowsA, const int colsA, int depA, Tensor3d C);
-//void exp2_tensor(const Tensor3d A, const int rowsA, const int colsA, int depA, Tensor3d C);
+void exp2_tensor(const Tensor3d A, const int rowsA, const int colsA, int depA, Tensor3d C);
 void clamp(const Tensor3d A, const int rowsA, const int colsA, int depA, int min, int max, Tensor3d C);
 //void roundTensor(const Tensor3d A, const int rowsA, const int colsA, int depA, Tensor3d C);
 //void reciprocal(const Tensor3d A, const int rowsA, const int colsA, int depA, Tensor3d C);
@@ -53,6 +53,9 @@ void sum(const Tensor3d A, const int rowsA, const int colsA, int depA, int dim, 
 void sign(const Tensor3d A, const int rowsA, const int colsA, int depA, Tensor3d C);
 void mean(const Tensor3d A, const int rowsA, const int colsA, int depA, Tensor3d C); //WARNING: matrix's size changes
 //void sqrt_tensor(const Tensor3d A, const int rowsA, const int colsA, int depA, Tensor3d C);
+
+//manipulation
+void fill(const Tensor3d A, const int rowsA, const int colsA, int depA, int fillnum);
 
 //adressing methods where dep is depth and select the 2d array you want.
 int get(const Tensor3d A, const int rowsA, const int colsA, int depA, int row, int col, int dep);

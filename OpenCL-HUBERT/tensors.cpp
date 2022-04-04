@@ -658,7 +658,7 @@ void exp2_tensor(const Tensor A, int rowsA, int colsA, Tensor C)
 #pragma max_concurrency 1
 		for (j = 0; j < colsA; j++)
 		{
-			set(C, rowsA, colsA, i, j, (int)exp2(get(A, rowsA, colsA, i, j)));
+			set(C, rowsA, colsA, i, j, 1 << (get(A, rowsA, colsA, i, j))); //who needs exp2 when you can just left shift.
 		}
 	}
 }

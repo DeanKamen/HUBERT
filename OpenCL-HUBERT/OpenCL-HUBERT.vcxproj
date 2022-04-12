@@ -146,15 +146,13 @@
     <ClInclude Include="hubertEnums.h" />
     <ClInclude Include="matrix_mult.h" />
     <ClInclude Include="matrix_mult_transpose.h" />
-    <ClInclude Include="softmax.h" />
     <ClInclude Include="tensor3d.h" />
     <ClInclude Include="tensors.h" />
     <ClInclude Include="tensor_matMul.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="gelu.cpp" />
-    <ClCompile Include="softmax.cpp" />
-    <ClCompile Include="softmax_testbench.cpp" />
+    <ClCompile Include="gelu_testbench.cpp" />
     <ClCompile Include="tensor3d.cpp" />
     <ClCompile Include="tensors.cpp" />
   </ItemGroup>

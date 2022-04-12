@@ -54,9 +54,6 @@
     <ClInclude Include="constant_headers\gelu_pre_fte.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="softmax.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="constant_headers\softmax_x0_int.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -95,10 +92,7 @@
     <ClCompile Include="gelu.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="softmax.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="softmax_testbench.cpp">
+    <ClCompile Include="gelu_testbench.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

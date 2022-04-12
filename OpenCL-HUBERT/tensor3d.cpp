@@ -101,6 +101,13 @@ void pow_dot(const Tensor3d A, int rowsA, int colsA, int depA, const Tensor3d B,
 	}
 }
 
+void rightShift(const Tensor3d A, const int rowsA, const int colsA, int depA, const Tensor3d B, const int rowsB, const int colsB, int depB, Tensor3d C) {
+#pragma max_concurrency 1
+	for (int d = 0; d < depA; d++)
+	{
+		rightShift(get_layer(A, rowsA, colsA, depA, d), rowsA, colsA, get_layer(B, rowsB, colsB, depB, d), rowsB, colsB, get_layer(C, rowsA, colsA, depA, d));
+	}
+}
 //scalar type
 void add_scalar(const Tensor3d A, int rowsA, int colsA, int depA, int B, Tensor3d C)
 {

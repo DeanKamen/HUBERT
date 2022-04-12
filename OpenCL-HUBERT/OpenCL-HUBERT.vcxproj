@@ -135,6 +135,11 @@
     <ClInclude Include="constant_headers\gelu_shift_int.h" />
     <ClInclude Include="constant_headers\softmax_b_int.h" />
     <ClInclude Include="constant_headers\softmax_c_int.h" />
+    <ClInclude Include="constant_headers\softmax_exp2.h" />
+    <ClInclude Include="constant_headers\softmax_exp_int.h" />
+    <ClInclude Include="constant_headers\softmax_n_m_q.h" />
+    <ClInclude Include="constant_headers\softmax_poly.h" />
+    <ClInclude Include="constant_headers\softmax_return.h" />
     <ClInclude Include="constant_headers\softmax_x0_int.h" />
     <ClInclude Include="constant_headers\softmax_x_int.h" />
     <ClInclude Include="gelu.h" />

@@ -1,7 +1,4 @@
 ﻿  softmax.cpp
-c:\users\hunto_efxy22i\opencl-hubert\opencl-hubert\softmax.cpp(44): warning C4244: 'initializing': conversion from 'double' to '__int64', possible loss of data
-c:\users\hunto_efxy22i\opencl-hubert\opencl-hubert\softmax.cpp(45): warning C4477: 'printf' : format string '%d' requires an argument of type 'int', but variadic argument 1 has type '__int64'
-  c:\users\hunto_efxy22i\opencl-hubert\opencl-hubert\softmax.cpp(45): note: consider using '%lld' in the format string
-  c:\users\hunto_efxy22i\opencl-hubert\opencl-hubert\softmax.cpp(45): note: consider using '%Id' in the format string
-  c:\users\hunto_efxy22i\opencl-hubert\opencl-hubert\softmax.cpp(45): note: consider using '%I64d' in the format string
+c:\users\hunto_efxy22i\opencl-hubert\opencl-hubert\constant_headers\softmax_exp_int.h(267): warning C4305: 'initializing': truncation from '__int64' to 'const int'
+c:\users\hunto_efxy22i\opencl-hubert\opencl-hubert\constant_headers\softmax_exp_int.h(267): warning C4309: 'initializing': truncation of constant value
   OpenCL-HUBERT.vcxproj -> C:\Users\hunto_efxy22i\OpenCL-HUBERT\x64\Debug\OpenCL-HUBERT.exe

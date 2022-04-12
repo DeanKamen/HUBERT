@@ -304,6 +304,19 @@ void pow_dot(const Tensor A, int rowsA, int colsA, const Tensor B, int rowsB, in
 	}
 }
 
+void rightShift(const Tensor A, const int rowsA, const int colsA, const Tensor B, const int rowsB, const int colsB, Tensor C)//specialized, no broadcasting
+{
+	int i, j;
+#pragma max_concurrency 1
+	for (i = 0; i < rowsA; i++)
+	{
+#pragma max_concurrency 1
+		for (j = 0; j < colsA; j++)
+		{
+			set(C, rowsA, colsA, i, j, get(A, rowsA, colsA, i, j) >> get(B, rowsB, colsB, i, j));
+		}
+	}
+}
 
 void add_scalar(const Tensor A, int rowsA, int colsA, int B, Tensor C)
 {

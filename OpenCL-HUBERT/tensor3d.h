@@ -28,6 +28,7 @@ void sub(const Tensor3d A, const int rowsA, const int colsA, int depA, const Ten
 void mul_dot(const Tensor3d A, const int rowsA, const int colsA, int depA, const Tensor3d B, const int rowsB, const int colsB, int depB, Tensor3d C);
 void div_dot(const Tensor3d A, const int rowsA, const int colsA, int depA, const Tensor3d B, const int rowsB, const int colsB, int depB, Tensor3d C);
 void pow_dot(const Tensor3d A, const int rowsA, const int colsA, int depA, const Tensor3d B, const int rowsB, const int colsB, int depB, Tensor3d C);
+void rightShift(const Tensor3d A, const int rowsA, const int colsA, int depA, const Tensor3d B, const int rowsB, const int colsB, int depB, Tensor3d C);
 
 //scalar type
 void add_scalar(const Tensor3d A, const int rowsA, const int colsA, int depA, int B, Tensor3d C);

@@ -1,5 +1,5 @@
 <RTL_SPEC>
-  <FUNCTION name="expHBU" module="exp_wrapper">
+  <FUNCTION name="geluHBU" module="gelu">
     <ATTRIBUTES>  
       <IS_STALL_FREE value="yes"/>
       <IS_FIXED_LATENCY value="yes"/>
@@ -18,8 +18,7 @@
       <OUTPUT port="bin_out1" width="8"/>
     </INTERFACE>
     <REQUIREMENTS>
-      <FILE name="exp_wrapper.v"/>
-      <FILE name="Out6.v"/>
+      <FILE name="gelu.v"/>
     </REQUIREMENTS>
     <RESOURCES>
       <ALUTS value="57"/>

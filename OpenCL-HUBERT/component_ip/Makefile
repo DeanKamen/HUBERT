@@ -1,4 +1,4 @@
-SOURCE_FILES  := component_testbench.cpp expHBU.a
+SOURCE_FILES  := component_testbench.cpp geluHBU.a
 override HLS_CXX_FLAGS := $(HLS_CXX_FLAGS) 
 CXX := i++
 DEVICE := Cyclone10GX

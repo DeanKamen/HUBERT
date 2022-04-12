@@ -84,18 +84,24 @@
     <ClInclude Include="constant_headers\gelu_x_int.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="component_ip\geluHBU.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="gelu.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="gelu_testbench.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="tensor3d.hpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="tensors.hpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="geluHBU_testbench.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="component_ip\geluHBU.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -98,7 +98,7 @@ void fill( t3d_int* A,  loc rowsA,  loc colsA, loc depA, t3d_int fillnum);
 
 //adressing methods where dep is depth and select the 2d array you want.
 template<typename t3d_int, typename loc>
-int get( t3d_int* A,  loc rowsA,  loc colsA, loc depA, loc row, loc col, loc dep);
+t3d_int get( t3d_int* A,  loc rowsA,  loc colsA, loc depA, loc row, loc col, loc dep);
 template<typename t3d_int, typename loc>
 void set( t3d_int* A, loc rowsA, loc colsA, loc depA, loc row, loc col, loc dep, t3d_int val);
 template<typename t3d_int, typename loc> //This one does not have a special 2d type.

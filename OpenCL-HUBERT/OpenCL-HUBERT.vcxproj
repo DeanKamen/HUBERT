@@ -127,6 +127,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="component_ip\geluHBU.h" />
     <ClInclude Include="constant_headers\gelu_b_int.h" />
     <ClInclude Include="constant_headers\gelu_c_int.h" />
     <ClInclude Include="constant_headers\gelu_neg_b_int.h" />
@@ -152,8 +153,9 @@
     <ClInclude Include="tensor_matMul.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="component_ip\geluHBU.cpp" />
     <ClCompile Include="gelu.cpp" />
-    <ClCompile Include="gelu_testbench.cpp" />
+    <ClCompile Include="geluHBU_testbench.cpp" />
     <ClCompile Include="tensor3d.hpp" />
     <ClCompile Include="tensors.hpp" />
   </ItemGroup>

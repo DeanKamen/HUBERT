@@ -14,7 +14,7 @@
 //verification
 //#include "constant_headers/gelu_pre_fte.h"
 //member functions
-Tensor3d int_erf(gelu_memory memory, Tensor3d x_int, const int xr, const int xc, const int xd) {
+Tensor3d int_erf(gelu_memory memory, Tensor3d x_int, int xr, int xc, int xd) {
 	//x_int is normally 22x1x3072, while our scaling factor constants are 1x3072
 	sign(x_int, xr, xc, xd, memory.sign);
 	abs_tensor(x_int, xr, xc, xd, memory.abs_int);
@@ -29,7 +29,7 @@ Tensor3d int_erf(gelu_memory memory, Tensor3d x_int, const int xr, const int xc,
 	//TODO skipped floor_ste????
 	return memory.y_int;
 }
-component Tensor3d gelu_forward(gelu_memory memory, Tensor3d x_int, const int xr, const int xc, const int xd) {
+component Tensor3d gelu_forward(gelu_memory memory, Tensor3d x_int, int xr, int xc, int xd) {
 	memory.sigmoid_int = int_erf(memory, x_int, xr, xc, xd);
 	add(memory.sigmoid_int,xr,xc,xd, memory.shift_int, memory.sfr, memory.sfc, memory.sigmoid_int);
 	mul_dot(x_int, xr, xc, xd, memory.sigmoid_int, xr, xc, xd, x_int);

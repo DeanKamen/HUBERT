@@ -1,6 +1,6 @@
 @echo off
 ::set "SOURCE_FILES=testbench.cpp"
-set "SOURCE_FILES= gelu_testbench.cpp gelu.cpp tensors.cpp tensor3d.cpp"
+set "SOURCE_FILES= gelu_testbench.cpp gelu.cpp"
 set "HLS_CXX_FLAGS="
 :: This batch file will compile the example design to three standard targets:
 ::   1) test-msvc    Compile the example design to the CPU

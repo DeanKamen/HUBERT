@@ -49,7 +49,7 @@ int main()
 	g_memory.y_int = y_int; //also size of x_int, could be optimized away probably
 
 	Tensor3d gelu_result;
-	gelu_result = gelu_forward(g_memory, gelu_x_int, xr,xc,xd);
+	gelu_result = gelu_forward(g_memory, (Tensor3d)gelu_x_int, xr,xc,xd);
 
 	eq(gelu_result, xr,xc,xd, (Tensor3d)gelu_result_int,xr,xc,xd);
 

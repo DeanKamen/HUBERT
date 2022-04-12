@@ -133,6 +133,7 @@
     <ClInclude Include="constant_headers\gelu_pre_fte.h" />
     <ClInclude Include="constant_headers\gelu_result_int.h" />
     <ClInclude Include="constant_headers\gelu_shift_int.h" />
+    <ClInclude Include="constant_headers\gelu_x_int.h" />
     <ClInclude Include="constant_headers\softmax_b_int.h" />
     <ClInclude Include="constant_headers\softmax_c_int.h" />
     <ClInclude Include="constant_headers\softmax_exp2.h" />
@@ -153,8 +154,8 @@
   <ItemGroup>
     <ClCompile Include="gelu.cpp" />
     <ClCompile Include="gelu_testbench.cpp" />
-    <ClCompile Include="tensor3d.cpp" />
-    <ClCompile Include="tensors.cpp" />
+    <ClCompile Include="tensor3d.hpp" />
+    <ClCompile Include="tensors.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

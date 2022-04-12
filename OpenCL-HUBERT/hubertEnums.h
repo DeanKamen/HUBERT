@@ -5,7 +5,10 @@
 
 #include "tensors.h"
 #include "tensor3d.h"
-#include "quantact.h"
+
+//WARNING: when changing these types, you only change the internal primitive type of the Tensor
+typedef int* Tensor3d; //meant to be some int type from 8 to 64 bits
+typedef int* Tensor;
 
 //enum to desribe all preloaded Tensors
 enum class QuantMode {none, symmetric};

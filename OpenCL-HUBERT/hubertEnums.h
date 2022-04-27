@@ -5,7 +5,11 @@
 
 #include "tensors.h"
 #include "tensor3d.h"
-#include "quantact.h"
+
+//WARNING: when changing these types, you only change the internal primitive type of the Tensor
+typedef int32_t underlyingTensor;
+typedef underlyingTensor* Tensor3d; //meant to be some int type from 8 to 64 bits
+typedef underlyingTensor* Tensor;
 
 //enum to desribe all preloaded Tensors
 enum class QuantMode {none, symmetric};
@@ -72,9 +76,11 @@ struct softmax_memory
 	/*pointers to space for the functions to use*/
 
 	//used in int_polynomial
+	//Export these from your finished python model, they change after training but are const through inference
 	Tensor3d z; //size of x_int
 	Tensor b_int; //size of scaling factor
-	Tensor c_int; //size of scaling factor
+	Tensor c_int; //size of scaling factor - > one row 1x3072
+	int sfr, sfc; //sizes of the scaling factor
 
 	//used in int_exp
 	Tensor x0_int;// size of scaling factor
@@ -84,22 +90,29 @@ struct softmax_memory
 	Tensor3d temp2; //size of x_int
 
 	//used in softmax_forward
-	Tensor3d x_int; //size of x
+	Tensor3d x_int_max; //size of x with columns collapsed
 	Tensor3d exp_int; //size of x
-	Tensor3d x_int_max; //size of x with (one dimention collapsed)
-	Tensor3d exp_int_sum; //size of exp_int (with one dimention collapsed) 
+	Tensor3d exp_int_sum; //size of exp_int (with columns collapsed) 
 	Tensor3d factor; //size of exp_int_sum
-	Tensor scaling_return; // 1x1
-
 
 	//Kind of like member variables but not because thats illegal (pointer to pointer + static funcs)
 	int output_bit;
-	QuantMode quant_mode;
-	float x0;
 	int n;
-	float coef0;
-	float coef1;
-	float coef2;
+};
+
+struct gelu_memory
+{
+	Tensor shift_int; //these ints are known at compile time but theyre arrays, so they come from header files.
+	Tensor b_int; //Export these from your finished python model, they change after training but are const through inference
+	Tensor c_int;
+	Tensor neg_b_int; //b_int but negative. I am also loading this in a header.
+	int sfr, sfc; //size of the prev three tensors
+	Tensor3d sigmoid_int; //size of sigmoid_int is the same as x_int, we just want a new sigmoid int. Must allocate on our own.
+	Tensor3d sign;// also size of gleu input x_int
+	Tensor3d abs_int; //also size of x_int
+	Tensor3d temp; //wozah, you guess the size!
+	Tensor3d y_int; //also size of x_int, could be optimized away probably
+	
 };
 
 enum class preload

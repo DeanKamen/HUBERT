@@ -33,102 +33,75 @@
     <ClInclude Include="hubertEnums.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="quantact.h">
+    <ClInclude Include="constant_headers\gelu_b_int.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="softmax.h">
+    <ClInclude Include="constant_headers\gelu_c_int.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="constant_headers\self_attn_softmax_act_act_scaling_factor.h">
+    <ClInclude Include="constant_headers\gelu_neg_b_int.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="constant_headers\self_attn_softmax_act_x_max.h">
+    <ClInclude Include="constant_headers\gelu_shift_int.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="constant_headers\self_attn_softmax_act_x_min.h">
+    <ClInclude Include="gelu.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="constant_headers\qa_pasf_softmax.h">
+    <ClInclude Include="constant_headers\gelu_result_int.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="constant_headers\qa_x_softmax.h">
+    <ClInclude Include="constant_headers\gelu_pre_fte.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="constant_headers\softmax_layer0_out.h">
+    <ClInclude Include="constant_headers\softmax_x0_int.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="constant_headers\softmax_sf_layer0.h">
+    <ClInclude Include="constant_headers\softmax_x_int.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="constant_headers\softmax_b4_int_exp.h">
+    <ClInclude Include="constant_headers\softmax_c_int.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="constant_headers\softmax_b4_max.h">
+    <ClInclude Include="constant_headers\softmax_b_int.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="constant_headers\softmax_x_int_max.h">
+    <ClInclude Include="constant_headers\softmax_n_m_q.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="constant_headers\softmax_layer0.h">
+    <ClInclude Include="constant_headers\softmax_exp2.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="constant_headers\softmax_b4_act.h">
+    <ClInclude Include="constant_headers\softmax_exp_int.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="constant_headers\softmax_int_exp_IP.h">
+    <ClInclude Include="constant_headers\softmax_poly.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="constant_headers\softmax_int_poly.h">
+    <ClInclude Include="constant_headers\softmax_return.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="constant_headers\softmax_int_poly_z.h">
+    <ClInclude Include="constant_headers\gelu_x_int.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="constant_headers\softmax_ip_floor.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="constant_headers\softmax_ip_q.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="constant_headers\softmax_ip_2q.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="constant_headers\softmax_ip_exp1.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="constant_headers\softmax_after_act.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="constant_headers\qa_fpm.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="constant_headers\fpm_round.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="constant_headers\fpm_pidentity.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="constant_headers\fpm_AdB.h">
+    <ClInclude Include="component_ip\geluHBU.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="tensors.cpp">
+    <ClCompile Include="gelu.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="tensor3d.cpp">
+    <ClCompile Include="tensor3d.hpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="quantact.cpp">
+    <ClCompile Include="tensors.hpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="softmax.cpp">
+    <ClCompile Include="component_ip\geluHBU.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="BERT_testbench.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="constant_headers\softmax_layer0.cpp">
+    <ClCompile Include="geluHBU_testbench.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

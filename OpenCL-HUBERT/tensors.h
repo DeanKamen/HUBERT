@@ -7,67 +7,118 @@
 #define __HUBERT_TENSORS_H__
 
 /*                TUNING AND OPTIONS                   */
-const unsigned MAX_ROWS_SMALL = 64; // based on the max size of numpy arrays in default IBERT (3072)
-const unsigned MAX_COLS_SMALL = 64;
-const unsigned MAX_ROWS = 3072;
-const unsigned MAX_COLS = 3072;
-const unsigned STD_ROWS = 768;
-const unsigned STD_COLS = 768;
-
-const unsigned UNITS_PER_MULTIPLY= 32; //must be a factor of the MAX_COLS
-// for example float t_tensor[MAX_ROWS*MAX_COLS];
-static int RETURN_NOTHING = 0;
+#define MAX_ROWS_SMALL 64; // based on the max size of numpy arrays in default IBERT (3072)
+#define MAX_COLS_SMALL 64;
+#define MAX_ROWS 3072;
+#define MAX_COLS 3072;
+#define STD_ROWS 768;
+#define STD_COLS 768;
+#define UNITS_PER_MULTIPLY 32; //must be a factor of the MAX_COLS
 
 
-typedef float* Tensor;
+//TODO: had to delete const for troubleshootin, did not add it back
+
 /* FUNCTION DEFINITIONS */
+
+//TEMPLATES: the tint defines the underlying int type of the tensor (8,12,16 bits).
+//When using this, I would do something like
+// typedef int gint
+// typedef gint* GELU_TENSOR
+// add_scalar(GELU_TENSOR A, int rowsA, int colsA, tint B, GELU_TENSOR C) 
+
+//the loc type is the size of the int that identifies the rows and columns. Going unsigned int or int here should be fine. 
+//Loc can be shrunk as well but know that there can be up to 3072 rows so you probably need at least 12 bits.
+
 //dot type (broadcasting)
-void add(const Tensor A, const int rowsA, const int colsA, const Tensor B, const int rowsB, const int colsB, Tensor C);
-void sub(const Tensor A, const int rowsA, const int colsA, const Tensor B, const int rowsB, const int colsB, Tensor C);
-void mul_dot(const Tensor A, const int rowsA, const int colsA, const Tensor B, const int rowsB, const int colsB, Tensor C);
-void div_dot(const Tensor A, const int rowsA, const int colsA, const Tensor B, const int rowsB, const int colsB, Tensor C);
-void pow_dot(const Tensor A, const int rowsA, const int colsA, const Tensor B, const int rowsB, const int colsB, Tensor C);
+template<typename tint, typename loc> 
+void add( tint* A,  loc rowsA,  loc colsA,  tint* B,  loc rowsB,  loc colsB, tint* C);
+template<typename tint, typename loc>
+void sub( tint* A,  loc rowsA,  loc colsA,  tint* B,  loc rowsB,  loc colsB, tint* C);
+template<typename tint, typename loc>
+void mul_dot( tint* A,  loc rowsA,  loc colsA,  tint* B,  loc rowsB,  loc colsB, tint* C);
+template<typename tint, typename loc>
+void div_dot( tint* A,  loc rowsA,  loc colsA,  tint* B,  loc rowsB,  loc colsB, tint* C);
+template<typename tint, typename loc>
+void pow_dot( tint* A,  loc rowsA,  loc colsA,  tint* B,  loc rowsB,  loc colsB, tint* C);
+template<typename tint, typename loc>
+void rightShift( tint* A,  loc rowsA,  loc colsA,  tint* B,  loc rowsB,  loc colsB, tint* C);
 //scalar type
-void add_scalar(const Tensor A, const int rowsA, const int colsA, float B, Tensor C);
-void mul_scalar(const Tensor A, const int rowsA, const int colsA, float B, Tensor C);
-void sub_scalar(const Tensor A, const int rowsA, const int colsA, float B, Tensor C);
-void sub_scalar(float B, const Tensor A, const int rowsA, const int colsA, Tensor C);
-void div_scalar(const Tensor A, const int rowsA, const int colsA, float B, Tensor C);
-void pow_scalar(const Tensor A, const int rowsA, const int colsA, float B, Tensor C);
-void max(const Tensor A, const int rowsA, const int colsA, int dim, Tensor C); //WARNING: matrix's size changes
-void min(const Tensor A, const int rowsA, const int colsA, int dim, Tensor C); //WARNING: matrix's size changes
-void sum(const Tensor A, const int rowsA, const int colsA, int dim, Tensor C); //WARNING: matrix's size changes
-void max_scalar(const Tensor A, const int rowsA, const int colsA, float compare, Tensor C);
-void min_scalar(const Tensor A, const int rowsA, const int colsA, float compare, Tensor C);
-void min_dot(const Tensor A, const int rowsA, const int colsA, const Tensor B, Tensor C); //implied A.size == B.size
-void abs_tensor(const Tensor A, const int rowsA, const int colsA, Tensor C);
-void floor_tensor(const Tensor A, const int rowsA, const int colsA, Tensor C);
-void exp2_tensor(const Tensor A, const int rowsA, const int colsA, Tensor C);
-void clamp(const Tensor A, const int rowsA, const int colsA, float min, float max, Tensor C);
-void roundTensor(const Tensor A, const int rowsA, const int colsA, Tensor C);
-void reciprocal(const Tensor A, const int rowsA, const int colsA, Tensor C);
-void sign(const Tensor A, const int rowsA, const int colsA, Tensor C);
-void mean(const Tensor A, const int rowsA, const int colsA, Tensor C); //WARNING: matrix's size changes
-void sqrt_tensor(const Tensor A, const int rowsA, const int colsA, Tensor C);
+template<typename tint, typename loc>
+void add_scalar( tint* A,  loc rowsA,  loc colsA, tint B, tint* C);
+template<typename tint, typename loc>
+void mul_scalar( tint* A,  loc rowsA,  loc colsA, tint B, tint* C);
+template<typename tint, typename loc>
+void sub_scalar( tint* A,  loc rowsA,  loc colsA, tint B, tint* C);
+template<typename tint, typename loc>
+void sub_scalar(tint B,  tint* A,  loc rowsA,  loc colsA, tint* C);
+template<typename tint, typename loc>
+void div_scalar( tint* A,  loc rowsA,  loc colsA, tint B, tint* C);
+template<typename tint, typename loc>
+void pow_scalar( tint* A,  loc rowsA,  loc colsA, tint B, tint* C);
+template<typename tint, typename loc>
+void max( tint* A,  loc rowsA,  loc colsA, tint dim, tint* C); //WARNING: matrix's size changes
+template<typename tint, typename loc>
+void min( tint* A,  loc rowsA,  loc colsA, tint dim, tint* C); //WARNING: matrix's size changes
+template<typename tint, typename loc>
+void sum( tint* A,  loc rowsA,  loc colsA, tint dim, tint* C); //WARNING: matrix's size changes
+template<typename tint, typename loc>
+void max_scalar( tint* A,  loc rowsA,  loc colsA, tint compare, tint* C);
+template<typename tint, typename loc>
+void min_scalar( tint* A,  loc rowsA,  loc colsA, tint compare, tint* C);
+template<typename tint, typename loc>
+void min_dot( tint* A,  loc rowsA,  loc colsA,  tint* B, tint* C); //implied A.size == B.size
+template<typename tint, typename loc>
+void abs_tensor( tint* A,  loc rowsA,  loc colsA, tint* C);
+template<typename tint, typename loc>
+void exp2_tensor( tint* A,  loc rowsA,  loc colsA, tint* C);
+template<typename tint, typename loc>
+void clamp( tint* A,  loc rowsA,  loc colsA, tint min, tint max, tint* C);
+template<typename tint, typename loc>
+void sign( tint* A,  loc rowsA,  loc colsA, tint* C);
+template<typename tint, typename loc>
+void mean( tint* A,  loc rowsA,  loc colsA, tint* C); //WARNING: matrix's size changes
+
 //manipulation
-void fill(const Tensor A, const int rowsA, const int colsA, float fill);
-//void view(const Tensor A, const int rowsA, const int colsA, int rows, int cols, Tensor space);
-void tensor_frexp(Tensor In, int rowsIn, int colsIn, Tensor m, int rowsm, int colsm, Tensor e, int rowse, int colse);
+template<typename tint, typename loc>
+void fill( tint* A,  loc rowsA,  loc colsA, tint fill);
+
 //adressing methods
-float get(const Tensor A, const int rowsA, const int colsA, int row, int col);
-float transposed_get(const Tensor A, const int rowsA, const int colsA, int row, int col);
-void set(const Tensor A, const int rowsA, const int colsA, int row, int col, float val);
-void transposed_set(const Tensor A, const int rowsA, const int colsA, int row, int col, float val);
+
+
+template<typename tint, typename loc> tint get(tint* A, loc rowsA, loc colsA, loc row, loc col);
+template<typename tint, typename loc> tint transposed_get( tint* A,  loc rowsA,  loc colsA, loc row, loc col);
+
+template<typename tint, typename loc> void set(tint* A,  loc rowsA,  loc colsA, loc row, loc col, tint val);
+template<typename tint, typename loc> void transposed_set( tint* A,  loc rowsA,  loc colsA, loc row, loc col, tint val);
 
 //helper functions
-void transpose(const Tensor A, const int rowsA, const int colsA, Tensor C);
-void copy(const Tensor A, const int rowsA, const int colsA, Tensor C);
-void shrinkTensor(const Tensor A, const int rowsA, const int colsA, Tensor C, const int rowsC, const int colsC); //use this after a dimention has been collapsed
-void print(const Tensor A, const int rowsA, const int colsA);
-void print_brief(const Tensor A, const int rowsA, const int colsA);
-bool eq(const Tensor A, const int rowsA, const int colsA, const Tensor B, const int rowsB, const int colsB);
-bool eq_verbose(const Tensor A, const int rowsA, const int colsA, const Tensor B, const int rowsB, const int colsB);
+template<typename tint, typename loc>
+void transpose( tint* A,  loc rowsA,  loc colsA, tint* C);
+template<typename tint, typename loc>
+void copy( tint* A,  loc rowsA,  loc colsA, tint* C);
+template<typename tint, typename loc>
+void shrinktint( tint* A,  loc rowsA,  loc colsA, tint* C,  loc rowsC,  loc colsC); //use this after a dimention has been collapsed
+template<typename tint, typename loc>
+void print( tint* A,  loc rowsA,  loc colsA);
+template<typename tint, typename loc>
+void print_brief( tint* A,  loc rowsA,  loc colsA);
+template<typename tint, typename loc>
+bool eq( tint* A,  loc rowsA,  loc colsA,  tint* B,  loc rowsB,  loc colsB);
+template<typename tint, typename loc>
+bool eq_verbose( tint* A,  loc rowsA,  loc colsA,  tint* B,  loc rowsB,  loc colsB);
 
-void flopSize(Tensor& lhs, int rowsLHS, int colsLHS, Tensor& rhs, int rowsRHS, int colsRHS);
+template<typename tint, typename loc>
+void flopSize(tint*& lhs, loc rowsLHS, loc colsLHS, tint*& rhs, loc rowsRHS, loc colsRHS);
 
+
+//void floor_tensor( Tensor A,  int rowsA,  int colsA, Tensor C); //commented functions like this one assume float inputs, change to FLENSOR when necessary
+//void roundTensor( Tensor A,  int rowsA,  int colsA, Tensor C);
+//void reciprocal( Tensor A,  int rowsA,  int colsA, Tensor C);
+//void reciprocal( Flensor A,  int rowsA,  int colsA, Flensor C);
+//void sqrt_tensor( Tensor A,  int rowsA,  int colsA, Tensor C);
+//void view( Tensor A,  int rowsA,  int colsA, int rows, int cols, Tensor space);
+//void tensor_frexp(Tensor In, int rowsIn, int colsIn, Tensor m, int rowsm, int colsm, Tensor e, int rowse, int colse);
+//float get( Tensor A,  int rowsA,  int colsA, int row, int col);
+//void set( Tensor A,  int rowsA,  int colsA, int row, int col, float val);
+#include "tensors.hpp"
 #endif

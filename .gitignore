@@ -1,5 +1,6 @@
 
 .vs/OpenCL-HUBERT/v15/.suo
+.vs/*
 *.ipch
 *.opendb
 *.log
@@ -10,4 +11,4 @@
 *.ilk
 *.pdb
 *.obj
-OpenCL-HUBERT/test-fpga.prj
+OpenCL-HUBERT/*.prj

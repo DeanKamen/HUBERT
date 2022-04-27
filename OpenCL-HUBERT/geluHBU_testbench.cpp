@@ -24,25 +24,30 @@ const int xd = 22;
 
 
 /*** Space for GELU ***/
-int sigmoid_int[xr*xc*xd]; //size of sigmoid_int is the same as x_int, we just want a new sigmoid int. Must allocate on our own.
-int signGelu[xr*xc*xd];// also size of gleu input x_int
-int abs_int[xr*xc*xd]; //also size of x_int
-int temp[xr*xc*xd]; //wozah, you guess the size!
-int y_int[xr*xc*xd]; //also size of x_int, could be optimized away probably
+underlyingTensor sigmoid_int[xr*xc*xd]; //size of sigmoid_int is the same as x_int, we just want a new sigmoid int. Must allocate on our own.
+underlyingTensor signGelu[xr*xc*xd];// also size of gleu input x_int
+underlyingTensor abs_int[xr*xc*xd]; //also size of x_int
+underlyingTensor temp[xr*xc*xd]; //wozah, you guess the size!
+underlyingTensor y_int[xr*xc*xd]; //also size of x_int, could be optimized away probably
 
 
 gelu_memory g_memory;
 /************************* END GELU DEFINES ****************************/
 
 component Tensor3d geluHBU_forward(gelu_memory memory, Tensor3d x_int, int xr, int xc, int xd) {
+#pragma ivdep
 	for (int d = 0; d < xd; d++)
 	{
+#pragma ivdep
 		for (int r = 0; r < xr; r++)
 		{
+#pragma ivdep
+			//#pragma unroll 4 //4 unary gelus in parallel
 			for (int c = 0; c < xc; c++)
 			{
-				int input = get(x_int, xr, xc, xd, r, c, d);
-				int gelu_result = geluHBU(input, memory.b_int[c], memory.c_int[c], memory.shift_int[c]);
+				underlyingTensor input = get(x_int, xr, xc, xd, r, c, d);
+				//int gelu_result = geluHBU(input, memory.b_int[c], memory.c_int[c], memory.shift_int[c]);
+				underlyingTensor gelu_result = geluHBU(input);// incomplete ver
 				set(memory.y_int, xr, xc, xd, r, c, d, gelu_result);
 			}
 		}
@@ -52,10 +57,10 @@ component Tensor3d geluHBU_forward(gelu_memory memory, Tensor3d x_int, int xr, i
 
 int main()
 {
-	g_memory.shift_int = gelu_shift_int; //these ints are known at compile time but theyre arrays, so they come from header files.
-	g_memory.b_int = gelu_b_int; //Export these from your finished python model, they change after training but are const through inference
-	g_memory.c_int = gelu_c_int;
-	g_memory.neg_b_int = gelu_neg_b_int; //b_int but negative. I am also loading this in a header.
+	g_memory.shift_int = (Tensor)gelu_shift_int; //these ints are known at compile time but theyre arrays, so they come from header files.
+	g_memory.b_int = (Tensor)gelu_b_int; //Export these from your finished python model, they change after training but are const through inference
+	g_memory.c_int = (Tensor)gelu_c_int;
+	g_memory.neg_b_int = (Tensor)gelu_neg_b_int; //b_int but negative. I am also loading this in a header.
 	g_memory.sfr = 1;
 	g_memory.sfc = 3072; //size of the prev three tensors
 	g_memory.sigmoid_int = sigmoid_int; //size of sigmoid_int is the same as x_int, we just want a new sigmoid int. Must allocate on our own.

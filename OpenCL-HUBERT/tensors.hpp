@@ -58,13 +58,15 @@ void add( tint* A, loc rowsA, loc colsA,  tint* B, loc rowsB, loc colsB, tint* C
 
 	//now for the actual math
     loc i,j;
-#pragma max_concurrency 1
+
+#pragma ivdep
     for (i = 0; i < rowsA; i++)
     {
-#pragma max_concurrency 1
+#pragma ivdep
         for (j = 0; j < colsA; j++)
         {
-            set(C, rowsA, colsA, i,j,get(larger, rowsA, colsA, i, j) + get(smaller, rowsB, colsB, i % rowMod, j % colMod));
+			tint data = get(larger, rowsA, colsA, i, j) + get(smaller, rowsB, colsB, i % rowMod, j % colMod);
+            set(C, rowsA, colsA, i,j, data);
         }
     }
 }
@@ -116,10 +118,12 @@ void sub( tint* A, loc rowsA, loc colsA,  tint* B, loc rowsB, loc colsB, tint* C
 
 	//now for the actual math
 	loc i, j;
-#pragma max_concurrency 1
+
+#pragma ivdep
 	for (i = 0; i < rowsA; i++)
 	{
-#pragma max_concurrency 1
+
+#pragma ivdep
 		for (j = 0; j < colsA; j++)
 		{
 			set(C, rowsA, colsA, i, j, get(larger, rowsA, colsA, i, j) - get(smaller, rowsB, colsB, i % rowMod, j % colMod));
@@ -174,13 +178,16 @@ void mul_dot( tint* A, loc rowsA, loc colsA,  tint* B, loc rowsB, loc colsB, tin
 
 	//now for the actual math
 	loc i, j;
-#pragma max_concurrency 1
+
+#pragma ivdep
 	for (i = 0; i < rowsA; i++)
 	{
-#pragma max_concurrency 1
+
+#pragma ivdep
 		for (j = 0; j < colsA; j++)
 		{
-			set(C, rowsA, colsA, i, j, get(larger, rowsA, colsA, i, j) * get(smaller, rowsB, colsB, i % rowMod, j % colMod));
+			tint data = get(larger, rowsA, colsA, i, j) * get(smaller, rowsB, colsB, i % rowMod, j % colMod);
+			set(C, rowsA, colsA, i, j, data);
 		}
 	}
 }
@@ -232,10 +239,12 @@ void div_dot( tint* A, loc rowsA, loc colsA,  tint* B, loc rowsB, loc colsB, tin
 
 	//now for the actual math
 	loc i, j;
-#pragma max_concurrency 1
+
+#pragma ivdep
 	for (i = 0; i < rowsA; i++)
 	{
-#pragma max_concurrency 1
+
+#pragma ivdep
 		for (j = 0; j < colsA; j++)
 		{
 			set(C, rowsA, colsA, i, j, get(larger, rowsA, colsA, i, j) / get(smaller, rowsB, colsB, i % rowMod, j % colMod));
@@ -291,10 +300,12 @@ void pow_dot( tint* A, loc rowsA, loc colsA,  tint* B, loc rowsB, loc colsB, tin
 
 	//now for the actual math
 	loc i, j;
-#pragma max_concurrency 1
+
+#pragma ivdep
 	for (i = 0; i < rowsA; i++)
 	{
-#pragma max_concurrency 1
+
+#pragma ivdep
 		for (j = 0; j < colsA; j++)
 		{
 			set(C, rowsA, colsA, i, j, (tint)pow(get(larger, rowsA, colsA, i, j), get(smaller, rowsB, colsB, i % rowMod, j % colMod)));
@@ -306,10 +317,12 @@ template<typename tint, typename loc>
 void rightShift( tint* A,  loc rowsA,  loc colsA,  tint* B,  loc rowsB,  loc colsB, tint* C)//specialized, no broadcasting
 {
 	loc i, j;
-#pragma max_concurrency 1
+
+#pragma ivdep
 	for (i = 0; i < rowsA; i++)
 	{
-#pragma max_concurrency 1
+
+#pragma ivdep
 		for (j = 0; j < colsA; j++)
 		{
 			set(C, rowsA, colsA, i, j, get(A, rowsA, colsA, i, j) >> get(B, rowsB, colsB, i, j));
@@ -321,13 +334,16 @@ template<typename tint, typename loc>
 void add_scalar( tint* A, loc rowsA, loc colsA, tint B, tint* C)
 {
     loc i,j;
-#pragma max_concurrency 1
+
+#pragma ivdep
     for (i = 0; i < rowsA; i++)
     {
-#pragma max_concurrency 1
+
+#pragma ivdep
         for (j = 0; j < colsA; j++)
         {
-            set(C, rowsA, colsA, i,j,get(A, rowsA, colsA, i,j) + B);
+			tint data = get(A, rowsA, colsA, i, j) + tint(B);
+            set(C, rowsA, colsA, i,j, data);
         }
     }
 }
@@ -336,13 +352,16 @@ template<typename tint, typename loc>
 void mul_scalar( tint* A, loc rowsA, loc colsA, tint B, tint* C)
 {
     loc i,j;
-#pragma max_concurrency 1
+
+#pragma ivdep
     for (i = 0; i < rowsA; i++)
     {
-#pragma max_concurrency 1
+
+#pragma ivdep
         for (j = 0; j < colsA; j++)
         {
-            set(C, rowsA, colsA, i,j,get(A, rowsA, colsA, i,j) * B);
+			tint data = get(A, rowsA, colsA, i, j) * tint(B);
+            set(C, rowsA, colsA, i,j, data);
         }
     }
 }
@@ -351,10 +370,12 @@ template<typename tint, typename loc>
 void sub_scalar( tint* A, loc rowsA, loc colsA, tint B, tint* C)
 {
     loc i,j;
-#pragma max_concurrency 1
+
+#pragma ivdep
     for (i = 0; i < rowsA; i++)
     {
-#pragma max_concurrency 1
+
+#pragma ivdep
         for (j = 0; j < colsA; j++)
         {
             set(C, rowsA, colsA, i,j,get(A, rowsA, colsA, i,j) - B);
@@ -366,10 +387,12 @@ template<typename tint, typename loc>
 void sub_scalar(tint B,  tint* A, loc rowsA, loc colsA, tint* C)
 {
 	loc i, j;
-#pragma max_concurrency 1
+
+#pragma ivdep
 	for (i = 0; i < rowsA; i++)
 	{
-#pragma max_concurrency 1
+
+#pragma ivdep
 		for (j = 0; j < colsA; j++)
 		{
 			set(C, rowsA, colsA, i, j, B - get(A, rowsA, colsA, i, j));
@@ -381,13 +404,16 @@ template<typename tint, typename loc>
 void div_scalar( tint* A, loc rowsA, loc colsA, tint B, tint* C)
 {
     loc i,j;
-#pragma max_concurrency 1
+
+#pragma ivdep
     for (i = 0; i < rowsA; i++)
     {
-#pragma max_concurrency 1
+
+#pragma ivdep
         for (j = 0; j < colsA; j++)
         {
-            set(C, rowsA, colsA, i,j,get(A, rowsA, colsA, i,j) / B);
+			tint data = tint(get(A, rowsA, colsA, i, j)) / tint(B);
+            set(C, rowsA, colsA, i,j, data);
         }
     }
 }
@@ -396,10 +422,12 @@ template<typename tint, typename loc>
 void pow_scalar( tint* A, loc rowsA, loc colsA, tint B, tint* C)
 {// A = B^C, note that there are more efficient functions for 2^X or e^X or 10^X
     loc i,j;
-#pragma max_concurrency 1
+
+#pragma ivdep
     for (i = 0; i < rowsA; i++)
     {
-#pragma max_concurrency 1
+
+#pragma ivdep
         for (j = 0; j < colsA; j++)
         {
             set(C, rowsA, colsA, i,j, (tint)pow(get(A, rowsA, colsA, i,j), B));
@@ -420,7 +448,8 @@ void max( tint* A, loc rowsA, loc colsA, int dim, tint* C)
         loc i,j;
         tint largest;
         bool first = true;
-#pragma max_concurrency 1
+
+#pragma ivdep
         for (i = 0; i < colsA; i++)
         {
             for (j = 0; j < rowsA; j++)
@@ -448,7 +477,8 @@ void max( tint* A, loc rowsA, loc colsA, int dim, tint* C)
         loc i,j;
         tint largest;
         bool first = true;
-#pragma max_concurrency 1
+
+#pragma ivdep
         for (i = 0; i < rowsA; i++)
         {
             for (j = 0; j < colsA; j++)
@@ -484,7 +514,8 @@ void min( tint* A, loc rowsA, loc colsA, int dim, tint* C)
         loc i,j;
         tint smallest;
         bool first = true;
-#pragma max_concurrency 1
+
+#pragma ivdep
         for (i = 0; i < colsA; i++)
         {
             for (j = 0; j < rowsA; j++)
@@ -512,7 +543,8 @@ void min( tint* A, loc rowsA, loc colsA, int dim, tint* C)
         loc i,j;
         tint smallest;
         bool first = true;
-#pragma max_concurrency 1
+
+#pragma ivdep
         for (i = 0; i < rowsA; i++)
         {
             for (j = 0; j < colsA; j++)
@@ -546,7 +578,8 @@ void sum( tint* A, loc rowsA, loc colsA, int dim, tint* C)
 	tint running = 0;
 	if (dim == 0)
 	{
-#pragma max_concurrency 1
+
+#pragma ivdep
 		for (i = 0; i < colsA; i++)
 		{
 			for (j = 0; j < rowsA; j++)
@@ -561,7 +594,8 @@ void sum( tint* A, loc rowsA, loc colsA, int dim, tint* C)
 	}
 	else
 	{ //dim ==1
-#pragma max_concurrency 1
+
+#pragma ivdep
 		for (i = 0; i < rowsA; i++)
 		{
 			for (j = 0; j < colsA; j++)
@@ -580,10 +614,12 @@ template<typename tint, typename loc>
 void max_scalar( tint* A, loc rowsA, loc colsA, tint compare, tint* C)
 { //similar to clamp but more readable
 	loc i, j;
-#pragma max_concurrency 1
+
+#pragma ivdep
 	for (i = 0; i < rowsA; i++)
 	{
-#pragma max_concurrency 1
+
+#pragma ivdep
 		for (j = 0; j < colsA; j++)
 		{
 			tint mat = get(A, rowsA, colsA, i, j);
@@ -597,10 +633,12 @@ template<typename tint, typename loc>
 void min_scalar( tint* A, loc rowsA, loc colsA, loc compare, tint* C)
 {
 	loc i, j;
-#pragma max_concurrency 1
+
+#pragma ivdep
 	for (i = 0; i < rowsA; i++)
 	{
-#pragma max_concurrency 1
+
+#pragma ivdep
 		for (j = 0; j < colsA; j++)
 		{
 			tint mini = get(A, rowsA, colsA, i, j);
@@ -615,10 +653,12 @@ void min_dot( tint* A, loc rowsA, loc colsA,  tint* B, tint* C)
 {//element wise min that assumes a and b are the same size
 	//assert(sameSize(A, B));
 	loc i, j;
-#pragma max_concurrency 1
+
+#pragma ivdep
 	for (i = 0; i < rowsA; i++)
 	{
-#pragma max_concurrency 1
+
+#pragma ivdep
 		for (j = 0; j < colsA; j++)
 		{
 			tint left = get(A, rowsA, colsA, i, j);
@@ -634,10 +674,12 @@ template<typename tint, typename loc>
 void abs_tensor( tint* A, loc rowsA, loc colsA, tint* C)
 {
 	loc i, j;
-#pragma max_concurrency 1
+
+#pragma ivdep
 	for (i = 0; i < rowsA; i++)
 	{
-#pragma max_concurrency 1
+
+#pragma ivdep
 		for (j = 0; j < colsA; j++)
 		{
 			tint el = get(A, rowsA, colsA, i, j);
@@ -653,10 +695,12 @@ template<typename tint, typename loc>
 void exp2_tensor( tint* A, loc rowsA, loc colsA, tint* C)
 {
 	loc i, j;
-#pragma max_concurrency 1
+
+#pragma ivdep
 	for (i = 0; i < rowsA; i++)
 	{
-#pragma max_concurrency 1
+
+#pragma ivdep
 		for (j = 0; j < colsA; j++)
 		{
 			set(C, rowsA, colsA, i, j, 1 << (get(A, rowsA, colsA, i, j))); //who needs exp2 when you can just left shift.
@@ -668,10 +712,12 @@ template<typename tint, typename loc>
 void clamp( tint* A, loc rowsA, loc colsA, tint min, tint max, tint* C)
 {
     loc i,j;
-#pragma max_concurrency 1
+
+#pragma ivdep
     for (i = 0; i < rowsA; i++)
     {
-#pragma max_concurrency 1
+
+#pragma ivdep
         for (j = 0; j < colsA; j++)
         {
             tint viq = get(A, rowsA, colsA, i,j);
@@ -686,23 +732,25 @@ template<typename tint, typename loc>
 void sign( tint* A, loc rowsA, loc colsA, tint* C)
 {
 	loc i, j;
-#pragma max_concurrency 1
+
+#pragma ivdep
 	for (i = 0; i < rowsA; i++)
 	{
-#pragma max_concurrency 1
+
+#pragma ivdep
 		for (j = 0; j < colsA; j++)
 		{
 			if (get(A, rowsA, colsA, i, j) < 0)
 			{
-				set(C, rowsA, colsA, i, j, -1);
+				set(C, rowsA, colsA, i, j, (tint)-1);
 			}
 			else if (get(A, rowsA, colsA, i, j) > 0)
 			{
-				set(C, rowsA, colsA, i, j, 1);
+				set(C, rowsA, colsA, i, j, (tint)1);
 			}
 			else
 			{
-				set(C, rowsA, colsA, i, j, 0);
+				set(C, rowsA, colsA, i, j, (tint)0);
 			}
 		}
 	}
@@ -713,7 +761,8 @@ void mean( tint* A, loc rowsA, loc colsA, tint* C)
 {// assume a row vector. can be expanded upon like max and min to work along multiple dimentions
 	//assert(rowsA == 1);
 	tint running = 0;
-#pragma max_concurrency 1
+
+#pragma ivdep
 	for (loc j = 0; j < colsA; j++)
 	{
 		running += get(A, rowsA, colsA, 0, j);
@@ -727,10 +776,12 @@ template<typename tint, typename loc>
 void fill( tint* A, loc rowsA, loc colsA, tint fill)
 {
     loc i,j;
-#pragma max_concurrency 1
+
+#pragma ivdep
     for (i = 0; i < rowsA; i++)
     {
-#pragma max_concurrency 1
+
+#pragma ivdep
         for (j = 0; j < colsA; j++)
         {
             set(A, rowsA, colsA, i,j, fill);
@@ -767,10 +818,12 @@ template<typename tint, typename loc> void transposed_set( tint* A, loc rowsA, l
 template<typename tint, typename loc>
 void transpose( tint* A, loc rowsA, loc colsA, tint* C)
 {
-#pragma max_concurrency 1
+
+#pragma ivdep
 	for (loc i = 0; i < rowsA; i++)
 	{
-#pragma max_concurrency 1
+
+#pragma ivdep
 		for (loc j = 0; j < colsA; i++)
 		{
 			set(C, colsA, rowsA, j, i, get(A, rowsA, colsA, i, j));
@@ -781,10 +834,12 @@ void transpose( tint* A, loc rowsA, loc colsA, tint* C)
 template<typename tint, typename loc>
 void copy( tint* A, loc rowsA, loc colsA, tint* C)
 {
-#pragma max_concurrency 1
+
+#pragma ivdep
 	for (loc i = 0; i < rowsA; i++)
 	{
-#pragma max_concurrency 1
+
+#pragma ivdep
 		for (loc j = 0; j < colsA; j++)
 		{
 			set(C, rowsA, colsA, i, j, get(A, rowsA, colsA, i, j));
@@ -798,7 +853,8 @@ void shrinkTensor( tint* A, loc rowsA, loc colsA, tint* C, loc rowsC, loc colsC)
 	//we will assume that rows have been collapsed to 1 or cols have been collapsed to 1.
 	if (rowsA != rowsC && rowsC ==1)
 	{//we have a 2d matrix who has one row but the values are positioned assuming multiple columns. Iterate over that row using different assumptions to collapse to C.
-#pragma max_concurrency 1
+
+#pragma ivdep
 		for (loc i = 0; i < colsA; i++)
 		{
 			tint take = get(A, rowsA, colsA, 0, i);
@@ -807,7 +863,8 @@ void shrinkTensor( tint* A, loc rowsA, loc colsA, tint* C, loc rowsC, loc colsC)
 	}
 	else if (colsA != colsC && colsC == 1)
 	{
-#pragma max_concurrency 1
+
+#pragma ivdep
 		for (loc i = 0; i < rowsA; i++)
 		{
 			tint take = get(A, rowsA, colsA, i, 0);
@@ -922,10 +979,10 @@ void flopSize(tint* &lhs, loc rowsLHS, loc colsLHS, tint* &rhs, loc rowsRHS, loc
 void floor_tensor( Tensor A, int rowsA, int colsA, Tensor C)
 {//does a cast to a float and then floors it.
 	int i,j;
-#pragma max_concurrency 1
+
 	for (i = 0; i < rowsA; i++)
 	{
-#pragma max_concurrency 1
+
 		for (j = 0; j < colsA; j++)
 		{
 			float temp = get(A, rowsA, colsA, i,j);
@@ -938,10 +995,10 @@ void floor_tensor( Tensor A, int rowsA, int colsA, Tensor C)
 void roundTensor( Tensor A, int rowsA, int colsA, Tensor C)
 {
 	int i,j;
-#pragma max_concurrency 1
+
 	for (i = 0; i < rowsA; i++)
 	{
-#pragma max_concurrency 1
+
 		for (j = 0; j < colsA; j++)
 		{
 			float roundme = get(A, rowsA, colsA, i,j);
@@ -959,10 +1016,10 @@ void roundTensor( Tensor A, int rowsA, int colsA, Tensor C)
 void reciprocal( Tensor A, int rowsA, int colsA, Tensor C)
 {
 	int i,j;
-#pragma max_concurrency 1
+
 	for (i = 0; i < rowsA; i++)
 	{
-#pragma max_concurrency 1
+
 		for (j = 0; j < colsA; j++)
 		{
 			float recip = get(A, rowsA, colsA, i,j);
@@ -975,10 +1032,10 @@ void reciprocal( Tensor A, int rowsA, int colsA, Tensor C)
 void reciprocal( Flensor A, int rowsA, int colsA, Flensor C)
 {//incoming big tensor array
 	int i, j;
-#pragma max_concurrency 1
+
 	for (i = 0; i < rowsA; i++)
 	{
-#pragma max_concurrency 1
+
 		for (j = 0; j < colsA; j++)
 		{
 			auto recip = get(A, rowsA, colsA, i, j);
@@ -992,10 +1049,10 @@ void reciprocal( Flensor A, int rowsA, int colsA, Flensor C)
 void sqrt_tensor( Tensor A, int rowsA, int colsA, Tensor C)
 {
 	int i, j;
-#pragma max_concurrency 1
+
 	for (i = 0; i < rowsA; i++)
 	{
-#pragma max_concurrency 1
+
 		for (j = 0; j < colsA; j++)
 		{
 			set(C, rowsA, colsA, i, j, sqrt(get(A, rowsA, colsA, i,j)));
@@ -1056,10 +1113,10 @@ void tensor_frexp(Tensor In, int rowsIn, int colsIn, Tensor m, int rowsm, int co
 	//reutrns the mantissas and then put the exponents in a seperate tensor.
 	 int MAX_BIT = 31;
 	int i,j;
-#pragma max_concurrency 1
+
 	for (i = 0; i < rowsIn; i++)
 	{
-#pragma max_concurrency 1
+
 		for (j = 0; j < colsIn; j++)
 		{
 			float m1;

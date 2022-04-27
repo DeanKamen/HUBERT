@@ -7,8 +7,9 @@
 #include "tensor3d.h"
 
 //WARNING: when changing these types, you only change the internal primitive type of the Tensor
-typedef int* Tensor3d; //meant to be some int type from 8 to 64 bits
-typedef int* Tensor;
+typedef int32_t underlyingTensor;
+typedef underlyingTensor* Tensor3d; //meant to be some int type from 8 to 64 bits
+typedef underlyingTensor* Tensor;
 
 //enum to desribe all preloaded Tensors
 enum class QuantMode {none, symmetric};

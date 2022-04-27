@@ -1,0 +1,19 @@
+Fitter Status : Successful - Thu Apr 21 09:10:55 2022
+Quartus Prime Version : 21.4.0 Build 67 12/06/2021 SC Pro Edition
+Revision Name : test_wrapper
+Top-level Entity Name : gelu_wrapper
+Family : Cyclone 10 GX
+Device : 10CX220YF780I5G
+Timing Models : Final
+Power Models : Final
+Device Status : Final
+Logic utilization (in ALMs) : 11 / 80,330 ( < 1 % )
+Total registers : 0
+Total pins : 70 / 340 ( 21 % )
+Total virtual pins : 0
+Total block memory bits : 0 / 12,021,760 ( 0 % )
+Total RAM Blocks : 0 / 587 ( 0 % )
+Total DSP Blocks : 0 / 192 ( 0 % )
+Total HSSI RX channels : 0 / 12 ( 0 % )
+Total HSSI TX channels : 0 / 12 ( 0 % )
+Total PLLs : 0 / 30 ( 0 % )

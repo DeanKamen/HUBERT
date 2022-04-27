@@ -14,7 +14,8 @@ template<typename t3d_int, typename tint, typename loc>
 void add( t3d_int* A, loc rowsA, loc colsA, loc depA, tint* B, loc rowsB, loc colsB, t3d_int* C)
 {
 	//defer error checking to a layer by layer basis. 
-	#pragma max_concurrency 1
+	#pragma ivdep
+	
 	for (loc d = 0; d < depA; d++)
 	{
 		add(get_layer(A, rowsA, colsA, depA, d), rowsA, colsA, B, rowsB, colsB, get_layer(C, rowsA, colsA, depA, d));
@@ -23,8 +24,9 @@ void add( t3d_int* A, loc rowsA, loc colsA, loc depA, tint* B, loc rowsB, loc co
 
 template<typename t3d_int, typename tint, typename loc>
 void sub( t3d_int* A, loc rowsA, loc colsA, loc depA, tint* B, loc rowsB, loc colsB, t3d_int* C)
-{
-	#pragma max_concurrency 1
+{	
+    #pragma ivdep
+	
 	for (loc d = 0; d < depA; d++)
 	{
 		sub(get_layer(A, rowsA, colsA, depA, d), rowsA, colsA, B, rowsB, colsB, get_layer(C, rowsA, colsA, depA, d));
@@ -34,7 +36,8 @@ void sub( t3d_int* A, loc rowsA, loc colsA, loc depA, tint* B, loc rowsB, loc co
 template<typename t3d_int, typename tint, typename loc>
 void mul_dot( t3d_int* A, loc rowsA, loc colsA, loc depA, tint* B, loc rowsB, loc colsB, t3d_int* C)
 {
-	#pragma max_concurrency 1
+	#pragma ivdep
+	
 	for (loc d = 0; d < depA; d++)
 	{
 		mul_dot(get_layer(A, rowsA, colsA, depA, d), rowsA, colsA, B, rowsB, colsB, get_layer(C, rowsA, colsA, depA, d));
@@ -44,7 +47,8 @@ void mul_dot( t3d_int* A, loc rowsA, loc colsA, loc depA, tint* B, loc rowsB, lo
 template<typename t3d_int, typename tint, typename loc>
 void div_dot( t3d_int* A, loc rowsA, loc colsA, loc depA, tint* B, loc rowsB, loc colsB, t3d_int* C)
 {
-#pragma max_concurrency 1
+	
+	#pragma ivdep
 	for (loc d = 0; d < depA; d++)
 	{
 		div_dot(get_layer(A, rowsA, colsA, depA, d), rowsA, colsA, B, rowsB, colsB, get_layer(C, rowsA, colsA, depA, d));
@@ -54,7 +58,8 @@ void div_dot( t3d_int* A, loc rowsA, loc colsA, loc depA, tint* B, loc rowsB, lo
 template<typename t3d_int, typename tint, typename loc>
 void pow_dot( t3d_int* A, loc rowsA, loc colsA, loc depA, tint* B, loc rowsB, loc colsB, t3d_int* C)
 {
-#pragma max_concurrency 1
+
+#pragma ivdep
 	for (loc d = 0; d < depA; d++)
 	{
 		pow_dot(get_layer(A, rowsA, colsA, depA, d), rowsA, colsA, B, rowsB, colsB, get_layer(C, rowsA, colsA, depA, d));
@@ -64,7 +69,8 @@ void pow_dot( t3d_int* A, loc rowsA, loc colsA, loc depA, tint* B, loc rowsB, lo
 template<typename t3d_int, typename loc>
 void add( t3d_int* A, loc rowsA, loc colsA, loc depA,  t3d_int* B, loc rowsB, loc colsB, loc depB, t3d_int* C)
 {
-#pragma max_concurrency 1
+
+#pragma ivdep
 	for (loc d = 0; d < depA; d++)
 	{
 		add(get_layer(A, rowsA, colsA, depA, d), rowsA, colsA, get_layer(B, rowsB, colsB, depB, d), rowsB, colsB, get_layer(C, rowsA, colsA, depA, d));
@@ -74,7 +80,8 @@ void add( t3d_int* A, loc rowsA, loc colsA, loc depA,  t3d_int* B, loc rowsB, lo
 template<typename t3d_int, typename loc>
 void sub( t3d_int* A, loc rowsA, loc colsA, loc depA,  t3d_int* B, loc rowsB, loc colsB, loc depB, t3d_int* C)
 {
-#pragma max_concurrency 1
+
+#pragma ivdep
 	for (loc d = 0; d < depA; d++)
 	{
 		sub(get_layer(A, rowsA, colsA, depA, d), rowsA, colsA, get_layer(B, rowsB, colsB, depB, d), rowsB, colsB, get_layer(C, rowsA, colsA, depA, d));
@@ -84,7 +91,8 @@ void sub( t3d_int* A, loc rowsA, loc colsA, loc depA,  t3d_int* B, loc rowsB, lo
 template<typename t3d_int, typename loc>
 void mul_dot( t3d_int* A, loc rowsA, loc colsA, loc depA,  t3d_int* B, loc rowsB, loc colsB, loc depB, t3d_int* C)
 {
-#pragma max_concurrency 1
+
+#pragma ivdep
 	for (loc d = 0; d < depA; d++)
 	{
 		mul_dot(get_layer(A, rowsA, colsA, depA, d), rowsA, colsA, get_layer(B, rowsB, colsB, depB, d), rowsB, colsB, get_layer(C, rowsA, colsA, depA, d));
@@ -94,7 +102,8 @@ void mul_dot( t3d_int* A, loc rowsA, loc colsA, loc depA,  t3d_int* B, loc rowsB
 template<typename t3d_int, typename loc>
 void div_dot( t3d_int* A, loc rowsA, loc colsA, loc depA,  t3d_int* B, loc rowsB, loc colsB, loc depB, t3d_int* C)
 {
-#pragma max_concurrency 1
+
+#pragma ivdep
 	for (loc d = 0; d < depA; d++)
 	{
 		div_dot(get_layer(A, rowsA, colsA, depA, d), rowsA, colsA, get_layer(B, rowsB, colsB, depB, d), rowsB, colsB, get_layer(C, rowsA, colsA, depA, d));
@@ -104,7 +113,8 @@ void div_dot( t3d_int* A, loc rowsA, loc colsA, loc depA,  t3d_int* B, loc rowsB
 template<typename t3d_int, typename loc>
 void pow_dot( t3d_int* A, loc rowsA, loc colsA, loc depA,  t3d_int* B, loc rowsB, loc colsB, loc depB, t3d_int* C)
 {
-#pragma max_concurrency 1
+
+#pragma ivdep
 	for (loc d = 0; d < depA; d++)
 	{
 		pow_dot(get_layer(A, rowsA, colsA, depA, d), rowsA, colsA, get_layer(B, rowsB, colsB, depB, d), rowsB, colsB, get_layer(C, rowsA, colsA, depA, d));
@@ -113,7 +123,8 @@ void pow_dot( t3d_int* A, loc rowsA, loc colsA, loc depA,  t3d_int* B, loc rowsB
 
 template<typename t3d_int, typename loc>
 void rightShift( t3d_int* A,  loc rowsA,  loc colsA, loc depA,  t3d_int* B,  loc rowsB,  loc colsB, loc depB, t3d_int* C) {
-#pragma max_concurrency 1
+
+#pragma ivdep
 	for (loc d = 0; d < depA; d++)
 	{
 		rightShift(get_layer(A, rowsA, colsA, depA, d), rowsA, colsA, get_layer(B, rowsB, colsB, depB, d), rowsB, colsB, get_layer(C, rowsA, colsA, depA, d));
@@ -124,7 +135,8 @@ void rightShift( t3d_int* A,  loc rowsA,  loc colsA, loc depA,  t3d_int* B,  loc
 template<typename t3d_int, typename loc>
 void add_scalar( t3d_int* A, loc rowsA, loc colsA, loc depA, t3d_int B, t3d_int* C)
 {
-#pragma max_concurrency 1
+
+#pragma ivdep
 	for (loc d = 0; d < depA; d++)
 	{
 		add_scalar(get_layer(A, rowsA, colsA, depA, d), rowsA, colsA, B, get_layer(C, rowsA, colsA, depA, d));
@@ -134,7 +146,8 @@ void add_scalar( t3d_int* A, loc rowsA, loc colsA, loc depA, t3d_int B, t3d_int*
 template<typename t3d_int, typename loc>
 void mul_scalar( t3d_int* A, loc rowsA, loc colsA, loc depA, t3d_int B, t3d_int* C)
 {
-#pragma max_concurrency 1
+
+#pragma ivdep
 	for (loc d = 0; d < depA; d++)
 	{
 		mul_scalar(get_layer(A, rowsA, colsA, depA, d), rowsA, colsA, B, get_layer(C, rowsA, colsA, depA, d));
@@ -144,7 +157,8 @@ void mul_scalar( t3d_int* A, loc rowsA, loc colsA, loc depA, t3d_int B, t3d_int*
 template<typename t3d_int, typename loc>
 void sub_scalar( t3d_int* A, loc rowsA, loc colsA, loc depA, t3d_int B, t3d_int* C)
 {
-#pragma max_concurrency 1
+
+#pragma ivdep
 	for (loc d = 0; d < depA; d++)
 	{
 		sub_scalar(get_layer(A, rowsA, colsA, depA, d), rowsA, colsA, B, get_layer(C, rowsA, colsA, depA, d));
@@ -154,7 +168,8 @@ void sub_scalar( t3d_int* A, loc rowsA, loc colsA, loc depA, t3d_int B, t3d_int*
 template<typename t3d_int, typename loc>
 void sub_scalar(t3d_int B,  t3d_int* A, loc rowsA, loc colsA, loc depA, t3d_int* C)
 {
-#pragma max_concurrency 1
+
+#pragma ivdep
 	for (loc d = 0; d < depA; d++)
 	{
 		sub_scalar(B, get_layer(A, rowsA, colsA, depA, d), rowsA, colsA, get_layer(C, rowsA, colsA, depA, d));
@@ -164,7 +179,8 @@ void sub_scalar(t3d_int B,  t3d_int* A, loc rowsA, loc colsA, loc depA, t3d_int*
 template<typename t3d_int, typename loc>
 void div_scalar( t3d_int* A, loc rowsA, loc colsA, loc depA, t3d_int B, t3d_int* C)
 {
-#pragma max_concurrency 1
+
+#pragma ivdep
 	for (loc d = 0; d < depA; d++)
 	{
 		div_scalar(get_layer(A, rowsA, colsA, depA, d), rowsA, colsA, B, get_layer(C, rowsA, colsA, depA, d));
@@ -174,7 +190,8 @@ void div_scalar( t3d_int* A, loc rowsA, loc colsA, loc depA, t3d_int B, t3d_int*
 template<typename t3d_int, typename loc>
 void pow_scalar( t3d_int* A, loc rowsA, loc colsA, loc depA, t3d_int B, t3d_int* C)
 {
-#pragma max_concurrency 1
+
+#pragma ivdep
 	for (loc d = 0; d < depA; d++)
 	{
 		pow_scalar(get_layer(A, rowsA, colsA, depA, d), rowsA, colsA, B, get_layer(C, rowsA, colsA, depA, d));
@@ -186,7 +203,8 @@ void max( t3d_int* A, loc rowsA, loc colsA, loc depA, int dim, t3d_int* C)
 {
 	if (dim == 0 )
 	{
-#pragma max_concurrency 1
+
+#pragma ivdep
 		for (loc d = 0; d < depA; d++)
 		{
 			max(get_layer(A, rowsA, colsA, depA, d), rowsA, colsA, dim, get_layer(C, rowsA, colsA, depA, d));
@@ -196,7 +214,8 @@ void max( t3d_int* A, loc rowsA, loc colsA, loc depA, int dim, t3d_int* C)
 	}
 	else if (dim == 1)
 	{
-#pragma max_concurrency 1
+
+#pragma ivdep
 		for (loc d = 0; d < depA; d++)
 		{
 			max(get_layer(A, rowsA, colsA, depA, d), rowsA, colsA, dim, get_layer(C, rowsA, colsA, depA, d));
@@ -240,7 +259,8 @@ void min( t3d_int* A, loc rowsA, loc colsA, loc depA, int dim, t3d_int* C)
 {
 	if (dim == 0)
 	{
-#pragma max_concurrency 1
+
+#pragma ivdep
 		for (loc d = 0; d < depA; d++)
 		{
 			min(get_layer(A, rowsA, colsA, depA, d), rowsA, colsA, dim, get_layer(C, rowsA, colsA, depA, d));
@@ -250,7 +270,8 @@ void min( t3d_int* A, loc rowsA, loc colsA, loc depA, int dim, t3d_int* C)
 	}
 	else if (dim == 1)
 	{
-#pragma max_concurrency 1
+
+#pragma ivdep
 		for (loc d = 0; d < depA; d++)
 		{
 			min(get_layer(A, rowsA, colsA, depA, d), rowsA, colsA, dim, get_layer(C, rowsA, colsA, depA, d));
@@ -308,7 +329,8 @@ void min( t3d_int* A, loc rowsA, loc colsA, loc depA)
 template<typename t3d_int, typename loc>
 void max_scalar( t3d_int* A, loc rowsA, loc colsA, loc depA, t3d_int compare, t3d_int* C)
 {
-#pragma max_concurrency 1
+
+#pragma ivdep
 	for (loc d = 0; d < depA; d++)
 	{
 		max_scalar(get_layer(A, rowsA, colsA, depA, d), rowsA, colsA, compare, get_layer(C, rowsA, colsA, depA, d));
@@ -318,7 +340,8 @@ void max_scalar( t3d_int* A, loc rowsA, loc colsA, loc depA, t3d_int compare, t3
 template<typename t3d_int, typename loc>
 void min_scalar( t3d_int* A, loc rowsA, loc colsA, loc depA, t3d_int compare, t3d_int* C)
 {
-#pragma max_concurrency 1
+
+#pragma ivdep
 	for (loc d = 0; d < depA; d++)
 	{
 		min_scalar(get_layer(A, rowsA, colsA, depA, d), rowsA, colsA, compare, get_layer(C, rowsA, colsA, depA, d));
@@ -328,7 +351,8 @@ void min_scalar( t3d_int* A, loc rowsA, loc colsA, loc depA, t3d_int compare, t3
 template<typename t3d_int, typename tint, typename loc>
 void min_dot( t3d_int* A, loc rowsA, loc colsA, loc depA, tint* B, t3d_int* C)
 { //assuming a and B are the same size.
-#pragma max_concurrency 1
+
+#pragma ivdep
 	for (loc d = 0; d < depA; d++)
 	{
 		min_dot(get_layer(A, rowsA, colsA, depA, d), rowsA, colsA, B, get_layer(C, rowsA, colsA, depA, d));
@@ -338,7 +362,8 @@ void min_dot( t3d_int* A, loc rowsA, loc colsA, loc depA, tint* B, t3d_int* C)
 template<typename t3d_int, typename loc>
 void abs_tensor( t3d_int* A, loc rowsA, loc colsA, loc depA, t3d_int* C)
 {
-#pragma max_concurrency 1
+
+#pragma ivdep
 	for (loc d = 0; d < depA; d++)
 	{
 		abs_tensor(get_layer(A, rowsA, colsA, depA, d), rowsA, colsA, get_layer(C, rowsA, colsA, depA, d));
@@ -349,7 +374,8 @@ void abs_tensor( t3d_int* A, loc rowsA, loc colsA, loc depA, t3d_int* C)
 template<typename t3d_int, typename loc>
 void exp2_tensor( t3d_int* A, loc rowsA, loc colsA, loc depA, t3d_int* C)
 {
-#pragma max_concurrency 1
+
+#pragma ivdep
 	for (loc d = 0; d < depA; d++)
 	{
 		exp2_tensor(get_layer(A, rowsA, colsA, depA, d), rowsA, colsA, get_layer(C, rowsA, colsA, depA, d));
@@ -359,7 +385,8 @@ void exp2_tensor( t3d_int* A, loc rowsA, loc colsA, loc depA, t3d_int* C)
 template<typename t3d_int, typename loc>
 void clamp( t3d_int* A, loc rowsA, loc colsA, loc depA, t3d_int min, t3d_int max, t3d_int* C)
 {
-#pragma max_concurrency 1
+
+#pragma ivdep
 	for (loc d = 0; d < depA; d++)
 	{
 		clamp(get_layer(A, rowsA, colsA, depA, d), rowsA, colsA, min, max, get_layer(C, rowsA, colsA, depA, d));
@@ -371,7 +398,8 @@ void sum( t3d_int* A, loc rowsA, loc colsA, loc depA, int dim, t3d_int* C)
 {
 	if (dim == 0)
 	{
-#pragma max_concurrency 1
+
+#pragma ivdep
 		for (loc d = 0; d < depA; d++)
 		{
 			sum(get_layer(A, rowsA, colsA, depA, d), rowsA, colsA, dim, get_layer(C, rowsA, colsA, depA, d));
@@ -381,7 +409,8 @@ void sum( t3d_int* A, loc rowsA, loc colsA, loc depA, int dim, t3d_int* C)
 	}
 	else if (dim == 1)
 	{
-#pragma max_concurrency 1
+
+#pragma ivdep
 		for (loc d = 0; d < depA; d++)
 		{
 			sum(get_layer(A, rowsA, colsA, depA, d), rowsA, colsA, dim, get_layer(C, rowsA, colsA, depA, d));
@@ -391,7 +420,8 @@ void sum( t3d_int* A, loc rowsA, loc colsA, loc depA, int dim, t3d_int* C)
 	else //dim ==2
 	{
 		t3d_int running = 0;
-#pragma loop_coalesce
+
+#pragma ivdep
 		for (loc i = 0; i < colsA; i++)
 		{
 			for (loc j = 0; j < rowsA; j++)
@@ -411,7 +441,8 @@ void sum( t3d_int* A, loc rowsA, loc colsA, loc depA, int dim, t3d_int* C)
 template<typename t3d_int, typename loc>
 void sign( t3d_int* A, loc rowsA, loc colsA, loc depA, t3d_int* C)
 {
-#pragma max_concurrency 1
+#pragma ivdep
+
 	for (loc d = 0; d < depA; d++)
 	{
 		sign(get_layer(A, rowsA, colsA, depA, d), rowsA, colsA, get_layer(C, rowsA, colsA, depA, d));
@@ -421,7 +452,8 @@ void sign( t3d_int* A, loc rowsA, loc colsA, loc depA, t3d_int* C)
 template<typename t3d_int, typename loc>
 void mean( t3d_int* A, loc rowsA, loc colsA, loc depA, t3d_int* C)
 {
-#pragma max_concurrency 1
+
+#pragma ivdep
 	for (loc d = 0; d < depA; d++)
 	{
 		mean(get_layer(A, rowsA, colsA, depA, d), rowsA, colsA, get_layer(C, 1, 1, depA, d)); //the output matrix C should be a depth vector
@@ -433,7 +465,8 @@ void mean( t3d_int* A, loc rowsA, loc colsA, loc depA, t3d_int* C)
 template<typename t3d_int, typename loc>
 void fill( t3d_int* A,  loc rowsA,  loc colsA, loc depA, t3d_int fillnum)
 {
-#pragma max_concurrency 1
+
+#pragma ivdep
 	for (loc d = 0; d < depA; d++)
 	{
 		fill(get_layer(A, rowsA, colsA, depA, d), rowsA, colsA, fillnum); 
@@ -465,7 +498,8 @@ t3d_int* get_layer( t3d_int* A, loc rowsA, loc colsA, loc depA, loc dep)
 template<typename t3d_int, typename tint, typename loc>
 void set( t3d_int* A, loc rowsA, loc colsA, loc depA, loc dep, tint* slice)
 {//does a copy operation from slice to Tensor
-#pragma max_concurrency 1
+
+#pragma ivdep
 	for (loc i = 0; i < rowsA*colsA; i++)
 	{
 		A[dep*rowsA*colsA + i] = slice[i];
@@ -477,6 +511,7 @@ void toTwoD( t3d_int* A, loc rowsA, loc colsA, loc depA, tint* C)
 {
 	if (depA == 1)
 	{
+#pragma ivdep
 		for (loc r = 0; r < rowsA; r++)
 		{
 			for (loc c = 0; c < colsA; c++)
@@ -487,6 +522,7 @@ void toTwoD( t3d_int* A, loc rowsA, loc colsA, loc depA, tint* C)
 	}
 	else if (rowsA == 1)
 	{// Here we transform depth into rows. depth 0 being the first row
+#pragma ivdep
 		for (loc d = 0; d < depA; d++)
 		{
 			for (loc c = 0; c < colsA; c++)
@@ -497,6 +533,7 @@ void toTwoD( t3d_int* A, loc rowsA, loc colsA, loc depA, tint* C)
 	}
 	else if (colsA == 1)
 	{// Here we transform depth into cols. depth 0 being the first column
+#pragma ivdep
 		for (loc d = 0; d < depA; d++)
 		{
 			for (loc r = 0; r < rowsA; r++)
@@ -546,7 +583,8 @@ void print_brief( t3d_int* A, loc rowsA, loc colsA, loc depA)
 template<typename t3d_int, typename loc>
 void copy( t3d_int* A, loc rowsA, loc colsA, loc depA, t3d_int* C)
 {
-#pragma max_concurrency 1
+
+#pragma ivdep
 	for (loc d = 0; d < depA; d++)
 	{
 		copy(get_layer(A, rowsA, colsA, depA, d), rowsA, colsA, get_layer(C, rowsA, colsA, depA, d));
@@ -561,6 +599,7 @@ void shrinkTensor( t3d_int* A, loc rowsA, loc colsA, loc depA, t3d_int* C, loc r
 	if (rowsA != rowsC && rowsC == 1)
 	{//we have a 3d matrix who has one row but the values are positioned assuming no dim was collapsed. Iterate over the remaining dims using different assumptions to collapse to C.
 #pragma loop_coalesce
+#pragma ivdep
 		for (loc i = 0; i < depA; i++)
 		{
 			t3d_int* cur_layer = get_layer(A, rowsA, colsA, depA, i); //this is necessary because the depth is not continuous
@@ -574,6 +613,7 @@ void shrinkTensor( t3d_int* A, loc rowsA, loc colsA, loc depA, t3d_int* C, loc r
 	else if (colsA != colsC && colsC == 1)
 	{
 #pragma loop_coalesce
+#pragma ivdep
 		for (loc i = 0; i < depA; i++)
 		{
 			t3d_int* cur_layer = get_layer(A, rowsA, colsA, depA, i); //this is necessary because the depth is not continuous
@@ -587,6 +627,7 @@ void shrinkTensor( t3d_int* A, loc rowsA, loc colsA, loc depA, t3d_int* C, loc r
 	else if (depA != depC && depC == 1)
 	{
 #pragma loop_coalesce
+#pragma ivdep
 		for (loc i = 0; i < rowsA; i++)
 		{
 			for (loc j = 0; j < colsA; j++)
@@ -601,6 +642,7 @@ void shrinkTensor( t3d_int* A, loc rowsA, loc colsA, loc depA, t3d_int* C, loc r
 template<typename t3d_int, typename loc>
 bool eq( t3d_int* A, loc rowsA, loc colsA, loc depA,  t3d_int* B, loc rowsB, loc colsB, loc depB)
 {
+#pragma ivdep
 	for (loc d = 0; d < depA; d++)
 	{
 		if (!eq_verbose(get_layer(A, rowsA, colsA, depA,d), rowsA, colsA, get_layer(B, rowsB, colsB, depB,d), rowsB, colsB))
@@ -615,7 +657,8 @@ bool eq( t3d_int* A, loc rowsA, loc colsA, loc depA,  t3d_int* B, loc rowsB, loc
 /*
 void floor_tensor( Tensor3d A, int rowsA, loc colsA, int depA, Tensor3d C)
 {
-#pragma max_concurrency 1
+
+#pragma ivdep
 	for (int d = 0; d < depA; d++)
 	{
 		floor_tensor(get_layer(A, rowsA, colsA, depA, d), rowsA, colsA, get_layer(C, rowsA, colsA, depA, d));
@@ -624,7 +667,8 @@ void floor_tensor( Tensor3d A, int rowsA, loc colsA, int depA, Tensor3d C)
 /*
 void roundTensor( Tensor3d A, int rowsA, int colsA, int depA, Tensor3d C)
 {
-#pragma max_concurrency 1
+
+#pragma ivdep
 	for (int d = 0; d < depA; d++)
 	{
 		roundTensor(get_layer(A, rowsA, colsA, depA, d), rowsA, colsA, get_layer(C, rowsA, colsA, depA, d));
@@ -634,7 +678,8 @@ void roundTensor( Tensor3d A, int rowsA, int colsA, int depA, Tensor3d C)
 /*
 void reciprocal( Tensor3d A, int rowsA, int colsA, int depA, Tensor3d C)
 {
-#pragma max_concurrency 1
+
+#pragma ivdep
 	for (int d = 0; d < depA; d++)
 	{
 		reciprocal(get_layer(A, rowsA, colsA, depA, d), rowsA, colsA, get_layer(C, rowsA, colsA, depA, d));
@@ -644,7 +689,8 @@ void reciprocal( Tensor3d A, int rowsA, int colsA, int depA, Tensor3d C)
 /*
 void sqrt_tensor( Tensor3d A, int rowsA, int colsA, int depA, Tensor3d C)
 {
-#pragma max_concurrency 1
+
+v
 	for (int d = 0; d < depA; d++)
 	{
 		sqrt_tensor(get_layer(A, rowsA, colsA, depA, d), rowsA, colsA, get_layer(C, rowsA, colsA, depA, d));

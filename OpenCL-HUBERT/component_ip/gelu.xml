@@ -14,17 +14,18 @@
       <AVALON port="iready" type="iready"/>
       <AVALON port="ovalid" type="ovalid"/>
       <AVALON port="oready" type="oready"/>
-      <INPUT port="bin_in" width="8"/>
-      <OUTPUT port="bin_out1" width="8"/>
+      <INPUT port="bin_in" width="32"/> <!--These are temporarily 32 bits, they should eventually be returned to 12?-->
+      <OUTPUT port="bin_out" width="32"/>
     </INTERFACE>
     <REQUIREMENTS>
-      <FILE name="gelu.v"/>
+      <FILE name="gelu.sv"/>
+      <FILE name="GELU_16bit.sv"/>
     </REQUIREMENTS>
     <RESOURCES>
-      <ALUTS value="57"/>
+      <ALUTS value="0"/>
       <FFS value="0"/>
       <RAMS value="0"/>
-      <MLABS value="43"/>
+      <MLABS value="0"/>
       <DSPS value="0"/>
     </RESOURCES>
   </FUNCTION>

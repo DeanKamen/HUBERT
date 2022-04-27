@@ -20,13 +20,12 @@ Tensor3d int_erf(gelu_memory memory, Tensor3d x_int, int xr, int xc, int xd) {
 	abs_tensor(x_int, xr, xc, xd, memory.abs_int);
 	min_dot(memory.abs_int, xr, xc, xd, memory.neg_b_int, memory.abs_int); //this is a custom function tailored for GELU so syntax is weird.
 	add(memory.abs_int, xr, xc, xd, memory.b_int, memory.sfr, memory.sfc, memory.temp);
-	pow_scalar(memory.temp, xr, xc, xd, 2, memory.temp);
+	pow_scalar(memory.temp, xr, xc, xd, (underlyingTensor)2, memory.temp);
 	add(memory.temp, xr, xc, xd, memory.c_int, memory.sfr, memory.sfc, memory.y_int);
 
 	mul_dot(memory.y_int, xr, xc, xd, memory.sign, xr,xc,xd, memory.y_int);
-	div_scalar(memory.y_int, xr, xc, xd, 1 << 14, memory.y_int);//This generates a small amount of error when compared to python verions
+	div_scalar(memory.y_int, xr, xc, xd, underlyingTensor(1 << 14), memory.y_int);//This generates a small amount of error when compared to python verions
 	//eq(memory.y_int,xr,xc,xd, (Tensor)gelu_pre_fte, xr, xc, xd);
-	//TODO skipped floor_ste????
 	return memory.y_int;
 }
 component Tensor3d gelu_forward(gelu_memory memory, Tensor3d x_int, int xr, int xc, int xd) {

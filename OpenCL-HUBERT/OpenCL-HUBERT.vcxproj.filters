@@ -98,10 +98,10 @@
     <ClCompile Include="tensors.hpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="geluHBU_testbench.cpp">
+    <ClCompile Include="component_ip\geluHBU.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="component_ip\geluHBU.cpp">
+    <ClCompile Include="geluHBU_testbench.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
